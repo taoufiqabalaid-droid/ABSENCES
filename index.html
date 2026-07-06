@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ISPITSM Marrakech - Inscription &amp; Réinscription</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f4f7fa;
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+}
+
+header {
+    background: linear-gradient(135deg, #006699 0%, #004d73 100%);
+    color: white;
+    text-align: center;
+    padding: 30px 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+header h1 { margin: 0 0 10px 0; font-size: 2.5em; }
+header h3 { margin: 10px 0; font-size: 1.3em; font-weight: 300; }
+header p { margin: 5px 0 0 0; opacity: 0.9; }
+
+.container {
+    max-width: 900px;
+    margin: 30px auto;
+    background: white;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    color: #006699;
+    border-bottom: 3px solid #006699;
+    padding-bottom: 10px;
+    margin-bottom: 25px;
+    font-size: 1.8em;
+}
+
+.section { margin-bottom: 30px; }
+.section-subtitle { color: #004d73; font-size: 1.1em; font-weight: bold; margin-bottom: 15px; margin-top: 20px; }
+.form-group { margin-bottom: 20px; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.form-row.full { grid-template-columns: 1fr; }
+
+@media (max-width: 768px) { .form-row { grid-template-columns: 1fr; } }
+
+label { display: block; font-weight: bold; margin-bottom: 8px; color: #333; font-size: 0.95em; }
+.required::after { content: " *"; color: #d9534f; font-weight: bold; }
+
+input, select, textarea {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+    font-size: 1em;
+    font-family: inherit;
+    transition: border-color 0.3s ease;
+}
+
+input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: #006699;
+    box-shadow: 0 0 5px rgba(0, 102, 153, 0.3);
+}
+
+input[readonly] { background-color: #f5f5f5; cursor: not-allowed; }
+.error-message { color: #d9534f; font-size: 0.85em; margin-top: 5px; display: none; }
+.form-group.error .error-message { display: block; }
+.form-group.error input, .form-group.error select { border-color: #d9534f; background-color: #fff5f5; }
+
+.info-box { background: #e7f3ff; border-left: 4px solid #006699; padding: 15px; margin-bottom: 20px; border-radius: 5px; }
+.info-box strong { color: #006699; }
+
+.button-group { display: flex; gap: 15px; justify-content: center; margin-top: 30px; }
+button {
+    padding: 14px 35px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    min-width: 150px;
+}
+
+.btn-submit { background: linear-gradient(135deg, #006699 0%, #004d73 100%); color: white; }
+.btn-submit:hover { background: linear-gradient(135deg, #004d73 0%, #003d5c 100%); transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0, 102, 153, 0.3); }
+.btn-reset { background: #6c757d; color: white; }
+.btn-reset:hover { background: #5a6268; }
+
+.message-container { position: fixed; top: 20px; right: 20px; z-index: 9999; max-width: 450px; }
+@keyframes slideIn { from { transform: translateX(500px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+@keyframes slideOut { from { transform: translateX(0); opacity: 1; } to { transform: translateX(500px); opacity: 0; } }
+
+.message { padding: 20px; margin-bottom: 15px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); animation: slideIn 0.4s ease-out; display: flex; align-items: flex-start; gap: 12px; }
+.message.removing { animation: slideOut 0.4s ease-in forwards; }
+.message.success { background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%); color: #155724; border-left: 4px solid #28a745; }
+.message.success .icon { font-size: 1.5em; min-width: 24px; animation: checkmark 0.6s ease-out; }
+@keyframes checkmark { 0% { transform: scale(0) rotate(-45deg); } 50% { transform: scale(1.2); } 100% { transform: scale(1) rotate(0deg); } }
+.message.error { background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%); color: #721c24; border-left: 4px solid #dc3545; }
+.message.error .icon { font-size: 1.5em; min-width: 24px; animation: shake 0.5s ease-out; }
+@keyframes shake { 0%, 100% { transform: translateX(0); } 10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); } 20%, 40%, 60%, 80% { transform: translateX(5px); } }
+.message.warning { background: linear-gradient(135deg, #fff3cd 0%, #ffeeba 100%); color: #856404; border-left: 4px solid #ffc107; }
+.message.info { background: linear-gradient(135deg, #d1ecf1 0%, #bee5eb 100%); color: #0c5460; border-left: 4px solid #17a2b8; }
+.message-content { flex: 1; }
+.message-title { font-weight: bold; margin-bottom: 5px; font-size: 1.05em; }
+.message-text { font-size: 0.95em; line-height: 1.5; }
+.message-details { margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(0, 0, 0, 0.1); font-size: 0.9em; }
+.message-close { background: none; border: none; color: inherit; cursor: pointer; font-size: 1.2em; padding: 0; min-width: auto; opacity: 0.6; transition: opacity 0.2s; }
+.message-close:hover { opacity: 1; }
+
+.modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.6); z-index: 10000; animation: fadeIn 0.3s ease-out; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+.modal-content { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 40px; border-radius: 15px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3); max-width: 550px; width: 90%; z-index: 10001; animation: modalSlideIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); text-align: center; max-height: 90vh; overflow-y: auto; }
+@keyframes modalSlideIn { from { transform: translate(-50%, -60%); opacity: 0; scale: 0.8; } to { transform: translate(-50%, -50%); opacity: 1; scale: 1; } }
+.modal-icon { font-size: 5em; margin-bottom: 20px; animation: successBounce 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55); }
+@keyframes successBounce { 0% { transform: scale(0) rotate(-45deg); } 50% { transform: scale(1.2); } 100% { transform: scale(1) rotate(0deg); } }
+.modal-icon.success { color: #28a745; }
+.modal-icon.error { color: #dc3545; }
+.modal-title { font-size: 1.8em; color: #006699; margin-bottom: 15px; font-weight: bold; }
+.modal-message { color: #666; margin-bottom: 20px; line-height: 1.6; font-size: 1.1em; }
+.modal-subtext { color: #999; font-size: 0.9em; margin-bottom: 25px; }
+.modal-details { background: #f4f7fa; padding: 20px; border-radius: 8px; margin-bottom: 25px; text-align: left; max-height: 250px; overflow-y: auto; }
+.modal-detail-item { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #ddd; font-size: 0.95em; }
+.modal-detail-item:last-child { border-bottom: none; }
+.modal-detail-label { font-weight: bold; color: #006699; }
+.modal-detail-value { color: #333; word-break: break-word; text-align: right; }
+.modal-reference { background: #fff3cd; border: 2px solid #ffc107; border-radius: 8px; padding: 15px; margin-bottom: 20px; text-align: center; }
+.modal-reference-label { font-size: 0.9em; color: #856404; margin-bottom: 5px; }
+.modal-reference-number { font-size: 1.4em; font-weight: bold; color: #006699; font-family: 'Courier New', monospace; }
+.modal-buttons { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+.modal-buttons button { min-width: 130px; }
+.btn-primary { background: linear-gradient(135deg, #28a745 0%, #20c997 100%); color: white; }
+.btn-primary:hover { background: linear-gradient(135deg, #20c997 0%, #17a2b8 100%); transform: translateY(-2px); }
+.btn-secondary { background: #6c757d; color: white; }
+.btn-secondary:hover { background: #5a6268; transform: translateY(-2px); }
+.btn-print { background: #17a2b8; color: white; }
+.btn-print:hover { background: #138496; transform: translateY(-2px); }
+
+@keyframes confetti-fall { 0% { transform: translateY(-10px) rotate(0deg); opacity: 1; } 100% { transform: translateY(100vh) rotate(720deg); opacity: 0; } }
+.confetti { position: fixed; width: 10px; height: 10px; z-index: 10002; pointer-events: none; }
+
+footer { text-align: center; padding: 20px; color: #666; margin-top: 40px; border-top: 1px solid #ddd; }
+
+@media (max-width: 600px) {
+    header h1 { font-size: 1.8em; }
+    .container { margin: 10px; padding: 15px; }
+    .message-container { left: 10px; right: 10px; max-width: none; }
+    .modal-content { width: 95%; padding: 25px; }
+    .modal-icon { font-size: 3.5em; }
+    .button-group { flex-direction: column; }
+    button { min-width: 100%; }
+}
+</style>
+</head>
+<body>
+
+<header>
+    <h1>ISPITSM Marrakech</h1>
+    <h3>Inscription et Réinscription aux Semestres</h3>
+    <p>Année Académique 2025-2026</p>
+</header>
+
+<div class="container">
+    <div class="info-box">
+        <strong>ℹ️ Information :</strong> Tous les champs marqués d'un astérisque (*) sont obligatoires.
+    </div>
+    
+    <h2>Formulaire d'Inscription</h2>
+    
+    <form id="inscriptionForm" novalidate="">
+        <!-- Section Informations Personnelles -->
+        <div class="section">
+            <div class="section-subtitle">📋 Informations Personnelles</div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="nom" class="required">Nom</label>
+                    <input type="text" id="nom" name="nom" required="" placeholder="Entrez votre nom">
+                    <span class="error-message">Le nom est obligatoire</span>
+                </div>
+                <div class="form-group">
+                    <label for="prenom" class="required">Prénom</label>
+                    <input type="text" id="prenom" name="prenom" required="" placeholder="Entrez votre prénom">
+                    <span class="error-message">Le prénom est obligatoire</span>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="cni" class="required">CNI</label>
+                    <input type="text" id="cni" name="cni" required="" placeholder="Exemple: AB123456" pattern="[A-Za-z0-9]{6,}">
+                    <span class="error-message">Le CNI est obligatoire et doit contenir au moins 6 caractères</span>
+                </div>
+                <div class="form-group">
+                    <label for="dateNaissance" class="required">Date de naissance</label>
+                    <input type="date" id="dateNaissance" name="dateNaissance" required="">
+                    <span class="error-message">La date de naissance est obligatoire</span>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="nationalite" class="required">Nationalité</label>
+                    <input type="text" id="nationalite" name="nationalite" required="" placeholder="Exemple: Marocain(e)">
+                    <span class="error-message">La nationalité est obligatoire</span>
+                </div>
+                <div class="form-group">
+                    <label for="email" class="required">Email</label>
+                    <input type="email" id="email" name="email" required="" placeholder="exemple@email.com">
+                    <span class="error-message">Veuillez entrer une adresse email valide</span>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="telephone">Téléphone</label>
+                    <input type="tel" id="telephone" name="telephone" placeholder="Exemple: +212612345678" pattern="[+0-9\s\-()]{8,}">
+                    <span class="error-message">Veuillez entrer un numéro de téléphone valide</span>
+                </div>
+                <div class="form-group">
+                    <label for="adresse">Adresse</label>
+                    <input type="text" id="adresse" name="adresse" placeholder="Votre adresse complète">
+                </div>
+            </div>
+        </div>
+
+        <!-- Section Informations Académiques -->
+        <div class="section">
+            <div class="section-subtitle">🎓 Informations Académiques</div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="filiere" class="required">Filière</label>
+                    <select id="filiere" name="filiere" required="">
+                        <option value="">-- Sélectionner une filière --</option>
+                        <option value="SI">Soins Infirmiers</option>
+                        <option value="SF">Sage-Femme</option>
+                        <option value="TS">Techniques de Santé</option>
+                        <option value="RR">Rééducation et Réhabilitation</option>
+                        <option value="AMS">Assistance Médico-Sociale</option>
+                    </select>
+                    <span class="error-message">Veuillez sélectionner une filière</span>
+                </div>
+                <div class="form-group">
+                    <label for="option" class="required">Option</label>
+                    <select id="option" name="option" required="">
+                        <option value="">-- Sélectionner une option --</option>
+                        <option value="IP">IP</option>
+                        <option value="ISM">ISM</option>
+                        <option value="IAR">IAR</option>
+                        <option value="ISUSI">ISUSI</option>
+                        <option value="IBO">IBO</option>
+                        <option value="IG">IG</option>
+                        <option value="ISFSC">ISFSC</option>
+                        <option value="INP">INP</option>
+                        <option value="SF">SF</option>
+                        <option value="LABO">LABO</option>
+                        <option value="SE">SE</option>
+                        <option value="RADIO">RADIO</option>
+                        <option value="SS">SS</option>
+                        <option value="ORTHO">ORTHO</option>
+                        <option value="KINE">KINE</option>
+                        <option value="PSY">PSY</option>
+                        <option value="AS">AS</option>
+                    </select>
+                    <span class="error-message">Veuillez sélectionner une option</span>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="promotion" class="required">Promotion (Année d'entrée)</label>
+                    <input type="text" id="promotion" name="promotion" required="" placeholder="Exemple: 2024" pattern="[0-9]{4}">
+                    <span class="error-message">La promotion doit être une année valide (4 chiffres)</span>
+                </div>
+                <div class="form-group">
+                    <label for="semestre" class="required">Semestre</label>
+                    <select id="semestre" name="semestre" required="">
+                        <option value="">-- Sélectionner un semestre --</option>
+                        <option value="S2">S2 - Semestre 2</option>
+                        <option value="S3">S3 - Semestre 3</option>
+                        <option value="S4">S4 - Semestre 4</option>
+                        <option value="S5">S5 - Semestre 5</option>
+                        <option value="S6">S6 - Semestre 6</option>
+                    </select>
+                    <span class="error-message">Veuillez sélectionner un semestre</span>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="anneeUniversitaire" class="required">Année Universitaire</label>
+                    <input type="text" id="anneeUniversitaire" name="anneeUniversitaire" value="2025-2026" readonly="">
+                </div>
+                <div class="form-group">
+                    <label for="type" class="required">Type d'inscription</label>
+                    <select id="type" name="type" required="">
+                        <option value="">-- Sélectionner un type --</option>
+                        <option value="inscription">Inscription</option>
+                        <option value="reinscription">Réinscription</option>
+                    </select>
+                    <span class="error-message">Veuillez sélectionner un type d'inscription</span>
+                </div>
+            </div>
+
+            <div class="form-row full">
+                <div class="form-group">
+                    <label for="modules">Modules suivis (séparés par des virgules)</label>
+                    <textarea id="modules" name="modules" rows="3" placeholder="Exemple: Anatomie, Physiologie, Pharmacologie" required></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="button-group">
+            <button type="submit" class="btn-submit">✓ Valider l'inscription</button>
+            <button type="reset" class="btn-reset">↻ Réinitialiser le formulaire</button>
+        </div>
+    </form>
+</div>
+
+<div class="message-container" id="messageContainer"></div>
+
+<div class="modal-overlay" id="modalOverlay">
+    <div class="modal-content">
+        <div class="modal-icon success" id="modalIcon">✓</div>
+        <div class="modal-title" id="modalTitle">Inscription Confirmée</div>
+        <div class="modal-message" id="modalMessage">Votre inscription a été enregistrée avec succès!</div>
+        <div class="modal-subtext" id="modalSubtext">Un email de confirmation vous sera envoyé à votre adresse</div>
+        <div class="modal-reference">
+            <div class="modal-reference-label">Numéro de Référence</div>
+            <div class="modal-reference-number" id="referenceNumber">#INS-000000</div>
+        </div>
+        <div class="modal-details" id="modalDetails"></div>
+        <div class="modal-buttons">
+            <button class="btn-primary" onclick="closeModal()">✓ Accepter</button>
+            <button class="btn-print" onclick="printInscription()">🖨 Imprimer</button>
+            <button class="btn-secondary" onclick="downloadInscription()">⬇ Télécharger</button>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <p>© 2025-2026 ISPITSM Marrakech - Plateforme d'inscription en ligne</p>
+</footer>
+
+<script>
+// ==========================================
+// REMPLACEZ CECI PAR VOTRE URL GOOGLE SCRIPT
+// ==========================================
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxbdKvm0IX7vW3AIN4RClk95hz4wGnCcMEVs5wEj3121A9xUywz8J9e0p0NdTnE8rc/exec'; 
+
+// Classe pour gérer les messages
+class MessageManager {
+    constructor(containerId) {
+        this.container = document.getElementById(containerId);
+        this.messages = [];
+    }
+
+    show(type, title, message, details = null, duration = 5000) {
+        const messageId = Date.now();
+        const messageEl = document.createElement('div');
+        messageEl.className = `message ${type}`;
+        messageEl.id = `msg-${messageId}`;
+        const icons = { success: '✓', error: '✕', warning: '⚠', info: 'ℹ' };
+        let detailsHtml = details ? '<div class="message-details">' + details + '</div>' : '';
+        
+        messageEl.innerHTML = `
+            <div class="icon">${icons[type]}</div>
+            <div class="message-content">
+                <div class="message-title">${title}</div>
+                <div class="message-text">${message}</div>
+                ${detailsHtml}
+            </div>
+            <button class="message-close" onclick="messageManager.remove('${messageId}')">×</button>
+        `;
+        
+        this.container.appendChild(messageEl);
+        this.messages.push(messageId);
+        if (duration > 0) { setTimeout(() => this.remove(messageId), duration); }
+        return messageId;
+    }
+
+    remove(messageId) {
+        const messageEl = document.getElementById(`msg-${messageId}`);
+        if (messageEl) {
+            messageEl.classList.add('removing');
+            setTimeout(() => {
+                messageEl.remove();
+                this.messages = this.messages.filter(id => id !== messageId);
+            }, 400);
+        }
+    }
+
+    success(title, message, details = null) { return this.show('success', title, message, details); }
+    error(title, message, details = null) { return this.show('error', title, message, details, 0); }
+    warning(title, message, details = null) { return this.show('warning', title, message, details); }
+    info(title, message, details = null) { return this.show('info', title, message, details); }
+}
+
+const messageManager = new MessageManager('messageContainer');
+const form = document.getElementById('inscriptionForm');
+const modalOverlay = document.getElementById('modalOverlay');
+
+function validateForm() {
+    let isValid = true;
+    const errors = [];
+    const requiredFields = form.querySelectorAll('[required]');
+    
+    requiredFields.forEach(field => {
+        const formGroup = field.closest('.form-group');
+        if (!field.value.trim()) {
+            formGroup.classList.add('error');
+            isValid = false;
+            errors.push(`${field.previousElementSibling.textContent.replace(' *', '')}`);
+        } else {
+            if (field.type === 'email' && !isValidEmail(field.value)) { formGroup.classList.add('error'); isValid = false; errors.push('Email invalide'); } 
+            else if (field.type === 'date' && !isValidDate(field.value)) { formGroup.classList.add('error'); isValid = false; errors.push('Date invalide'); } 
+            else if (field.id === 'cni' && !isValidCNI(field.value)) { formGroup.classList.add('error'); isValid = false; errors.push('CNI invalide'); } 
+            else if (field.id === 'promotion' && !isValidYear(field.value)) { formGroup.classList.add('error'); isValid = false; errors.push('Année invalide'); } 
+            else { formGroup.classList.remove('error'); }
+        }
+    });
+    
+    const telephone = document.getElementById('telephone');
+    if (telephone.value.trim() && !isValidPhone(telephone.value)) {
+        telephone.closest('.form-group').classList.add('error');
+        isValid = false;
+        errors.push('Téléphone invalide');
+    }
+    return { isValid, errors };
+}
+
+function isValidEmail(email) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email); }
+function isValidDate(dateString) { const date = new Date(dateString); return date instanceof Date && !isNaN(date) && date < new Date(); }
+function isValidCNI(cni) { return cni.length >= 6; }
+function isValidYear(year) { const currentYear = new Date().getFullYear(); return /^[0-9]{4}$/.test(year) && year >= 1950 && year <= currentYear; }
+function isValidPhone(phone) { return /^[+0-9\s\-()]{8,}$/.test(phone); }
+
+// ==========================================
+// NOUVEAU : ENVOI VERS GOOGLE SHEET
+// ==========================================
+form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    form.querySelectorAll('.form-group').forEach(group => group.classList.remove('error'));
+    const validation = validateForm();
+    
+    if (validation.isValid) {
+        // Message de chargement
+        const loadingMsgId = messageManager.info('⏳ Traitement', 'Envoi de votre inscription en cours...');
+        
+        const formData = new FormData(form);
+        const data = Object.fromEntries(formData);
+        
+        // Requête vers Google Apps Script
+        fetch(https://script.google.com/macros/s/AKfycbxbdKvm0IX7vW3AIN4RClk95hz4wGnCcMEVs5wEj3121A9xUywz8J9e0p0NdTnE8rc/exec, {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(res => {
+            messageManager.remove(loadingMsgId); // Supprimer le message de chargement
+            
+            if (res.result === 'success') {
+                showSuccessModal(data); // Afficher le modal et les confettis
+            } else {
+                throw new Error(res.error || 'Erreur inconnue');
+            }
+        })
+        .catch(error => {
+            messageManager.remove(loadingMsgId);
+            console.error('Erreur:', error);
+            messageManager.error(
+                '❌ Erreur d\'envoi',
+                'Une erreur est survenue lors de l\'envoi vers le serveur. Vérifiez votre connexion et réessayez.'
+            );
+        });
+    } else {
+        const errorDetails = validation.errors.map(err => `• ${err}`).join('<br>');
+        messageManager.error('❌ Erreurs de Validation', 'Veuillez corriger les erreurs avant de soumettre le formulaire.', errorDetails);
+    }
+});
+
+function showSuccessModal(data) {
+    const modalTitle = document.getElementById('modalTitle');
+    const modalMessage = document.getElementById('modalMessage');
+    const modalDetails = document.getElementById('modalDetails');
+    const refNumber = generateReferenceNumber();
+    
+    document.getElementById('referenceNumber').textContent = `#INS-${refNumber}`;
+    modalTitle.textContent = `Bienvenue, ${data.prenom} ${data.nom}!`;
+    modalMessage.textContent = 'Votre inscription a été enregistrée avec succès!';
+    
+    const detailsHtml = `
+        <div class="modal-detail-item"><span class="modal-detail-label">📁 Filière:</span><span class="modal-detail-value">${getFiliereName(data.filiere)}</span></div>
+        <div class="modal-detail-item"><span class="modal-detail-label">🎯 Option:</span><span class="modal-detail-value">${data.option}</span></div>
+        <div class="modal-detail-item"><span class="modal-detail-label">📚 Semestre:</span><span class="modal-detail-value">${data.semestre}</span></div>
+        <div class="modal-detail-item"><span class="modal-detail-label">📝 Type :</span><span class="modal-detail-value">${data.type === 'inscription' ? 'Première inscription' : 'Réinscription'}</span></div>
+        <div class="modal-detail-item"><span class="modal-detail-label">✉️ Email:</span><span class="modal-detail-value">${data.email}</span></div>
+        <div class="modal-detail-item"><span class="modal-detail-label">🎂 Date de naissance :</span><span class="modal-detail-value">${data.dateNaissance || 'N/A'}</span></div>
+        <div class="modal-detail-item"><span class="modal-detail-label">🏠 Adresse :</span><span class="modal-detail-value">${data.adresse || 'N/A'}</span></div>
+        <div class="modal-detail-item"><span class="modal-detail-label">📅 Date:</span><span class="modal-detail-value">${new Date().toLocaleDateString('fr-FR')}</span></div>
+        <div class="modal-detail-item"><span class="modal-detail-label">📖 Modules :</span><span class="modal-detail-value">${data.modules || 'Aucun'}</span></div>
+    `;
+    
+    modalDetails.innerHTML = detailsHtml;
+    modalOverlay.style.display = 'block';
+    launchConfetti();
+    
+    messageManager.success('🎉 Inscription Réussie!', 'Vérifiez votre email pour les prochaines étapes.', `Numéro de référence: <strong>#INS-${refNumber}</strong>`);
+    saveInscriptionData(data, refNumber);
+}
+
+function getFiliereName(code) {
+    const filieres = { 'SI': 'Soins Infirmiers', 'SF': 'Sage-Femme', 'TS': 'Techniques de Santé', 'RR': 'Rééducation et Réhabilitation', 'AMS': 'Assistance Médico-Sociale' };
+    return filieres[code] || code;
+}
+
+function generateReferenceNumber() { return Math.floor(Math.random() * 1000000).toString().padStart(6, '0'); }
+function saveInscriptionData(data, refNumber) {
+    const inscription = { ...data, dateInscription: new Date().toLocaleString('fr-FR'), numeroReference: refNumber };
+    localStorage.setItem('derniere-inscription', JSON.stringify(inscription));
+}
+
+function closeModal() { modalOverlay.style.display = 'none'; form.reset(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+
+function printInscription() {
+    const inscription = JSON.parse(localStorage.getItem('derniere-inscription'));
+    if (inscription) {
+        const printContent = `
+            <!DOCTYPE html><html><head><style>
+                body { font-family: Arial, sans-serif; }
+                .header { text-align: center; margin-bottom: 30px; }
+                .header h1 { color: #006699; }
+                .reference { background: #fff3cd; padding: 15px; border-radius: 5px; margin-bottom: 20px; }
+                .details { margin-top: 20px; }
+                .detail-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #ddd; }
+            </style></head><body>
+                <div class="header"><h1>ISPITSM Marrakech</h1><p>Confirmation d'Inscription</p></div>
+                <div class="reference"><p><strong>Numéro de Référence:</strong> #INS-${inscription.numeroReference}</p><p><strong>Date d'Inscription:</strong> ${inscription.dateInscription}</p></div>
+                <div class="details">
+                    <h3>Informations Personnelles</h3>
+                    <div class="detail-row"><span>Nom:</span><span>${inscription.nom}</span></div>
+                    <div class="detail-row"><span>Prénom:</span><span>${inscription.prenom}</span></div>
+                    <div class="detail-row"><span>Email:</span><span>${inscription.email}</span></div>
+                    <div class="detail-row"><span>Téléphone:</span><span>${inscription.telephone || 'N/A'}</span></div>
+                    <div class="detail-row"><span>Date de naissance :</span><span>${inscription.dateNaissance || 'N/A'}</span></div>
+                    <div class="detail-row"><span>Adresse :</span><span>${inscription.adresse || 'N/A'}</span></div>
+                    <h3>Informations Académiques</h3>
+                    <div class="detail-row"><span>Filière:</span><span>${getFiliereName(inscription.filiere)}</span></div>
+                    <div class="detail-row"><span>Option:</span><span>${inscription.option}</span></div>
+                    <div class="detail-row"><span>Semestre:</span><span>${inscription.semestre}</span></div>
+                    <div class="detail-row"><span>Type:</span><span>${inscription.type === 'inscription' ? 'Première inscription' : 'Réinscription'}</span></div>
+                    <div class="detail-row"><span>Modules :</span><span>${inscription.modules || 'Aucun'}</span></div>
+                </div>
+            </body></html>
+        `;
+        const printWindow = window.open('', '', 'height=600,width=800');
+        printWindow.document.write(printContent);
+        printWindow.document.close();
+        printWindow.print();
+    }
+}
+
+function downloadInscription() {
+    const inscription = JSON.parse(localStorage.getItem('derniere-inscription'));
+    if (inscription) {
+        const content = `
+CONFIRMATION D'INSCRIPTION
+ISPITSM Marrakech
+==================================================
+
+NUMÉRO DE RÉFÉRENCE: #INS-${inscription.numeroReference}
+DATE D'INSCRIPTION: ${inscription.dateInscription}
+
+INFORMATIONS PERSONNELLES
+==================================================
+Nom: ${inscription.nom}
+Prénom: ${inscription.prenom}
+Email: ${inscription.email}
+Date de naissance: ${inscription.dateNaissance || 'N/A'}
+Adresse: ${inscription.adresse || 'N/A'}
+Téléphone: ${inscription.telephone || 'N/A'}
+CNI: ${inscription.cni}
+Nationalité: ${inscription.nationalite}
+
+INFORMATIONS ACADÉMIQUES
+==================================================
+Filière: ${getFiliereName(inscription.filiere)}
+Option: ${inscription.option}
+Semestre: ${inscription.semestre}
+Année Universitaire: ${inscription.anneeUniversitaire}
+Type d'Inscription: ${inscription.type === 'inscription' ? 'Première inscription' : 'Réinscription'}
+Modules: ${inscription.modules || 'Aucun'}
+
+================================
+© 2025-2026 ISPITSM Marrakech
+        `;
+        const blob = new Blob([content], { type: 'text/plain' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `inscription-${inscription.numeroReference}.txt`;
+        a.click();
+        window.URL.revokeObjectURL(url);
+    }
+}
+
+function launchConfetti() {
+    const confettiCount = 50;
+    const colors = ['#28a745', '#006699', '#ffc107', '#17a2b8', '#dc3545'];
+    for (let i = 0; i < confettiCount; i++) {
+        setTimeout(() => {
+            const confetti = document.createElement('div');
+            confetti.className = 'confetti';
+            confetti.style.left = Math.random() * window.innerWidth + 'px';
+            confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+            confetti.style.animation = `confetti-fall ${2 + Math.random() * 1}s ease-in forwards`;
+            document.body.appendChild(confetti);
+            setTimeout(() => confetti.remove(), 3000);
+        }, i * 30);
+    }
+}
+
+form.querySelectorAll('input, select, textarea').forEach(field => {
+    field.addEventListener('blur', function() {
+        const formGroup = this.closest('.form-group');
+        if (this.hasAttribute('required') && !this.value.trim()) { formGroup.classList.add('error'); } 
+        else if (this.type === 'email' && this.value.trim() && !isValidEmail(this.value)) { formGroup.classList.add('error'); } 
+        else { formGroup.classList.remove('error'); }
+    });
+    field.addEventListener('focus', function() { this.closest('.form-group').classList.remove('error'); });
+});
+
+modalOverlay.addEventListener('click', function(e) { if (e.target === modalOverlay) { closeModal(); } });
+
+window.addEventListener('load', function() {
+    messageManager.success('👋 Bienvenue!', 'Remplissez le formulaire ci-dessous pour procéder à votre inscription.', 'Tous les champs marqués d\'un astérisque (*) sont obligatoires.');
+});
+</script>
+
+</body></html>
