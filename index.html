@@ -171,6 +171,19 @@ tbody tr{border-bottom:1px solid var(--bd);transition:background .15s}tbody tr:l
 .import-check{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--fm);cursor:pointer}
 .import-check input[type="checkbox"]{accent-color:var(--ac);width:15px;height:15px;cursor:pointer}
 .md-import{width:680px}
+
+/* ===== STYLES CONFIRM DANGER ===== */
+.confirm-danger-icon{width:64px;height:64px;border-radius:50%;background:var(--dns);color:var(--dn);display:flex;align-items:center;justify-content:center;font-size:26px;margin:0 auto 16px;animation:cpulse 1.5s ease infinite}
+@keyframes cpulse{0%,100%{box-shadow:0 0 0 0 rgba(239,68,68,.3)}50%{box-shadow:0 0 0 12px rgba(239,68,68,0)}}
+.confirm-warning-icon{width:64px;height:64px;border-radius:50%;background:var(--wns);color:var(--wn);display:flex;align-items:center;justify-content:center;font-size:26px;margin:0 auto 16px;animation:wpulse 1.5s ease infinite}
+@keyframes wpulse{0%,100%{box-shadow:0 0 0 0 rgba(245,158,11,.3)}50%{box-shadow:0 0 0 12px rgba(245,158,11,0)}}
+.confirm-sub{color:var(--fm);font-size:13px;line-height:1.6;margin-top:8px}
+.confirm-count{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:7px;font-weight:700;font-family:'Space Grotesk',sans-serif;font-size:18px;margin-top:12px}
+.confirm-input-wrap{margin-top:14px;padding:12px;background:var(--bg);border-radius:9px;border:1px solid var(--bd)}
+.confirm-input-wrap label{display:block;font-size:12px;font-weight:600;color:var(--fm);margin-bottom:6px}
+.confirm-input-wrap input{width:100%;padding:8px 12px;background:var(--bgc);border:1px solid var(--bd);border-radius:7px;color:var(--fg);font-size:13px;font-family:'DM Sans',sans-serif;outline:none;transition:border-color .2s;text-align:center;letter-spacing:1px;font-weight:600}
+.confirm-input-wrap input:focus{border-color:var(--dn)}
+.confirm-input-wrap .ci-hint{font-size:10.5px;color:var(--fd);margin-top:5px;text-align:center}
 </style>
 </head>
 <body>
@@ -195,6 +208,7 @@ tbody tr{border-bottom:1px solid var(--bd);transition:background .15s}tbody tr:l
   <div style="display:flex;gap:8px;flex-wrap:wrap;">
     <button class="bs" onclick="openImportModal()" style="border-color:var(--in);color:var(--in);"><i class="fa-solid fa-file-excel"></i> Importer Excel</button>
     <button class="bp1" onclick="openSM()"><i class="fa-solid fa-user-plus"></i> Ajouter</button>
+    <button class="bs" onclick="doDeleteAllStudents()" style="border-color:var(--dn);color:var(--dn);"><i class="fa-solid fa-users-slash"></i> Supprimer tout</button>
   </div>
 </div>
 <div style="margin-bottom:16px;"><div class="tfs" id="STF" style="gap:7px;flex-wrap:wrap;"></div></div>
@@ -226,15 +240,14 @@ tbody tr{border-bottom:1px solid var(--bd);transition:background .15s}tbody tr:l
 <!-- MODAL TYPE -->
 <div class="mo" id="MTY"><div class="md"><div class="mh"><h3 id="TYT2">Nouveau type</h3><button class="mx" onclick="closeModal('MTY')"><i class="fa-solid fa-xmark"></i></button></div><div class="mb"><input type="hidden" id="TID"><div class="fg"><label class="fl">Nom</label><input type="text" class="fi" id="TNM" placeholder="Ex: Absence justifiee"></div><div class="fg"><label class="fl">Couleur</label><input type="color" class="fi" id="TCO" value="#10b981" style="height:42px;padding:4px 8px;cursor:pointer;"></div></div><div class="mf"><button class="bs" onclick="closeModal('MTY')">Annuler</button><button class="bp1" onclick="saveT()"><i class="fa-solid fa-check"></i> Enregistrer</button></div></div></div>
 
-<!-- MODAL CONFIRM -->
-<div class="mo" id="MCF"><div class="md" style="width:390px;"><div class="mb"><div style="text-align:center;padding:10px 0;"><div style="width:56px;height:56px;border-radius:50%;background:var(--dns);color:var(--dn);display:flex;align-items:center;justify-content:center;font-size:22px;margin:0 auto 14px;"><i class="fa-solid fa-trash-can"></i></div><h4 id="CFT">Confirmer</h4><p id="CFX" style="color:var(--fm);font-size:13px;"></p></div></div><div class="mf" style="justify-content:center;"><button class="bs" onclick="closeModal('MCF')">Annuler</button><button class="bdr" onclick="execDelete()"><i class="fa-solid fa-trash-can"></i> Supprimer</button></div></div></div>
+<!-- MODAL CONFIRM (reutilise pour toutes les confirmations) -->
+<div class="mo" id="MCF"><div class="md" style="width:430px;"><div class="mb" id="MCF_BODY"><div style="text-align:center;padding:10px 0;"><div class="confirm-danger-icon"><i class="fa-solid fa-trash-can"></i></div><h4 id="CFT">Confirmer</h4><p id="CFX" style="color:var(--fm);font-size:13px;"></p></div></div><div class="mf" style="justify-content:center;" id="MCF_FOOTER"><button class="bs" onclick="closeModal('MCF')">Annuler</button><button class="bdr" id="MCF_BTN" onclick="execDelete()"><i class="fa-solid fa-trash-can"></i> Supprimer</button></div></div></div>
 
 <!-- MODAL IMPORT EXCEL -->
 <div class="mo" id="MIMP">
 <div class="md md-import">
   <div class="mh"><h3><i class="fa-solid fa-file-excel" style="color:var(--ac);margin-right:8px;"></i>Importer etudiants depuis Excel</h3><button class="mx" onclick="closeModal('MIMP')"><i class="fa-solid fa-xmark"></i></button></div>
   <div class="mb" id="IMP_BODY">
-    <!-- Etape 1 : upload -->
     <div id="IMP_STEP1">
       <div class="import-zone" id="IMP_DROP" onclick="document.getElementById('IMP_FILE').click()">
         <i class="fa-solid fa-cloud-arrow-up"></i>
@@ -252,7 +265,6 @@ tbody tr{border-bottom:1px solid var(--bd);transition:background .15s}tbody tr:l
         </div>
       </div>
     </div>
-    <!-- Etape 2 : mapping + preview -->
     <div id="IMP_STEP2" style="display:none;">
       <div class="import-stats" id="IMP_STATS"></div>
       <div class="col-map" id="IMP_COLMAP"></div>
@@ -284,8 +296,6 @@ var students=[],modules=[],absences=[],types=[],nid=1;
 var absPage=1,absFilter='all',absClass='all',absModule='all',absSearch='';
 var calMonth,calYear,stuClass='all',modClass='all';
 var currentDetailStuId=null,currentDetailModId=null,delTarget=null;
-
-/* ====== IMPORT EXCEL STATE ====== */
 var importData={rows:[],headers:[],mapped:[],validCount:0,dupCount:0,errCount:0,colMap:{prenom:0,nom:1,classe:2,email:3}};
 
 /* ====== PERSISTANCE ====== */
@@ -294,7 +304,64 @@ function loadFromStorage(){try{var d=JSON.parse(localStorage.getItem(STORE_KEY))
 function clearStorage(){try{localStorage.removeItem(STORE_KEY);}catch(e){}}
 
 /* ====== SUPPRESSION ====== */
-function askDelete(type,id,after){delTarget={type:type,id:id,after:after||'all'};var lb={absence:'cette absence',student:'cet etudiant et ses absences',module:'ce module et ses absences',type:'ce type'};document.getElementById('CFT').textContent='Confirmer la suppression';document.getElementById('CFX').textContent='Voulez-vous vraiment supprimer '+(lb[type]||'cet element')+' ?';openModal('MCF');}
+function askDelete(type,id,after){delTarget={type:type,id:id,after:after||'all'};var lb={absence:'cette absence',student:'cet etudiant et ses absences',module:'ce module et ses absences',type:'ce type'};document.getElementById('MCF_BODY').innerHTML='<div style="text-align:center;padding:10px 0;"><div class="confirm-danger-icon"><i class="fa-solid fa-trash-can"></i></div><h4 id="CFT">Confirmer la suppression</h4><p id="CFX" style="color:var(--fm);font-size:13px;">Voulez-vous vraiment supprimer '+(lb[type]||'cet element')+' ?</p></div>';document.getElementById('MCF_BTN').innerHTML='<i class="fa-solid fa-trash-can"></i> Supprimer';document.getElementById('MCF_BTN').onclick=execDelete;openModal('MCF');}
+
+/* Supprimer TOUS les etudiants avec confirmation securisee */
+function doDeleteAllStudents(){
+    if(!students.length){toast('Aucun etudiant a supprimer','info');return;}
+    var count=students.length;
+    var absCount=absences.length;
+    /* Generer un code de confirmation aleatoire */
+    var code='SUPPRIMER';
+    document.getElementById('MCF_BODY').innerHTML=
+        '<div style="text-align:center;padding:10px 0;">'+
+            '<div class="confirm-danger-icon"><i class="fa-solid fa-users-slash"></i></div>'+
+            '<h4 style="font-size:18px;font-weight:700;color:var(--dn);margin-bottom:6px;">Supprimer tous les etudiants</h4>'+
+            '<p style="color:var(--fm);font-size:13px;line-height:1.6;">Cette action est <strong style="color:var(--dn);">irreversible</strong>. Tous les etudiants seront supprimes ainsi que toutes les absences associees.</p>'+
+            '<div class="confirm-count" style="background:var(--dns);color:var(--dn);"><i class="fa-solid fa-user-graduate"></i> '+count+' etudiant'+(count>1?'s':'')+'</div>'+
+            (absCount>0?'<div class="confirm-count" style="background:var(--wns);color:var(--wn);margin-top:6px;"><i class="fa-solid fa-clipboard-list"></i> '+absCount+' absence'+(absCount>1?'s':'')+' liee'+(absCount>1?'s':'')+'</div>':'')+
+            '<p style="color:var(--fm);font-size:12px;margin-top:14px;line-height:1.5;">Les modules et types d\'absence seront <strong style="color:var(--fg);">conserves</strong>.</p>'+
+            '<div class="confirm-input-wrap">'+
+                '<label>Tapez <strong style="color:var(--dn);">'+code+'</strong> pour confirmer</label>'+
+                '<input type="text" id="MCF_CONFIRM_INPUT" placeholder="'+code+'" autocomplete="off" oninput="toggleConfirmBtn()">'+
+                '<div class="ci-hint">Cette verification prevent une suppression accidentelle</div>'+
+            '</div>'+
+        '</div>';
+    document.getElementById('MCF_BTN').innerHTML='<i class="fa-solid fa-users-slash"></i> Supprimer '+count+' etudiants';
+    document.getElementById('MCF_BTN').onclick=execDeleteAllStudents;
+    document.getElementById('MCF_BTN').disabled=true;
+    document.getElementById('MCF_BTN').style.opacity='.4';
+    document.getElementById('MCF_BTN').style.cursor='not-allowed';
+    openModal('MCF');
+    /* Focus sur l'input apres ouverture du modal */
+    setTimeout(function(){var inp=document.getElementById('MCF_CONFIRM_INPUT');if(inp)inp.focus();},350);
+}
+
+/* Activer/desactiver le bouton de confirmation selon la saisie */
+function toggleConfirmBtn(){
+    var inp=document.getElementById('MCF_CONFIRM_INPUT');
+    var btn=document.getElementById('MCF_BTN');
+    if(!inp||!btn)return;
+    var match=inp.value.trim()==='SUPPRIMER';
+    btn.disabled=!match;
+    btn.style.opacity=match?'1':'.4';
+    btn.style.cursor=match?'pointer':'not-allowed';
+}
+
+/* Executer la suppression de tous les etudiants */
+function execDeleteAllStudents(){
+    var inp=document.getElementById('MCF_CONFIRM_INPUT');
+    if(!inp||inp.value.trim()!=='SUPPRIMER'){toast('Code de confirmation incorrect','error');return;}
+    var count=students.length;
+    var absCount=absences.length;
+    students=[];
+    absences=[];
+    saveToStorage();
+    closeModal('MCF');
+    renderAll();
+    toast(count+' etudiant'+(count>1?'s':'')+' et '+absCount+' absence'+(absCount>1?'s':'')+' supprime'+(count>1?'s':''),'success');
+}
+
 function execDelete(){closeModal('MCF');if(!delTarget)return;var t=delTarget.type,id=delTarget.id,after=delTarget.after;delTarget=null;
 if(t==='_reset'){absences=[];saveToStorage();renderAll();toast('Absences reinitialisees');return;}
 if(t==='_fullReset'){clearStorage();location.reload();return;}
@@ -303,8 +370,8 @@ else if(t==='student'){students=students.filter(function(x){return x.id!==id;});
 else if(t==='module'){modules=modules.filter(function(x){return x.id!==id;});absences=absences.filter(function(a){return a.moduleId!==id;});toast('Module supprime');}
 else if(t==='type'){var fb=types.find(function(tp){return tp.id!==id;});if(fb)absences.forEach(function(a){if(a.typeId===id)a.typeId=fb.id;});types=types.filter(function(x){return x.id!==id;});toast('Type supprime');}
 saveToStorage();if(after==='stuDetail'&&currentDetailStuId){getStu(currentDetailStuId)?showStuDetail(currentDetailStuId):go('students');}else if(after==='modDetail'&&currentDetailModId){getMod(currentDetailModId)?showModDetail(currentDetailModId):go('modules');}else{renderAll();}}
-function doReset(){delTarget={type:'_reset',id:0,after:'all'};document.getElementById('CFT').textContent='Reinitialiser les absences';document.getElementById('CFX').textContent='Toutes les absences seront supprimees. Etudiants et modules conserves.';openModal('MCF');}
-function doFullReset(){delTarget={type:'_fullReset',id:0,after:'all'};document.getElementById('CFT').textContent='Reinitialiser tout';document.getElementById('CFX').textContent='Toutes les donnees seront reinitialisees. La page va se recharger.';openModal('MCF');}
+function doReset(){delTarget={type:'_reset',id:0,after:'all'};document.getElementById('MCF_BODY').innerHTML='<div style="text-align:center;padding:10px 0;"><div class="confirm-warning-icon"><i class="fa-solid fa-rotate-left"></i></div><h4>Reinitialiser les absences</h4><p style="color:var(--fm);font-size:13px;margin-top:8px;">Toutes les absences seront supprimees. Etudiants et modules conserves.</p></div>';document.getElementById('MCF_BTN').innerHTML='<i class="fa-solid fa-rotate-left"></i> Reinitialiser';document.getElementById('MCF_BTN').onclick=execDelete;openModal('MCF');}
+function doFullReset(){delTarget={type:'_fullReset',id:0,after:'all'};document.getElementById('MCF_BODY').innerHTML='<div style="text-align:center;padding:10px 0;"><div class="confirm-danger-icon"><i class="fa-solid fa-triangle-exclamation"></i></div><h4>Reinitialiser tout</h4><p style="color:var(--fm);font-size:13px;margin-top:8px;">Toutes les donnees seront reinitialisees. La page va se recharger.</p></div>';document.getElementById('MCF_BTN').innerHTML='<i class="fa-solid fa-triangle-exclamation"></i> Reinitialiser tout';document.getElementById('MCF_BTN').onclick=execDelete;openModal('MCF');}
 
 /* ====== UTILITAIRES ====== */
 function fmtD(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
@@ -318,7 +385,7 @@ function typeBadge(tid){var t=getTyp(tid);if(!t)return '';return '<span class="b
 function fmtDateFr(ds){if(!ds)return '';var p=ds.split('-');return p[2]+'/'+p[1]+'/'+p[0];}
 function toast(msg,type){type=type||'success';var cls={success:'ts',error:'te',info:'tn'}[type]||'ts';var icon={success:'fa-check-circle',error:'fa-circle-xmark',info:'fa-circle-info'}[type]||'fa-check-circle';var el=document.createElement('div');el.className='toast '+cls;el.innerHTML='<i class="fa-solid '+icon+'"></i> '+msg;document.getElementById('TC').appendChild(el);setTimeout(function(){el.classList.add('toast-exit');setTimeout(function(){el.remove();},300);},3000);}
 function openModal(id){document.getElementById(id).classList.add('show');}
-function closeModal(id){document.getElementById(id).classList.remove('show');}
+function closeModal(id){document.getElementById(id).classList.remove('show');/* Reinitialiser l'etat du bouton a la fermeture */var btn=document.getElementById('MCF_BTN');if(btn){btn.disabled=false;btn.style.opacity='1';btn.style.cursor='pointer';}}
 
 /* ====== NAVIGATION ====== */
 function go(page){document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');});var el=document.getElementById('page-'+page);if(el)el.classList.add('active');document.querySelectorAll('.ni').forEach(function(n){n.classList.toggle('active',n.dataset.p===page);});document.getElementById('SB').classList.remove('open');if(page==='dashboard')renderDashboard();else if(page==='absences'){renderAbsFilters();renderAbsences();}else if(page==='calendar')renderCalendar();else if(page==='students'){renderStuFilters();renderStudents();}else if(page==='modules'){renderModFilters();renderModules();}else if(page==='types')renderTypes();}
@@ -365,7 +432,7 @@ function renderTypes(){document.getElementById('TB').innerHTML=types.map(functio
 /* ====== MODAL ETUDIANT ====== */
 function openSM(editId){var s=editId?getStu(editId):null;document.getElementById('SMT2').textContent=s?'Modifier etudiant':'Nouvel etudiant';document.getElementById('SID').value=s?s.id:'';document.getElementById('SFR').value=s?s.prenom:'';document.getElementById('SLN').value=s?s.nom:'';var cls=getClasses();document.getElementById('SCL').innerHTML=cls.map(function(c){return '<option value="'+c+'"'+(s&&s.classe===c?' selected':'')+'>'+c+'</option>';}).join('');document.getElementById('SEM').value=s?s.email:'';openModal('MST');}
 function editS(id){openSM(id);}
-function saveS(){var id=document.getElementById('SID').value;var prenom=document.getElementById('SFR').value.trim();var nom=document.getElementById('SLN').value.trim();var classe=document.getElementById('SCL').value;var email=document.getElementById('SEM').value.trim();if(!prenom||!nom||!classe){toast('Prenom, Nom et Classe sont obligatoires','error');return;}var parts=classe.split(' '),sem=parts[parts.length-1],spec=parts.slice(0,-1).join(' ');var lvl=sem<='S2'?'1ere Annee':sem<='S4'?'2eme Annee':'3eme Annee';if(id){var s=getStu(parseInt(id));if(s){s.prenom=prenom;s.nom=nom;s.classe=classe;s.spec=spec;s.niveau=lvl;s.email=email||prenom.toLowerCase()+'.'+nom.replace(/\s+/g,'').toLowerCase()+'@univ.fr';}toast('Etudiant modifie');}else{var newS={id:nid++,prenom:prenom,nom:nom,classe:classe,spec:spec,niveau:lvl,email:email||prenom.toLowerCase()+'.'+nom.replace(/\s+/g,'').toLowerCase()+'@univ.fr'};students.push(newS);toast('Etudiant ajoute');}saveToStorage();closeModal('MST');renderAll();}
+function saveS(){var id=document.getElementById('SID').value;var prenom=document.getElementById('SFR').value.trim();var nom=document.getElementById('SLN').value.trim();var classe=document.getElementById('SCL').value;var email=document.getElementById('SEM').value.trim();if(!prenom||!nom||!classe){toast('Prenom, Nom et Classe sont obligatoires','error');return;}var parts=classe.split(' '),sem=parts[parts.length-1],spec=parts.slice(0,-1).join(' ');var lvl=sem<='S2'?'1ere Annee':sem<='S4'?'2eme Annee':'3eme Annee';if(id){var s=getStu(parseInt(id));if(s){s.prenom=prenom;s.nom=nom;s.classe=classe;s.spec=spec;s.niveau=lvl;s.email=email||prenom.toLowerCase()+'.'+nom.replace(/\s+/g,'').toLowerCase()+'@univ.fr';}toast('Etudiant modifie');}else{students.push({id:nid++,prenom:prenom,nom:nom,classe:classe,spec:spec,niveau:lvl,email:email||prenom.toLowerCase()+'.'+nom.replace(/\s+/g,'').toLowerCase()+'@univ.fr'});toast('Etudiant ajoute');}saveToStorage();closeModal('MST');renderAll();}
 
 /* ====== MODAL MODULE ====== */
 function openMM(editId){var m=editId?getMod(editId):null;document.getElementById('MMT2').textContent=m?'Modifier module':'Nouveau module';document.getElementById('MID').value=m?m.id:'';document.getElementById('MNM').value=m?m.name:'';var cls=getClasses();document.getElementById('MCL').innerHTML=cls.map(function(c){return '<option value="'+c+'"'+(m&&m.classe===c?' selected':'')+'>'+c+'</option>';}).join('');document.getElementById('MCO').value=m?m.color:'#8b5cf6';openModal('MMO');}
@@ -382,208 +449,16 @@ function exportCSV(){if(!absences.length){toast('Aucune absence a exporter','err
 function exportStudents(){if(!students.length){toast('Aucun etudiant','error');return;}var csv='Prenom,Nom,Classe,Specialite,Niveau,Email\n';students.forEach(function(s){csv+='"'+s.prenom+'","'+s.nom+'","'+s.classe+'","'+s.spec+'","'+s.niveau+'","'+s.email+'"\n';});downloadFile(csv,'etudiants_export.csv','text/csv');toast('Export etudiants telecharge');}
 function downloadFile(content,filename,type){var blob=new Blob([content],{type:type+';charset=utf-8;'});var url=URL.createObjectURL(blob);var a=document.createElement('a');a.href=url;a.download=filename;a.click();URL.revokeObjectURL(url);}
 
-/* ====================================================================
-   IMPORT EXCEL - LOGIQUE COMPLETE
-   ==================================================================== */
-
-/* Ouvrir le modal d'import et reinitialiser l'etat */
-function openImportModal(){
-    importData={rows:[],headers:[],mapped:[],validCount:0,dupCount:0,errCount:0,colMap:{prenom:0,nom:1,classe:2,email:3}};
-    document.getElementById('IMP_STEP1').style.display='block';
-    document.getElementById('IMP_STEP2').style.display='none';
-    document.getElementById('IMP_BACK').style.display='none';
-    document.getElementById('IMP_VALIDATE').style.display='none';
-    document.getElementById('IMP_FILE').value='';
-    openModal('MIMP');
-}
-
-/* Drag & Drop sur la zone d'upload */
-(function(){
-    document.addEventListener('DOMContentLoaded',function(){
-        var zone=document.getElementById('IMP_DROP');
-        if(!zone)return;
-        zone.addEventListener('dragover',function(e){e.preventDefault();e.stopPropagation();zone.classList.add('drag-over');});
-        zone.addEventListener('dragleave',function(e){e.preventDefault();e.stopPropagation();zone.classList.remove('drag-over');});
-        zone.addEventListener('drop',function(e){e.preventDefault();e.stopPropagation();zone.classList.remove('drag-over');if(e.dataTransfer.files.length){document.getElementById('IMP_FILE').files=e.dataTransfer.files;handleImportFile(document.getElementById('IMP_FILE'));}});
-    });
-})();
-
-/* Traitement du fichier selectionne */
-function handleImportFile(input){
-    var file=input.files[0];
-    if(!file)return;
-    var ext=file.name.split('.').pop().toLowerCase();
-    if(['xlsx','xls','csv'].indexOf(ext)===-1){toast('Format non supporte. Utilisez .xlsx, .xls ou .csv','error');return;}
-    var reader=new FileReader();
-    reader.onload=function(e){
-        try{
-            var data=new Uint8Array(e.target.result);
-            var wb=XLSX.read(data,{type:'array',cellDates:true});
-            var ws=wb.Sheets[wb.SheetNames[0]];
-            var json=XLSX.utils.sheet_to_json(ws,{header:1,defval:''});
-            if(json.length<2){toast('Le fichier est vide ou ne contient qu\'une en-tete','error');return;}
-            /* Extraire les en-tetes (premiere ligne) et les donnees */
-            var headers=json[0].map(function(h){return String(h).trim().toLowerCase().replace(/[^a-z0-9àâäéèêëïîôùûüÿçœæ _-]/gi,'');});
-            var rows=json.slice(1).filter(function(r){return r.some(function(c){return String(c).trim()!=='';});});
-            importData.headers=headers;
-            importData.rows=rows;
-            /* Detection automatique des colonnes */
-            autoDetectColumns(headers);
-            /* Passer a l'etape 2 */
-            showImportStep2();
-        }catch(err){
-            console.error(err);
-            toast('Erreur de lecture du fichier : '+err.message,'error');
-        }
-    };
-    reader.readAsArrayBuffer(file);
-}
-
-/* Detection automatique des colonnes par correspondance de noms */
-function autoDetectColumns(headers){
-    var map={prenom:-1,nom:-1,classe:-1,email:-1};
-    var patterns={
-        prenom:/^(prenom|pre?nom|first.?name|fn|prénom)$/i,
-        nom:/^(nom|name|last.?name|ln|family|famille|nom de famille)$/i,
-        classe:/^(classe|class|groupe|group|section|niveau|filiere|filier?e|promo)$/i,
-        email:/^(email|mail|e.?mail|courriel|adresse?\.?mail)$/i
-    };
-    headers.forEach(function(h,i){
-        for(var key in patterns){
-            if(patterns[key].test(h)&&map[key]===-1){map[key]=i;}
-        }
-    });
-    /* Fallback : si prenom/nom non trouves, prendre les 2 premieres colonnes */
-    if(map.prenom===-1&&headers.length>0)map.prenom=0;
-    if(map.nom===-1&&headers.length>1)map.nom=1;
-    if(map.classe===-1&&headers.length>2)map.classe=2;
-    importData.colMap=map;
-}
-
-/* Afficher l'etape 2 : mapping + preview */
-function showImportStep2(){
-    document.getElementById('IMP_STEP1').style.display='none';
-    document.getElementById('IMP_STEP2').style.display='block';
-    document.getElementById('IMP_BACK').style.display='inline-flex';
-    /* Generer les selects de mapping */
-    var headerOpts=importData.headers.map(function(h,i){return '<option value="'+i+'">'+(h||'Colonne '+(i+1))+'</option>';}).join('');
-    var m=importData.colMap;
-    document.getElementById('IMP_COLMAP').innerHTML=
-        '<div><label>Prenom *</label><select class="fs" onchange="importData.colMap.prenom=parseInt(this.value);updateImportPreview();">'+headerOpts+'</select></div>'+
-        '<div><label>Nom *</label><select class="fs" onchange="importData.colMap.nom=parseInt(this.value);updateImportPreview();">'+headerOpts+'</select></div>'+
-        '<div><label>Classe *</label><select class="fs" onchange="importData.colMap.classe=parseInt(this.value);updateImportPreview();">'+headerOpts+'</select></div>'+
-        '<div><label>Email (optionnel)</label><select class="fs" onchange="importData.colMap.email=parseInt(this.value);updateImportPreview();"><option value="-1">-- Non defini --</option>'+headerOpts+'</select></div>';
-    /* Set les valeurs detectees */
-    var selMaps=document.getElementById('IMP_COLMAP').querySelectorAll('select');
-    var keys=['prenom','nom','classe','email'];
-    selMaps.forEach(function(sel,i){sel.value=m[keys[i]];});
-    updateImportPreview();
-}
-
-/* Mettre a jour la previsualisation apres changement de mapping */
-function updateImportPreview(){
-    var m=importData.colMap;
-    var skipDup=document.getElementById('IMP_SKIPDUP').checked;
-    var overwrite=document.getElementById('IMP_OVERWRITE').checked;
-    var mapped=[];
-    var validCount=0,dupCount=0,errCount=0;
-    importData.rows.forEach(function(row){
-        var prenom=String(row[m.prenom]||'').trim();
-        var nom=String(row[m.nom]||'').trim();
-        var classe=String(row[m.classe]||'').trim();
-        var email=m.email>=0?String(row[m.email]||'').trim():'';
-        var status='ok';
-        var dup=null;
-        if(!prenom||!nom||!classe){status='err';errCount++;}
-        else{
-            /* Verifier doublon */
-            dup=students.find(function(s){return s.prenom.toLowerCase()===prenom.toLowerCase()&&s.nom.toLowerCase()===nom.toLowerCase()&&s.classe.toLowerCase()===classe.toLowerCase();});
-            if(dup){
-                if(overwrite){status='dup';dupCount++;}
-                else if(skipDup){status='dup';dupCount++;}
-                else{status='ok';}
-            }else{status='ok';}
-            if(status==='ok')validCount++;
-        }
-        mapped.push({prenom:prenom,nom:nom,classe:classe,email:email,status:status,dup:dup});
-    });
-    importData.mapped=mapped;
-    importData.validCount=validCount;
-    importData.dupCount=dupCount;
-    importData.errCount=errCount;
-    /* Stats */
-    document.getElementById('IMP_STATS').innerHTML=
-        '<div class="import-stat"><div class="import-stat-val" style="color:var(--in);">'+importData.rows.length+'</div><div class="import-stat-lbl">Total lignes</div></div>'+
-        '<div class="import-stat"><div class="import-stat-val" style="color:var(--ac);">'+validCount+'</div><div class="import-stat-lbl">A importer</div></div>'+
-        '<div class="import-stat"><div class="import-stat-val" style="color:var(--wn);">'+dupCount+'</div><div class="import-stat-lbl">Doublons</div></div>'+
-        '<div class="import-stat"><div class="import-stat-val" style="color:var(--dn);">'+errCount+'</div><div class="import-stat-lbl">Erreurs</div></div>';
-    /* Preview tableau */
-    var maxPreview=Math.min(mapped.length,50);
-    document.getElementById('IMP_PREV_COUNT').textContent=maxPreview;
-    var tbl='<table><thead><tr><th>#</th><th>Prenom</th><th>Nom</th><th>Classe</th><th>Email</th><th>Statut</th></tr></thead><tbody>';
-    for(var i=0;i<maxPreview;i++){
-        var r=mapped[i];
-        var rowCls=r.status==='err'?'row-err':r.status==='dup'?'row-dup':'row-ok';
-        var statusHtml=r.status==='err'?'<span style="color:var(--dn);font-size:11px;font-weight:600;"><i class="fa-solid fa-circle-xmark"></i> Incomplet</span>':r.status==='dup'?'<span style="color:var(--wn);font-size:11px;font-weight:600;"><i class="fa-solid fa-copy"></i> '+(document.getElementById('IMP_OVERWRITE').checked?'Remplacement':'Ignore')+'</span>':'<span style="color:var(--ac);font-size:11px;font-weight:600;"><i class="fa-solid fa-check"></i> OK</span>';
-        tbl+='<tr class="'+rowCls+'"><td style="color:var(--fd);font-size:11px;">'+(i+1)+'</td><td>'+(r.prenom||'<em style="color:var(--dn);">manquant</em>')+'</td><td>'+(r.nom||'<em style="color:var(--dn);">manquant</em>')+'</td><td>'+(r.classe||'<em style="color:var(--dn);">manquant</em>')+'</td><td style="font-size:11px;color:var(--fm);">'+(r.email||'-')+'</td><td>'+statusHtml+'</td></tr>';
-    }
-    if(mapped.length>50)tbl+='<tr><td colspan="6" style="text-align:center;color:var(--fd);font-size:11px;padding:8px;">... et '+(mapped.length-50)+' autres lignes</td></tr>';
-    tbl+='</tbody></table>';
-    document.getElementById('IMP_PREVIEW').innerHTML=tbl;
-    /* Bouton valider */
-    var canImport=validCount>0;
-    document.getElementById('IMP_VALIDATE').style.display=canImport?'inline-flex':'none';
-    document.getElementById('IMP_VALID_COUNT').textContent=validCount;
-}
-
-/* Retour a l'etape 1 */
-function importBack(){
-    document.getElementById('IMP_STEP1').style.display='block';
-    document.getElementById('IMP_STEP2').style.display='none';
-    document.getElementById('IMP_BACK').style.display='none';
-    document.getElementById('IMP_VALIDATE').style.display='none';
-}
-
-/* Executer l'import reel */
-function executeImport(){
-    var overwrite=document.getElementById('IMP_OVERWRITE').checked;
-    var added=0,updated=0;
-    importData.mapped.forEach(function(r){
-        if(r.status==='err')return;
-        if(r.status==='dup'&&!overwrite)return;
-        var parts=r.classe.split(' '),sem=parts[parts.length-1]||'S1',spec=parts.slice(0,-1).join(' ')||r.classe;
-        var lvl=sem<='S2'?'1ere Annee':sem<='S4'?'2eme Annee':'3eme Annee';
-        var email=r.email||(r.prenom.toLowerCase()+'.'+r.nom.replace(/\s+/g,'').replace(/'/g,'').toLowerCase()+'@univ.fr');
-        if(r.dup&&overwrite){
-            r.dup.prenom=r.prenom;r.dup.nom=r.nom;r.dup.classe=r.classe;r.dup.spec=spec;r.dup.niveau=lvl;r.dup.email=email;
-            updated++;
-        }else if(r.status==='ok'){
-            students.push({id:nid++,prenom:r.prenom,nom:r.nom,classe:r.classe,spec:spec,niveau:lvl,email:email});
-            added++;
-        }
-    });
-    saveToStorage();
-    closeModal('MIMP');
-    renderAll();
-    var msg=added+' etudiant'+(added>1?'s':'')+' ajoute'+(added>1?'s':'');
-    if(updated>0)msg+=', '+updated+' mis a jour';
-    if(importData.dupCount>0&&!overwrite)msg+=' ('+importData.dupCount+' doublon'+(importData.dupCount>1?'s':'')+' ignores)';
-    toast(msg,'success');
-}
-
-/* Reagir au changement des checkboxes d'import */
-document.addEventListener('DOMContentLoaded',function(){
-    var skipEl=document.getElementById('IMP_SKIPDUP');
-    var overEl=document.getElementById('IMP_OVERWRITE');
-    if(skipEl)skipEl.addEventListener('change',function(){
-        if(this.checked)overEl.checked=false;
-        if(importData.rows.length)updateImportPreview();
-    });
-    if(overEl)overEl.addEventListener('change',function(){
-        if(this.checked)skipEl.checked=false;
-        if(importData.rows.length)updateImportPreview();
-    });
-});
+/* ====== IMPORT EXCEL ====== */
+function openImportModal(){importData={rows:[],headers:[],mapped:[],validCount:0,dupCount:0,errCount:0,colMap:{prenom:0,nom:1,classe:2,email:3}};document.getElementById('IMP_STEP1').style.display='block';document.getElementById('IMP_STEP2').style.display='none';document.getElementById('IMP_BACK').style.display='none';document.getElementById('IMP_VALIDATE').style.display='none';document.getElementById('IMP_FILE').value='';openModal('MIMP');}
+(function(){document.addEventListener('DOMContentLoaded',function(){var zone=document.getElementById('IMP_DROP');if(!zone)return;zone.addEventListener('dragover',function(e){e.preventDefault();e.stopPropagation();zone.classList.add('drag-over');});zone.addEventListener('dragleave',function(e){e.preventDefault();e.stopPropagation();zone.classList.remove('drag-over');});zone.addEventListener('drop',function(e){e.preventDefault();e.stopPropagation();zone.classList.remove('drag-over');if(e.dataTransfer.files.length){document.getElementById('IMP_FILE').files=e.dataTransfer.files;handleImportFile(document.getElementById('IMP_FILE'));}});});})();
+function handleImportFile(input){var file=input.files[0];if(!file)return;var ext=file.name.split('.').pop().toLowerCase();if(['xlsx','xls','csv'].indexOf(ext)===-1){toast('Format non supporte. Utilisez .xlsx, .xls ou .csv','error');return;}var reader=new FileReader();reader.onload=function(e){try{var data=new Uint8Array(e.target.result);var wb=XLSX.read(data,{type:'array',cellDates:true});var ws=wb.Sheets[wb.SheetNames[0]];var json=XLSX.utils.sheet_to_json(ws,{header:1,defval:''});if(json.length<2){toast('Le fichier est vide ou ne contient qu\'une en-tete','error');return;}var headers=json[0].map(function(h){return String(h).trim().toLowerCase().replace(/[^a-z0-9àâäéèêëïîôùûüÿçœæ _-]/gi,'');});var rows=json.slice(1).filter(function(r){return r.some(function(c){return String(c).trim()!=='';});});importData.headers=headers;importData.rows=rows;autoDetectColumns(headers);showImportStep2();}catch(err){console.error(err);toast('Erreur de lecture du fichier : '+err.message,'error');}};reader.readAsArrayBuffer(file);}
+function autoDetectColumns(headers){var map={prenom:-1,nom:-1,classe:-1,email:-1};var patterns={prenom:/^(prenom|pre?nom|first.?name|fn|prénom)$/i,nom:/^(nom|name|last.?name|ln|family|famille|nom de famille)$/i,classe:/^(classe|class|groupe|group|section|niveau|filiere|filier?e|promo)$/i,email:/^(email|mail|e.?mail|courriel|adresse?\.?mail)$/i};headers.forEach(function(h,i){for(var key in patterns){if(patterns[key].test(h)&&map[key]===-1){map[key]=i;}}});if(map.prenom===-1&&headers.length>0)map.prenom=0;if(map.nom===-1&&headers.length>1)map.nom=1;if(map.classe===-1&&headers.length>2)map.classe=2;importData.colMap=map;}
+function showImportStep2(){document.getElementById('IMP_STEP1').style.display='none';document.getElementById('IMP_STEP2').style.display='block';document.getElementById('IMP_BACK').style.display='inline-flex';var headerOpts=importData.headers.map(function(h,i){return '<option value="'+i+'">'+(h||'Colonne '+(i+1))+'</option>';}).join('');var m=importData.colMap;document.getElementById('IMP_COLMAP').innerHTML='<div><label>Prenom *</label><select class="fs" onchange="importData.colMap.prenom=parseInt(this.value);updateImportPreview();">'+headerOpts+'</select></div><div><label>Nom *</label><select class="fs" onchange="importData.colMap.nom=parseInt(this.value);updateImportPreview();">'+headerOpts+'</select></div><div><label>Classe *</label><select class="fs" onchange="importData.colMap.classe=parseInt(this.value);updateImportPreview();">'+headerOpts+'</select></div><div><label>Email (optionnel)</label><select class="fs" onchange="importData.colMap.email=parseInt(this.value);updateImportPreview();"><option value="-1">-- Non defini --</option>'+headerOpts+'</select></div>';var selMaps=document.getElementById('IMP_COLMAP').querySelectorAll('select');var keys=['prenom','nom','classe','email'];selMaps.forEach(function(sel,i){sel.value=m[keys[i]];});updateImportPreview();}
+function updateImportPreview(){var m=importData.colMap;var skipDup=document.getElementById('IMP_SKIPDUP').checked;var overwrite=document.getElementById('IMP_OVERWRITE').checked;var mapped=[];var validCount=0,dupCount=0,errCount=0;importData.rows.forEach(function(row){var prenom=String(row[m.prenom]||'').trim();var nom=String(row[m.nom]||'').trim();var classe=String(row[m.classe]||'').trim();var email=m.email>=0?String(row[m.email]||'').trim():'';var status='ok';var dup=null;if(!prenom||!nom||!classe){status='err';errCount++;}else{dup=students.find(function(s){return s.prenom.toLowerCase()===prenom.toLowerCase()&&s.nom.toLowerCase()===nom.toLowerCase()&&s.classe.toLowerCase()===classe.toLowerCase();});if(dup){if(overwrite){status='dup';dupCount++;}else if(skipDup){status='dup';dupCount++;}else{status='ok';}}if(status==='ok')validCount++;}mapped.push({prenom:prenom,nom:nom,classe:classe,email:email,status:status,dup:dup});});importData.mapped=mapped;importData.validCount=validCount;importData.dupCount=dupCount;importData.errCount=errCount;document.getElementById('IMP_STATS').innerHTML='<div class="import-stat"><div class="import-stat-val" style="color:var(--in);">'+importData.rows.length+'</div><div class="import-stat-lbl">Total lignes</div></div><div class="import-stat"><div class="import-stat-val" style="color:var(--ac);">'+validCount+'</div><div class="import-stat-lbl">A importer</div></div><div class="import-stat"><div class="import-stat-val" style="color:var(--wn);">'+dupCount+'</div><div class="import-stat-lbl">Doublons</div></div><div class="import-stat"><div class="import-stat-val" style="color:var(--dn);">'+errCount+'</div><div class="import-stat-lbl">Erreurs</div></div>';var maxPreview=Math.min(mapped.length,50);document.getElementById('IMP_PREV_COUNT').textContent=maxPreview;var tbl='<table><thead><tr><th>#</th><th>Prenom</th><th>Nom</th><th>Classe</th><th>Email</th><th>Statut</th></tr></thead><tbody>';for(var i=0;i<maxPreview;i++){var r=mapped[i];var rowCls=r.status==='err'?'row-err':r.status==='dup'?'row-dup':'row-ok';var statusHtml=r.status==='err'?'<span style="color:var(--dn);font-size:11px;font-weight:600;"><i class="fa-solid fa-circle-xmark"></i> Incomplet</span>':r.status==='dup'?'<span style="color:var(--wn);font-size:11px;font-weight:600;"><i class="fa-solid fa-copy"></i> '+(document.getElementById('IMP_OVERWRITE').checked?'Remplacement':'Ignore')+'</span>':'<span style="color:var(--ac);font-size:11px;font-weight:600;"><i class="fa-solid fa-check"></i> OK</span>';tbl+='<tr class="'+rowCls+'"><td style="color:var(--fd);font-size:11px;">'+(i+1)+'</td><td>'+(r.prenom||'<em style="color:var(--dn);">manquant</em>')+'</td><td>'+(r.nom||'<em style="color:var(--dn);">manquant</em>')+'</td><td>'+(r.classe||'<em style="color:var(--dn);">manquant</em>')+'</td><td style="font-size:11px;color:var(--fm);">'+(r.email||'-')+'</td><td>'+statusHtml+'</td></tr>';}if(mapped.length>50)tbl+='<tr><td colspan="6" style="text-align:center;color:var(--fd);font-size:11px;padding:8px;">... et '+(mapped.length-50)+' autres lignes</td></tr>';tbl+='</tbody></table>';document.getElementById('IMP_PREVIEW').innerHTML=tbl;var canImport=validCount>0;document.getElementById('IMP_VALIDATE').style.display=canImport?'inline-flex':'none';document.getElementById('IMP_VALID_COUNT').textContent=validCount;}
+function importBack(){document.getElementById('IMP_STEP1').style.display='block';document.getElementById('IMP_STEP2').style.display='none';document.getElementById('IMP_BACK').style.display='none';document.getElementById('IMP_VALIDATE').style.display='none';}
+function executeImport(){var overwrite=document.getElementById('IMP_OVERWRITE').checked;var added=0,updated=0;importData.mapped.forEach(function(r){if(r.status==='err')return;if(r.status==='dup'&&!overwrite)return;var parts=r.classe.split(' '),sem=parts[parts.length-1]||'S1',spec=parts.slice(0,-1).join(' ')||r.classe;var lvl=sem<='S2'?'1ere Annee':sem<='S4'?'2eme Annee':'3eme Annee';var email=r.email||(r.prenom.toLowerCase()+'.'+r.nom.replace(/\s+/g,'').replace(/'/g,'').toLowerCase()+'@univ.fr');if(r.dup&&overwrite){r.dup.prenom=r.prenom;r.dup.nom=r.nom;r.dup.classe=r.classe;r.dup.spec=spec;r.dup.niveau=lvl;r.dup.email=email;updated++;}else if(r.status==='ok'){students.push({id:nid++,prenom:r.prenom,nom:r.nom,classe:r.classe,spec:spec,niveau:lvl,email:email});added++;}});saveToStorage();closeModal('MIMP');renderAll();var msg=added+' etudiant'+(added>1?'s':'')+' ajoute'+(added>1?'s':'');if(updated>0)msg+=', '+updated+' mis a jour';if(importData.dupCount>0&&!overwrite)msg+=' ('+importData.dupCount+' doublon'+(importData.dupCount>1?'s':'')+' ignores)';toast(msg,'success');}
+document.addEventListener('DOMContentLoaded',function(){var skipEl=document.getElementById('IMP_SKIPDUP');var overEl=document.getElementById('IMP_OVERWRITE');if(skipEl)skipEl.addEventListener('change',function(){if(this.checked)overEl.checked=false;if(importData.rows.length)updateImportPreview();});if(overEl)overEl.addEventListener('change',function(){if(this.checked)skipEl.checked=false;if(importData.rows.length)updateImportPreview();});});
 
 /* ====== DEMARRAGE ====== */
 initData();
