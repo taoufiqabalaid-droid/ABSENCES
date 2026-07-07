@@ -179,7 +179,6 @@ tbody tr{border-bottom:1px solid var(--bd);transition:background .15s}tbody tr:l
 .confirm-input-wrap input{width:100%;padding:8px 12px;background:var(--bgc);border:1px solid var(--bd);border-radius:7px;color:var(--fg);font-size:13px;font-family:'DM Sans',sans-serif;outline:none;transition:border-color .2s;text-align:center;letter-spacing:1px;font-weight:600}
 .confirm-input-wrap input:focus{border-color:var(--dn)}
 .confirm-input-wrap .ci-hint{font-size:10.5px;color:var(--fd);margin-top:5px;text-align:center}
-/* Indicateur de type import dans le modal */
 .import-type-badge{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:7px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px}
 .import-type-badge.mod-badge{background:rgba(139,92,246,.12);color:var(--vi);}
 .import-type-badge.stu-badge{background:var(--acs);color:var(--ac);}
@@ -192,10 +191,10 @@ tbody tr{border-bottom:1px solid var(--bd);transition:background .15s}tbody tr:l
 <header class="th"><div style="display:flex;align-items:center;gap:14px;"><button class="mt" onclick="document.getElementById('SB').classList.toggle('open')"><i class="fa-solid fa-bars"></i></button><div class="sb"><i class="fa-solid fa-magnifying-glass"></i><input type="text" placeholder="Rechercher..." id="GS" oninput="globalSearch(this.value)"></div></div><div class="ha"><button class="hb" onclick="toast('Aucune notification','info')"><i class="fa-solid fa-bell"></i><span class="nd" id="ND"></span></button><button class="hb" onclick="exportCSV()"><i class="fa-solid fa-download"></i></button><div class="ua">SC</div></div></header>
 
 <!-- DASHBOARD -->
-<section class="page active" id="page-dashboard"><div style="margin-bottom:24px"><h1 style="font-size:26px;font-weight:700;">Tableau de bord</h1><p style="color:var(--fm);font-size:13px;">— <span id="CD"></span></p></div><div class="kg" id="KPI"></div><div style="display:grid;grid-template-columns:1fr 1.5fr;gap:18px;"><div class="cc"><h3 style="font-size:15px;font-weight:600;margin-bottom:18px;">Par classe</h3><div class="cbc" id="CB"></div></div><div class="dtw"><div class="dth"><h3>Dernieres demandes</h3><button class="bs" onclick="go('absences')" style="padding:6px 12px;font-size:12px;">Voir tout <i class="fa-solid fa-arrow-right" style="font-size:10px;"></i></button></div><table><thead><tr><th>Etudiant</th><th>Module</th><th>Statut</th></tr></thead><tbody id="DR"></tbody></table></div></div></section>
+<section class="page active" id="page-dashboard"><div style="margin-bottom:24px"><h1 style="font-size:26px;font-weight:700;">Tableau de bord</h1><p style="color:var(--fm);font-size:13px;">— <span id="CD"></span></p></div><div class="kg" id="KPI"></div><div style="display:grid;grid-template-columns:1fr 1.5fr;gap:18px;"><div class="cc"><h3 style="font-size:15px;font-weight:600;margin-bottom:18px;">Par classe</h3><div class="cbc" id="CB"></div></div><div class="dtw"><div class="dth"><h3>Dernieres demandes</h3><button class="bs" onclick="go('absences')" style="padding:6px 12px;font-size:12px;">Voir tout <i class="fa-solid fa-arrow-right" style="font-size:10px;"></i></button></div><table><thead><tr><th>Etudiant</th><th>Module</th><th>Date & Heure</th><th>Statut</th></tr></thead><tbody id="DR"></tbody></table></div></div></section>
 
 <!-- ABSENCES -->
-<section class="page" id="page-absences"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:10px;"><div><h1 style="font-size:26px;font-weight:700;">Gestion des absences</h1></div><button class="bp1" onclick="openAM()"><i class="fa-solid fa-plus"></i> Nouvelle absence</button></div><div class="dtw"><div class="dth" style="flex-wrap:wrap;gap:10px;"><div class="tfs" id="SF"></div><div class="tfs"><select class="fs" style="width:140px;padding:6px 11px;font-size:12px;" id="FC" onchange="absClass=this.value;absModule='all';absPage=1;renderAbsFilters();renderAbsences();"><option value="all">Toutes classes</option></select><select class="fs" style="width:140px;padding:6px 11px;font-size:12px;" id="FM" onchange="absModule=this.value;absPage=1;renderAbsences();"><option value="all">Tous modules</option></select></div></div><div style="overflow-x:auto;"><table><thead><tr><th>Etudiant</th><th>Classe</th><th>Module</th><th>Type</th><th>Debut</th><th>Statut</th><th>Actions</th></tr></thead><tbody id="AB"></tbody></table></div><div class="pg" id="PG"></div></div></section>
+<section class="page" id="page-absences"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:10px;"><div><h1 style="font-size:26px;font-weight:700;">Gestion des absences</h1></div><button class="bp1" onclick="openAM()"><i class="fa-solid fa-plus"></i> Nouvelle absence</button></div><div class="dtw"><div class="dth" style="flex-wrap:wrap;gap:10px;"><div class="tfs" id="SF"></div><div class="tfs"><select class="fs" style="width:140px;padding:6px 11px;font-size:12px;" id="FC" onchange="absClass=this.value;absModule='all';absPage=1;renderAbsFilters();renderAbsences();"><option value="all">Toutes classes</option></select><select class="fs" style="width:140px;padding:6px 11px;font-size:12px;" id="FM" onchange="absModule=this.value;absPage=1;renderAbsences();"><option value="all">Tous modules</option></select></div></div><div style="overflow-x:auto;"><table><thead><tr><th>Etudiant</th><th>Classe</th><th>Module</th><th>Type</th><th>Date & Heure</th><th>Statut</th><th>Actions</th></tr></thead><tbody id="AB"></tbody></table></div><div class="pg" id="PG"></div></div></section>
 
 <!-- CALENDAR -->
 <section class="page" id="page-calendar"><div style="margin-bottom:24px"><h1 style="font-size:26px;font-weight:700;">Calendrier</h1></div><div style="display:grid;grid-template-columns:1fr 320px;gap:18px;"><div class="cc" id="CM"></div><div><div class="cc" style="margin-bottom:14px;"><h3 style="font-size:14px;font-weight:600;margin-bottom:14px;">Legendes</h3><div style="display:flex;flex-direction:column;gap:9px;"><div style="display:flex;align-items:center;gap:9px;"><span style="width:9px;height:9px;border-radius:50%;background:var(--ac);"></span><span style="font-size:12.5px;color:var(--fm);">Approuvee</span></div><div style="display:flex;align-items:center;gap:9px;"><span style="width:9px;height:9px;border-radius:50%;background:var(--wn);"></span><span style="font-size:12.5px;color:var(--fm);">En attente</span></div><div style="display:flex;align-items:center;gap:9px;"><span style="width:9px;height:9px;border-radius:50%;background:var(--dn);"></span><span style="font-size:12.5px;color:var(--fm);">Refusee</span></div></div></div><div class="cc"><h3 style="font-size:14px;font-weight:600;margin-bottom:14px;">Absences du jour</h3><div id="CDD"><p style="color:var(--fd);font-size:12.5px;text-align:center;padding:18px 0;">Cliquez sur un jour</p></div></div></div></div></section>
@@ -240,7 +239,7 @@ tbody tr{border-bottom:1px solid var(--bd);transition:background .15s}tbody tr:l
 </div>
 
 <!-- MODAL ABSENCE -->
-<div class="mo" id="MAB"><div class="md"><div class="mh"><h3 id="AMT">Nouvelle absence</h3><button class="mx" onclick="closeModal('MAB')"><i class="fa-solid fa-xmark"></i></button></div><div class="mb"><input type="hidden" id="AID"><div class="fg"><label class="fl">Etudiant</label><select class="fs" id="AST"></select></div><div class="fg"><label class="fl">Module</label><select class="fs" id="AMO"></select></div><div class="fr"><div class="fg"><label class="fl">Debut</label><input type="date" class="fi" id="ASD"></div><div class="fg"><label class="fl">Fin</label><input type="date" class="fi" id="AED"></div></div><div class="fr"><div class="fg"><label class="fl">Type</label><select class="fs" id="ATY"></select></div><div class="fg"><label class="fl">Statut</label><select class="fs" id="AST2"><option value="pending">En attente</option><option value="approved">Approuvee</option><option value="rejected">Refusee</option></select></div></div><div class="fg"><label class="fl">Motif</label><textarea class="fi" id="ARE" rows="2" placeholder="Raison..." style="resize:vertical;"></textarea></div></div><div class="mf"><button class="bs" onclick="closeModal('MAB')">Annuler</button><button class="bp1" onclick="saveA()"><i class="fa-solid fa-check"></i> Enregistrer</button></div></div></div>
+<div class="mo" id="MAB"><div class="md"><div class="mh"><h3 id="AMT">Nouvelle absence</h3><button class="mx" onclick="closeModal('MAB')"><i class="fa-solid fa-xmark"></i></button></div><div class="mb"><input type="hidden" id="AID"><div class="fg"><label class="fl">Etudiant</label><select class="fs" id="AST"></select></div><div class="fg"><label class="fl">Module</label><select class="fs" id="AMO"></select></div><div class="fr"><div class="fg"><label class="fl">Debut (date & heure)</label><input type="datetime-local" class="fi" id="ASD"></div><div class="fg"><label class="fl">Fin (date & heure)</label><input type="datetime-local" class="fi" id="AED"></div></div><div class="fr"><div class="fg"><label class="fl">Type</label><select class="fs" id="ATY"></select></div><div class="fg"><label class="fl">Statut</label><select class="fs" id="AST2"><option value="pending">En attente</option><option value="approved">Approuvee</option><option value="rejected">Refusee</option></select></div></div><div class="fg"><label class="fl">Motif</label><textarea class="fi" id="ARE" rows="2" placeholder="Raison..." style="resize:vertical;"></textarea></div></div><div class="mf"><button class="bs" onclick="closeModal('MAB')">Annuler</button><button class="bp1" onclick="saveA()"><i class="fa-solid fa-check"></i> Enregistrer</button></div></div></div>
 
 <!-- MODAL ETUDIANT -->
 <div class="mo" id="MST"><div class="md"><div class="mh"><h3 id="SMT2">Nouvel etudiant</h3><button class="mx" onclick="closeModal('MST')"><i class="fa-solid fa-xmark"></i></button></div><div class="mb"><input type="hidden" id="SID"><div class="fr"><div class="fg"><label class="fl">Prenom</label><input type="text" class="fi" id="SFR" placeholder="Prenom"></div><div class="fg"><label class="fl">Nom</label><input type="text" class="fi" id="SLN" placeholder="Nom"></div></div><div class="fr"><div class="fg"><label class="fl">Classe</label><select class="fs" id="SCL"></select></div><div class="fg"><label class="fl">Email</label><input type="email" class="fi" id="SEM" placeholder="email@univ.fr"></div></div></div><div class="mf"><button class="bs" onclick="closeModal('MST')">Annuler</button><button class="bp1" onclick="saveS()"><i class="fa-solid fa-check"></i> Enregistrer</button></div></div></div>
@@ -254,7 +253,7 @@ tbody tr{border-bottom:1px solid var(--bd);transition:background .15s}tbody tr:l
 <!-- MODAL CONFIRM -->
 <div class="mo" id="MCF"><div class="md" style="width:430px;"><div class="mb" id="MCF_BODY"></div><div class="mf" style="justify-content:center;" id="MCF_FOOTER"><button class="bs" onclick="closeModal('MCF')">Annuler</button><button class="bdr" id="MCF_BTN" onclick="execDelete()"><i class="fa-solid fa-trash-can"></i> Supprimer</button></div></div></div>
 
-<!-- MODAL IMPORT EXCEL (unifie pour etudiants ET modules) -->
+<!-- MODAL IMPORT EXCEL -->
 <div class="mo" id="MIMP">
 <div class="md md-import">
   <div class="mh"><h3 id="IMP_TITLE"><i class="fa-solid fa-file-excel" style="color:var(--ac);margin-right:8px;"></i>Importer depuis Excel</h3><button class="mx" onclick="closeModal('MIMP')"><i class="fa-solid fa-xmark"></i></button></div>
@@ -308,9 +307,9 @@ var students=[],modules=[],absences=[],types=[],nid=1;
 var absPage=1,absFilter='all',absClass='all',absModule='all',absSearch='';
 var calMonth,calYear,stuClass='all',modClass='all',modSearch='';
 var currentDetailStuId=null,currentDetailModId=null,delTarget=null;
-var PP=8; /* elements par page */
+var PP=8;
 
-/* Etat de l'import unifie */
+/* Etat import */
 var impState={mode:'student',rows:[],headers:[],validCount:0,dupCount:0,errCount:0,colMap:{}};
 
 /* ====== PERSISTANCE ====== */
@@ -336,6 +335,16 @@ function initData(){
     types=DEF_TYPES.slice();nid=sid+mid;
     saveToStorage();
   }
+  /* Migration : convertir anciennes dates sans heure en datetime-local */
+  absences.forEach(function(a){
+    if(a.startDate && a.startDate.indexOf('T')===-1){
+      a.startDate = a.startDate + 'T08:00';
+    }
+    if(a.endDate && a.endDate.indexOf('T')===-1){
+      a.endDate = a.endDate + 'T10:00';
+    }
+  });
+  saveToStorage();
 }
 
 /* ====== NAVIGATION ====== */
@@ -354,7 +363,6 @@ function go(p){
 function globalSearch(v){
   absSearch=v;absPage=1;renderAbsences();
   modSearch=v;renderModules();
-  /* Recherche etudiant aussi */
   var cards=document.querySelectorAll('#SG .sc');
   var q=v.toLowerCase();
   cards.forEach(function(c){var t=(c.dataset.name||'').toLowerCase();c.style.display=(!q||t.indexOf(q)>=0)?'':'none';});
@@ -379,463 +387,539 @@ function getClasses(){var s={};students.forEach(function(st){s[st.classe]=1;});m
 function getStudent(id){return students.find(function(s){return s.id===id;});}
 function getModule(id){return modules.find(function(m){return m.id===id;});}
 function getType(id){return types.find(function(t){return t.id===id;});}
-function fmtDate(d){if(!d)return'';var p=d.split('-');return p[2]+'/'+p[1]+'/'+p[0];}
+
+/* Formater date+heure : "15/01/2025 à 08:30" */
+function fmtDate(d){
+  if(!d)return'';
+  var dt=d.indexOf('T')>=0?d.split('T'):d.split(' ');
+  var p=dt[0].split('-');
+  var timeStr=dt[1]||'';
+  var h='',m='';
+  if(timeStr){
+    var tp=timeStr.split(':');
+    h=tp[0]||'';m=tp[1]||'';
+  }
+  var result=p[2]+'/'+p[1]+'/'+p[0];
+  if(h && m) result += ' à '+h+':'+m;
+  return result;
+}
+
+/* Extraire juste la date (pour calendrier) : "2025-01-15" */
+function dateOnly(d){
+  if(!d)return'';
+  if(d.indexOf('T')>=0) return d.split('T')[0];
+  return d.split(' ')[0];
+}
+
+/* Obtenir datetime-local par défaut (maintenant) */
+function nowLocal(){
+  var d=new Date();
+  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')+'T'+String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');
+}
 function todayStr(){var d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
-function statusBadge(s){if(s==='approved')return'<span class="badge ba"><i class="fa-solid fa-check" style="font-size:9px;"></i> Approuvee</span>';if(s==='rejected')return'<span class="badge br"><i class="fa-solid fa-xmark" style="font-size:9px;"></i> Refusee</span>';return'<span class="badge bp"><i class="fa-solid fa-clock" style="font-size:9px;"></i> En attente</span>';}
-function initials(p,n){return((p||'')[0]||'')+((n||'')[0]||'');}
+
+function statusBadge(s){
+  if(s==='approved')return'<span class="badge ba"><i class="fa-solid fa-circle-check"></i> Approuvee</span>';
+  if(s==='rejected')return'<span class="badge br"><i class="fa-solid fa-circle-xmark"></i> Refusee</span>';
+  return'<span class="badge bp"><i class="fa-solid fa-clock"></i> En attente</span>';
+}
+function initials(p,n){return(p[0]||'')+(n[0]||'');}
 function fillClassSelect(sel,all){
-  var v=sel.value;sel.innerHTML='<option value="all">'+(all||'Toutes les classes')+'</option>';
-  getClasses().forEach(function(c){var o=document.createElement('option');o.value=c;o.textContent=c;sel.appendChild(o);});
-  sel.value=v;
+  var c=getClasses();
+  var h='<option value="all">'+(all||'Toutes')+'</option>';
+  c.forEach(function(cl){h+='<option value="'+cl+'">'+cl+'</option>';});
+  sel.innerHTML=h;
+}
+function fillStudentSelect(sel){
+  var h='';
+  students.forEach(function(s){h+='<option value="'+s.id+'">'+s.prenom+' '+s.nom+' ('+s.classe+')</option>';});
+  sel.innerHTML=h;
+}
+function fillModuleSelect(sel,cl){
+  var h='';
+  var ms=cl&&cl!=='all'?modules.filter(function(m){return m.classe===cl;}):modules;
+  ms.forEach(function(m){h+='<option value="'+m.id+'">'+m.name+'</option>';});
+  sel.innerHTML=h;
+}
+function fillTypeSelect(sel){
+  var h='';
+  types.forEach(function(t){h+='<option value="'+t.id+'">'+t.name+'</option>';});
+  sel.innerHTML=h;
 }
 
 /* ====== DASHBOARD ====== */
 function renderDashboard(){
-  var now=new Date();var opts={weekday:'long',year:'numeric',month:'long',day:'numeric'};document.getElementById('CD').textContent=now.toLocaleDateString('fr-FR',opts);
-  var total=absences.length,pend=absences.filter(function(a){return a.status==='pending';}).length,app=absences.filter(function(a){return a.status==='approved';}).length,rej=absences.filter(function(a){return a.status==='rejected';}).length;
+  var now=new Date();
+  document.getElementById('CD').innerHTML=now.toLocaleDateString('fr-FR',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  var total=absences.length,pend=absences.filter(function(a){return a.status==='pending';}).length;
+  var appr=absences.filter(function(a){return a.status==='approved';}).length;
+  var rej=absences.filter(function(a){return a.status==='rejected';}).length;
+  var pendingClass=pend>0?'style="color:var(--wn);"':'style="color:var(--fm);"';
   document.getElementById('KPI').innerHTML=
-    kc('fa-clipboard-list','var(--ac)','var(--acs)',total,'Total absences','Toutes periodes')+
-    kc('fa-clock','var(--wn)','var(--wns)',pend,'En attente','A traiter')+
-    kc('fa-circle-check','var(--ac)','var(--acs)',app,'Approuvees','Validees')+
-    kc('fa-circle-xmark','var(--dn)','var(--dns)',rej,'Refusees','Rejetees');
-  document.getElementById('ND').style.display=pend>0?'':'none';
-  /* Barres par classe */
-  var classCounts={};getClasses().forEach(function(c){classCounts[c]=0;});absences.forEach(function(a){var st=getStudent(a.studentId);if(st&&classCounts[st.classe]!==undefined)classCounts[st.classe]++;});
-  var maxC=Math.max(1,Math.max.apply(null,Object.values(classCounts)));
-  var barColors=['#10b981','#06b6d4','#8b5cf6','#f59e0b','#ef4444','#ec4899','#14b8a6','#f97316'];
-  var bh='';var ci=0;Object.keys(classCounts).forEach(function(c){
-    var h=Math.round((classCounts[c]/maxC)*100);var col=barColors[ci%barColors.length];ci++;
-    bh+='<div class="cbw"><div class="cbr" style="height:'+h+'%;background:'+col+';"></div><div class="cbl">'+c.replace(' S','<br>S')+'</div></div>';
-  });document.getElementById('CB').innerHTML=bh;
-  /* Dernieres demandes */
-  var last=absences.slice().sort(function(a,b){return(b.id||0)-(a.id||0);}).slice(0,5);
-  var rh='';last.forEach(function(a){var st=getStudent(a.studentId);var md=getModule(a.moduleId);rh+='<tr><td><div class="ec"><div class="ea" style="background:var(--ac);">'+initials(st?st.prenom:'',st?st.nom:'')+'</div><div><div class="en">'+(st?st.prenom+' '+st.nom:'?')+'</div><div class="es">'+(st?st.classe:'')+'</div></div></div></td><td>'+(md?md.name:'?')+'</td><td>'+statusBadge(a.status)+'</td></tr>';});
-  document.getElementById('DR').innerHTML=rh||'<tr><td colspan="3" style="text-align:center;color:var(--fd);padding:20px;">Aucune absence</td></tr>';
-  /* Badge pending */
-  document.getElementById('PB').textContent=pend;document.getElementById('PB').style.display=pend>0?'':'none';
-}
-function kc(icon,color,bg,val,label,sub){
-  return'<div class="kc"><div class="ki" style="background:'+bg+';color:'+color+';"><i class="fa-solid '+icon+'"></i></div><div class="kv">'+val+'</div><div class="kl">'+label+'</div><div class="kt" style="color:'+color+';">'+sub+'</div><div class="kgw" style="background:'+color+';"></div></div>';
+    '<div class="kc"><div class="ki" style="background:var(--acs);color:var(--ac);"><i class="fa-solid fa-list-check"></i></div><div class="kv">'+total+'</div><div class="kl">Total absences</div><div class="kt" style="color:var(--fm);"><i class="fa-solid fa-database"></i> enregistrees</div><div class="kgw" style="background:var(--ac);"></div></div>'+
+    '<div class="kc"><div class="ki" style="background:var(--wns);color:var(--wn);"><i class="fa-solid fa-clock"></i></div><div class="kv">'+pend+'</div><div class="kl">En attente</div><div class="kt" '+pendingClass+'><i class="fa-solid fa-triangle-exclamation"></i> '+((total?Math.round(pend/total*100):0))+'% du total</div><div class="kgw" style="background:var(--wn);"></div></div>'+
+    '<div class="kc"><div class="ki" style="background:rgba(16,185,129,.15);color:var(--ac);"><i class="fa-solid fa-circle-check"></i></div><div class="kv">'+appr+'</div><div class="kl">Approuvees</div><div class="kt" style="color:var(--ac);"><i class="fa-solid fa-arrow-trend-up"></i> '+((total?Math.round(appr/total*100):0))+'%</div><div class="kgw" style="background:var(--ac);"></div></div>'+
+    '<div class="kc"><div class="ki" style="background:var(--dns);color:var(--dn);"><i class="fa-solid fa-circle-xmark"></i></div><div class="kv">'+rej+'</div><div class="kl">Refusees</div><div class="kt" style="color:var(--dn);"><i class="fa-solid fa-arrow-trend-down"></i> '+((total?Math.round(rej/total*100):0))+'%</div><div class="kgw" style="background:var(--dn);"></div></div>';
+
+  /* Graphique par classe */
+  var classCounts={};
+  absences.forEach(function(a){var s=getStudent(a.studentId);if(s)classCounts[s.classe]=(classCounts[s.classe]||0)+1;});
+  var keys=Object.keys(classCounts).sort();
+  var maxV=Math.max.apply(null,keys.map(function(k){return classCounts[k];}).concat([1]));
+  var cbh='';
+  keys.forEach(function(k){
+    var pct=Math.round(classCounts[k]/maxV*100);
+    var short=k.replace('S3','S3').replace('S4','S4').replace('S5','S5');
+    cbh+='<div class="cbw"><div class="cbr" style="height:'+pct+'%;background:var(--ac);"></div><div class="cbl">'+short+'</div></div>';
+  });
+  document.getElementById('CB').innerHTML=cbh||'<div class="empty-state"><p>Aucune donnee</p></div>';
+
+  /* Dernières demandes */
+  var recent=absences.slice().sort(function(a,b){return(b.startDate||'').localeCompare(a.startDate||'');}).slice(0,5);
+  var drh='';
+  recent.forEach(function(a){
+    var s=getStudent(a.studentId);var m=getModule(a.moduleId);
+    if(!s||!m)return;
+    drh+='<tr><td><div class="ec"><div class="ea" style="background:var(--ac);">'+initials(s.prenom,s.nom)+'</div><div><div class="en">'+s.prenom+' '+s.nom+'</div><div class="es">'+s.classe+'</div></div></div></td><td style="font-size:12px;">'+m.name+'</td><td style="font-size:12px;color:var(--fm);white-space:nowrap;">'+fmtDate(a.startDate)+'</td><td>'+statusBadge(a.status)+'</td></tr>';
+  });
+  document.getElementById('DR').innerHTML=drh||'<tr><td colspan="4" class="empty-state"><p>Aucune absence</p></td></tr>';
+  document.getElementById('PB').textContent=pend;
+  if(pend>0)document.getElementById('ND').style.display='';else document.getElementById('ND').style.display='none';
 }
 
 /* ====== ABSENCES ====== */
 function renderAbsFilters(){
-  var f=document.getElementById('SF');
-  var filters=[{k:'all',l:'Toutes'},{k:'pending',l:'En attente'},{k:'approved',l:'Approuvees'},{k:'rejected',l:'Refusees'}];
-  f.innerHTML='';filters.forEach(function(fi){var b=document.createElement('button');b.className='fb'+(absFilter===fi.k?' active':'');b.textContent=fi.l;b.onclick=function(){absFilter=fi.k;absPage=1;renderAbsFilters();renderAbsences();};f.appendChild(b);});
+  var filters=[{k:'all',l:'Tous'},{k:'pending',l:'En attente'},{k:'approved',l:'Approuvees'},{k:'rejected',l:'Refusees'}];
+  var h='';
+  filters.forEach(function(f){h+='<button class="fb'+(absFilter===f.k?' active':'')+'" onclick="absFilter=\''+f.k+'\';absPage=1;renderAbsFilters();renderAbsences();">'+f.l+'</button>';});
+  document.getElementById('SF').innerHTML=h;
   fillClassSelect(document.getElementById('FC'),'Toutes classes');
-  fillModSelect(document.getElementById('FM'));
-}
-function fillModSelect(sel){
-  var v=sel.value;sel.innerHTML='<option value="all">Tous modules</option>';
-  var filtered=absClass==='all'?modules:modules.filter(function(m){return m.classe===absClass;});
-  filtered.forEach(function(m){var o=document.createElement('option');o.value=m.id;o.textContent=m.name;sel.appendChild(o);});
-  sel.value=v;
+  document.getElementById('FC').value=absClass;
+  var ms=absClass!=='all'?modules.filter(function(m){return m.classe===absClass;}):modules;
+  var mh='<option value="all">Tous modules</option>';
+  ms.forEach(function(m){mh+='<option value="'+m.id+'">'+m.name+'</option>';});
+  document.getElementById('FM').innerHTML=mh;
+  document.getElementById('FM').value=absModule;
 }
 function renderAbsences(){
   var list=absences.slice();
   if(absFilter!=='all')list=list.filter(function(a){return a.status===absFilter;});
-  if(absClass!=='all'){var cls=students.filter(function(s){return s.classe===absClass;}).map(function(s){return s.id;});list=list.filter(function(a){return cls.indexOf(a.studentId)>=0;});fillModSelect(document.getElementById('FM'));}
+  if(absClass!=='all'){var cls=students.filter(function(s){return s.classe===absClass;}).map(function(s){return s.id;});list=list.filter(function(a){return cls.indexOf(a.studentId)>=0;});}
   if(absModule!=='all')list=list.filter(function(a){return a.moduleId==absModule;});
-  if(absSearch){var q=absSearch.toLowerCase();list=list.filter(function(a){var st=getStudent(a.studentId);var md=getModule(a.moduleId);return(st&&((st.prenom+' '+st.nom).toLowerCase().indexOf(q)>=0))||(md&&md.name.toLowerCase().indexOf(q)>=0);});}
-  list.sort(function(a,b){return(b.id||0)-(a.id||0);});
+  if(absSearch){var q=absSearch.toLowerCase();list=list.filter(function(a){var s=getStudent(a.studentId);return s&&(s.prenom+' '+s.nom).toLowerCase().indexOf(q)>=0;});}
+  list.sort(function(a,b){return(b.startDate||'').localeCompare(a.startDate||'');});
   var total=list.length,pages=Math.ceil(total/PP)||1;if(absPage>pages)absPage=pages;
   var start=(absPage-1)*PP,page=list.slice(start,start+PP);
-  var tb=document.getElementById('AB'),rh='';
-  page.forEach(function(a){var st=getStudent(a.studentId);var md=getModule(a.moduleId);var tp=getType(a.typeId);
-    rh+='<tr><td><div class="ec"><div class="ea" style="background:var(--ac);">'+initials(st?st.prenom:'',st?st.nom:'')+'</div><div><div class="en">'+(st?st.prenom+' '+st.nom:'?')+'</div></div></div></td>';
-    rh+='<td style="font-size:12px;color:var(--fm);">'+(st?st.classe:'')+'</td>';
-    rh+='<td style="font-size:12px;">'+(md?md.name:'?')+'</td>';
-    rh+='<td>'+(tp?'<span style="display:inline-flex;align-items:center;gap:4px;"><span style="width:7px;height:7px;border-radius:50%;background:'+tp.color+';"></span>'+tp.name+'</span>':'?')+'</td>';
-    rh+='<td style="font-size:12px;">'+fmtDate(a.startDate)+(a.endDate&&a.endDate!==a.startDate?' → '+fmtDate(a.endDate):'')+'</td>';
-    rh+='<td>'+statusBadge(a.status)+'</td>';
-    rh+='<td><button class="ab" title="Modifier" onclick="editA('+a.id+')"><i class="fa-solid fa-pen"></i></button><button class="ab dg" title="Supprimer" onclick="askDelete(\'absence\','+a.id+')"><i class="fa-solid fa-trash-can"></i></button></td></tr>';
+  var bh='';
+  page.forEach(function(a){
+    var s=getStudent(a.studentId);var m=getModule(a.moduleId);var t=getType(a.typeId);
+    if(!s||!m)return;
+    var tnm=t?t.name:'-';var tcol=t?t.color:'var(--fm)';
+    bh+='<tr><td><div class="ec"><div class="ea" style="background:var(--ac);">'+initials(s.prenom,s.nom)+'</div><div><div class="en">'+s.prenom+' '+s.nom+'</div></div></div></td><td style="font-size:12px;color:var(--fm);">'+s.classe+'</td><td style="font-size:12px;">'+m.name+'</td><td><span style="display:inline-flex;align-items:center;gap:5px;font-size:11.5px;"><span style="width:7px;height:7px;border-radius:50%;background:'+tcol+';flex-shrink:0;"></span>'+tnm+'</span></td><td style="font-size:12px;color:var(--fm);white-space:nowrap;">'+fmtDate(a.startDate)+'</td><td>'+statusBadge(a.status)+'</td><td><button class="ab" onclick="editA('+a.id+')" title="Modifier"><i class="fa-solid fa-pen-to-square"></i></button><button class="ab dg" onclick="delA('+a.id+')" title="Supprimer"><i class="fa-solid fa-trash-can"></i></button></td></tr>';
   });
-  tb.innerHTML=rh||'<tr><td colspan="7" style="text-align:center;color:var(--fd);padding:30px;">Aucune absence trouvee</td></tr>';
+  document.getElementById('AB').innerHTML=bh||'<tr><td colspan="7" class="empty-state"><i class="fa-solid fa-inbox"></i><p>Aucune absence trouvee</p></td></tr>';
   /* Pagination */
-  var pg=document.getElementById('PG'),ph='';
-  if(pages>1){ph+='<button class="pb" onclick="absPage=Math.max(1,absPage-1);renderAbsences();" '+(absPage<=1?'disabled':'')+'><i class="fa-solid fa-chevron-left"></i></button>';for(var i=1;i<=pages;i++){if(pages>7&&i>2&&i<pages-1&&Math.abs(i-absPage)>1){if(i===3||i===pages-2)ph+='<span style="color:var(--fd);font-size:12px;">...</span>';continue;}ph+='<button class="pb'+(i===absPage?' active':'')+'" onclick="absPage='+i+';renderAbsences();">'+i+'</button>';}ph+='<button class="pb" onclick="absPage=Math.min('+pages+',absPage+1);renderAbsences();" '+(absPage>=pages?'disabled':'')+'><i class="fa-solid fa-chevron-right"></i></button>';}
-  pg.innerHTML=ph;
-}
-
-/* CRUD Absence */
-function openAM(editId){
-  document.getElementById('AMT').textContent=editId?'Modifier absence':'Nouvelle absence';
-  document.getElementById('AID').value=editId||'';
-  var ss=document.getElementById('AST');ss.innerHTML='';students.forEach(function(s){var o=document.createElement('option');o.value=s.id;o.textContent=s.prenom+' '+s.nom+' ('+s.classe+')';ss.appendChild(o);});
-  var ms=document.getElementById('AMO');ms.innerHTML='';modules.forEach(function(m){var o=document.createElement('option');o.value=m.id;o.textContent=m.name+' ('+m.classe+')';ms.appendChild(o);});
-  var ts=document.getElementById('ATY');ts.innerHTML='';types.forEach(function(t){var o=document.createElement('option');o.value=t.id;o.textContent=t.name;ts.appendChild(o);});
-  document.getElementById('ASD').value=todayStr();document.getElementById('AED').value=todayStr();document.getElementById('ARE').value='';document.getElementById('AST2').value='pending';
-  if(editId){var a=absences.find(function(x){return x.id===editId;});if(a){ss.value=a.studentId;ms.value=a.moduleId;document.getElementById('ASD').value=a.startDate;document.getElementById('AED').value=a.endDate||a.startDate;document.getElementById('ATY').value=a.typeId;document.getElementById('AST2').value=a.status;document.getElementById('ARE').value=a.reason||'';}}
-  openModal('MAB');
-}
-function editA(id){openAM(id);}
-function saveA(){
-  var eid=document.getElementById('AID').value;var sid=parseInt(document.getElementById('AST').value);var mid=parseInt(document.getElementById('AMO').value);var sd=document.getElementById('ASD').value;var ed=document.getElementById('AED').value;var tid=parseInt(document.getElementById('ATY').value);var st=document.getElementById('AST2').value;var re=document.getElementById('ARE').value;
-  if(!sid||!mid||!sd){toast('Veuillez remplir les champs obligatoires','error');return;}
-  if(eid){var a=absences.find(function(x){return x.id==eid;});if(a){a.studentId=sid;a.moduleId=mid;a.startDate=sd;a.endDate=ed;a.typeId=tid;a.status=st;a.reason=re;}}
-  else{absences.push({id:nid++,studentId:sid,moduleId:mid,startDate:sd,endDate:ed,typeId:tid,status:st,reason:re});}
-  saveToStorage();closeModal('MAB');renderAbsences();renderDashboard();toast(eid?'Absence modifiee':'Absence ajoutee','success');
+  var pgh='';
+  if(pages>1){
+    pgh+='<button class="pb" onclick="absPage=Math.max(1,absPage-1);renderAbsences();" '+(absPage<=1?'disabled style="opacity:.4;"':'')+'><i class="fa-solid fa-chevron-left"></i></button>';
+    for(var i=1;i<=pages;i++){
+      if(pages>7&&i>2&&i<pages-1&&Math.abs(i-absPage)>1){if(i===3||i===pages-2)pgh+='<span style="color:var(--fd);font-size:12px;">...</span>';continue;}
+      pgh+='<button class="pb'+(i===absPage?' active':'')+'" onclick="absPage='+i+';renderAbsences();">'+i+'</button>';
+    }
+    pgh+='<button class="pb" onclick="absPage=Math.min('+pages+',absPage+1);renderAbsences();" '+(absPage>=pages?'disabled style="opacity:.4;"':'')+'><i class="fa-solid fa-chevron-right"></i></button>';
+  }
+  document.getElementById('PG').innerHTML=pgh;
 }
 
 /* ====== CALENDRIER ====== */
 function renderCalendar(){
-  var now=new Date();if(calMonth===undefined){calMonth=now.getMonth();calYear=now.getFullYear();}
+  var now=new Date();
+  if(calMonth===undefined){calMonth=now.getMonth();calYear=now.getFullYear();}
   var months=['Janvier','Fevrier','Mars','Avril','Mai','Juin','Juillet','Aout','Septembre','Octobre','Novembre','Decembre'];
+  var first=new Date(calYear,calMonth,1),last=new Date(calYear,calMonth+1,0);
+  var startDay=(first.getDay()+6)%7;
   var days=['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'];
-  var first=new Date(calYear,calMonth,1);var startDow=(first.getDay()+6)%7;var daysInMonth=new Date(calYear,calMonth+1,0).getDate();var prevDays=new Date(calYear,calMonth,0).getDate();
-  var todayD=todayStr();
-  /* Compter absences par jour */
-  var dayAbs={};absences.forEach(function(a){var d=a.startDate;if(d){if(!dayAbs[d])dayAbs[d]={p:0,a:0,r:0};if(a.status==='pending')dayAbs[d].p++;else if(a.status==='approved')dayAbs[d].a++;else dayAbs[d].r++;}});
-  var h='<div class="ch"><h3 style="font-size:15px;font-weight:600;">'+months[calMonth]+' '+calYear+'</h3><div class="cn"><button onclick="calMonth--;if(calMonth<0){calMonth=11;calYear--;}renderCalendar();"><i class="fa-solid fa-chevron-left"></i></button><button onclick="calMonth=new Date().getMonth();calYear=new Date().getFullYear();renderCalendar();"><i class="fa-solid fa-dot" style="font-size:8px;"></i></button><button onclick="calMonth++;if(calMonth>11){calMonth=0;calYear++;}renderCalendar();"><i class="fa-solid fa-chevron-right"></i></button></div></div>';
-  h+='<div class="cg">';days.forEach(function(d){h+='<div class="cdl">'+d+'</div>';});
-  for(var i=0;i<startDow;i++){var pd=prevDays-startDow+1+i;h+='<div class="cd om">'+pd+'</div>';}
-  for(var d=1;d<=daysInMonth;d++){
-    var ds=calYear+'-'+String(calMonth+1).padStart(2,'0')+'-'+String(d).padStart(2,'0');
-    var cls='cd';if(ds===todayD)cls+=' today';
-    var info=dayAbs[ds];if(info){if(info.r>0)cls+=' ha';else if(info.p>0)cls+=' hpp';else if(info.a>0)cls+=' hap';}
-    h+='<div class="'+cls+'" onclick="showCalDay(\''+ds+'\')">'+d+'</div>';
+  var dh='<div class="ch"><h3 style="font-size:15px;font-weight:600;">'+months[calMonth]+' '+calYear+'</h3><div class="cn"><button onclick="calMonth--;if(calMonth<0){calMonth=11;calYear--;}renderCalendar();"><i class="fa-solid fa-chevron-left"></i></button><button onclick="calMonth=now.getMonth();calYear=now.getFullYear();renderCalendar();" style="font-size:11px;width:auto;padding:0 10px;">Auj.</button><button onclick="calMonth++;if(calMonth>11){calMonth=0;calYear++;}renderCalendar();"><i class="fa-solid fa-chevron-right"></i></button></div></div>';
+  dh+='<div class="cg">';
+  days.forEach(function(d){dh+='<div class="cdl">'+d+'</div>';});
+  for(var i=0;i<startDay;i++){
+    var pd=new Date(calYear,calMonth,1-(startDay-i));
+    dh+='<div class="cd om">'+pd.getDate()+'</div>';
   }
-  var totalCells=startDow+daysInMonth;var rem=totalCells%7;if(rem>0)for(var i=1;i<=7-rem;i++){h+='<div class="cd om">'+i+'</div>';}
-  h+='</div>';document.getElementById('CM').innerHTML=h;
+  var tds=todayStr();
+  for(var d=1;d<=last.getDate();d++){
+    var ds=calYear+'-'+String(calMonth+1).padStart(2,'0')+'-'+String(d).padStart(2,'0');
+    var dayAbs=absences.filter(function(a){return dateOnly(a.startDate)===ds;});
+    var cls='cd';
+    if(ds===tds)cls+=' today';
+    if(dayAbs.length>0){
+      var hasPend=dayAbs.some(function(a){return a.status==='pending';});
+      var hasAppr=dayAbs.some(function(a){return a.status==='approved';});
+      if(hasPend)cls+=' ha';else if(hasAppr)cls+=' hap';else cls+=' ha';
+    }
+    dh+='<div class="'+cls+'" onclick="showCalDay(\''+ds+'\')">'+d+'</div>';
+  }
+  var rem=7-((startDay+last.getDate())%7);
+  if(rem<7){for(var i=1;i<=rem;i++){dh+='<div class="cd om">'+i+'</div>';}}
+  dh+='</div>';
+  document.getElementById('CM').innerHTML=dh;
 }
 function showCalDay(ds){
-  var list=absences.filter(function(a){return a.startDate===ds;});
-  var h='';if(!list.length){h='<p style="color:var(--fd);font-size:12.5px;text-align:center;padding:18px 0;">Aucune absence le '+fmtDate(ds)+'</p>';}
-  else{list.forEach(function(a){var st=getStudent(a.studentId);var md=getModule(a.moduleId);h+='<div style="padding:8px 0;border-bottom:1px solid var(--bd);"><div style="font-size:12.5px;font-weight:600;">'+(st?st.prenom+' '+st.nom:'?')+'</div><div style="font-size:11px;color:var(--fm);">'+(md?md.name:'')+'</div><div style="margin-top:3px;">'+statusBadge(a.status)+'</div></div>';});}
+  var dayAbs=absences.filter(function(a){return dateOnly(a.startDate)===ds;});
+  var h='';
+  if(dayAbs.length===0){h='<p style="color:var(--fd);font-size:12.5px;text-align:center;padding:18px 0;">Aucune absence le '+fmtDate(ds)+'</p>';}
+  else{
+    dayAbs.forEach(function(a){
+      var s=getStudent(a.studentId);var m=getModule(a.moduleId);
+      if(!s||!m)return;
+      h+='<div style="padding:10px 0;border-bottom:1px solid var(--bd);"><div style="font-size:13px;font-weight:600;">'+s.prenom+' '+s.nom+'</div><div style="font-size:11.5px;color:var(--fm);margin-top:3px;">'+m.name+'</div><div style="font-size:11px;color:var(--in);margin-top:2px;"><i class="fa-regular fa-clock" style="margin-right:3px;"></i>'+fmtDate(a.startDate)+'</div><div style="margin-top:5px;">'+statusBadge(a.status)+'</div></div>';
+    });
+  }
   document.getElementById('CDD').innerHTML=h;
 }
 
 /* ====== ETUDIANTS ====== */
 function renderStudents(){
-  document.getElementById('SC2').textContent=students.length;
-  var f=document.getElementById('STF');f.innerHTML='';var classes=getClasses();
-  var allBtn=document.createElement('button');allBtn.className='fb'+(stuClass==='all'?' active':'');allBtn.textContent='Toutes';allBtn.onclick=function(){stuClass='all';renderStudents();};f.appendChild(allBtn);
-  classes.forEach(function(c){var b=document.createElement('button');b.className='fb'+(stuClass===c?' active':'');b.textContent=c;b.onclick=function(){stuClass=c;renderStudents();};f.appendChild(b);});
-  var list=stuClass==='all'?students:students.filter(function(s){return s.classe===stuClass;});
-  var q=(modSearch||'').toLowerCase();
-  if(q)list=list.filter(function(s){return(s.prenom+' '+s.nom+' '+s.classe).toLowerCase().indexOf(q)>=0;});
-  var g=document.getElementById('SG'),gh='';
+  var classes=getClasses();
+  var h='';
+  classes.forEach(function(cl){h+='<button class="fb'+(stuClass===cl?' active':'')+'" onclick="stuClass=\''+cl+'\';renderStudents();">'+cl+'</button>';});
+  h+='<button class="fb'+(stuClass==='all'?' active':'')+'" onclick="stuClass=\'all\';renderStudents();">Toutes</button>';
+  document.getElementById('STF').innerHTML=h;
+  var list=stuClass!=='all'?students.filter(function(s){return s.classe===stuClass;}):students;
+  document.getElementById('SC2').textContent=list.length;
+  var cards='';
   list.forEach(function(s){
-    var sa=absences.filter(function(a){return a.studentId===s.id;});var tot=sa.length;var pen=sa.filter(function(a){return a.status==='pending';}).length;
-    var col=gc(s.id);
-    gh+='<div class="sc" data-name="'+s.prenom+' '+s.nom+'" onclick="showStuDetail('+s.id+')"><div class="sct"><div class="sca" style="background:'+col+';">'+initials(s.prenom,s.nom)+'</div><div><div class="en">'+s.prenom+' '+s.nom+'</div><div class="es">'+s.classe+'</div></div></div><div class="scs"><div class="ss"><div class="ssv">'+tot+'</div><div class="ssl">Total</div></div><div class="ss"><div class="ssv" style="color:var(--wn);">'+pen+'</div><div class="ssl">Attente</div></div><div class="ss"><div class="ssv" style="color:var(--ac);">'+(tot-pen)+'</div><div class="ssl">Traite</div></div></div><div class="lb"><div class="lbb"><div class="lbf" style="width:'+Math.min(100,tot*10)+'%;background:'+col+';"></div></div><div class="lbt">'+tot+' absence'+(tot>1?'s':'')+'</div></div></div>';
+    var sa=absences.filter(function(a){return a.studentId===s.id;});
+    var tot=sa.length,pen=sa.filter(function(a){return a.status==='pending';}).length,app=sa.filter(function(a){return a.status==='approved';}).length;
+    var pct=tot?Math.round(app/tot*100):100;
+    var col=pct>=80?'var(--ac)':pct>=50?'var(--wn)':'var(--dn)';
+    cards+='<div class="sc" data-name="'+s.prenom+' '+s.nom+'" onclick="showStuDetail('+s.id+')"><div class="sct"><div class="sca" style="background:var(--ac);">'+initials(s.prenom,s.nom)+'</div><div><div style="font-weight:600;font-size:14px;">'+s.prenom+' '+s.nom+'</div><div style="font-size:11.5px;color:var(--fm);">'+s.classe+'</div></div></div><div class="scs"><div class="ss"><div class="ssv">'+tot+'</div><div class="ssl">Total</div></div><div class="ss"><div class="ssv" style="color:var(--wn);">'+pen+'</div><div class="ssl">Attente</div></div><div class="ss"><div class="ssv" style="color:var(--ac);">'+app+'</div><div class="ssl">Approuv.</div></div></div><div class="lb"><div class="lbb"><div class="lbf" style="width:'+pct+'%;background:'+col+';"></div></div><div class="lbt">'+pct+'% assiduite</div></div></div>';
   });
-  g.innerHTML=gh||'<div class="empty-state" style="grid-column:1/-1;"><i class="fa-solid fa-user-graduate"></i><p>Aucun etudiant trouve</p></div>';
+  document.getElementById('SG').innerHTML=cards||'<div class="empty-state" style="grid-column:1/-1;"><i class="fa-solid fa-user-graduate"></i><p>Aucun etudiant</p></div>';
 }
 function showStuDetail(id){
-  var s=getStudent(id);if(!s)return;currentDetailStuId=id;
-  var sa=absences.filter(function(a){return a.studentId===id;});var tot=sa.length,pen=sa.filter(function(a){return a.status==='pending';}).length,app=sa.filter(function(a){return a.status==='approved';}).length,rej=sa.filter(function(a){return a.status==='rejected';}).length;
-  var col=gc(s.id);var pg=document.getElementById('page-stu-detail');
-  var h='<button class="back-btn" onclick="go(\'students\')"><i class="fa-solid fa-arrow-left"></i> Retour aux etudiants</button>';
-  h+='<div class="detail-hero"><div class="detail-hero-glow" style="background:'+col+';"></div><div style="display:flex;align-items:center;gap:18px;position:relative;z-index:1;"><div class="sca" style="width:60px;height:60px;font-size:22px;border-radius:14px;background:'+col+';">'+initials(s.prenom,s.nom)+'</div><div><h2 style="font-size:22px;font-weight:700;">'+s.prenom+' '+s.nom+'</h2><div style="color:var(--fm);font-size:14px;margin-top:2px;">'+s.classe+(s.email?' — '+s.email:'')+'</div></div><div style="margin-left:auto;display:flex;gap:8px;"><button class="bs" onclick="editS('+s.id+')"><i class="fa-solid fa-pen"></i> Modifier</button><button class="bs" style="border-color:var(--dn);color:var(--dn);" onclick="askDelete(\'student\','+s.id+')"><i class="fa-solid fa-trash-can"></i></button></div></div></div>';
+  var s=getStudent(id);if(!s)return;
+  currentDetailStuId=id;
+  var sa=absences.filter(function(a){return a.studentId===id;}).sort(function(a,b){return(b.startDate||'').localeCompare(a.startDate||'');});
+  var tot=sa.length,pen=sa.filter(function(a){return a.status==='pending';}).length,app=sa.filter(function(a){return a.status==='approved';}).length,rej=sa.filter(function(a){return a.status==='rejected';}).length;
+  var h='<button class="back-btn" onclick="go(\'students\')"><i class="fa-solid fa-arrow-left"></i> Retour</button>';
+  h+='<div class="detail-hero"><div class="detail-hero-glow" style="background:var(--ac);"></div><div style="display:flex;align-items:center;gap:18px;position:relative;z-index:1;"><div class="sca" style="width:64px;height:64px;border-radius:16px;font-size:22px;background:var(--ac);">'+initials(s.prenom,s.nom)+'</div><div><h2 style="font-size:22px;font-weight:700;">'+s.prenom+' '+s.nom+'</h2><p style="color:var(--fm);font-size:13px;margin-top:3px;">'+s.classe+(s.email?' — '+s.email:'')+'</p></div></div></div>';
   h+='<div class="detail-stats"><div class="detail-stat"><div class="detail-stat-val">'+tot+'</div><div class="detail-stat-label">Total</div></div><div class="detail-stat"><div class="detail-stat-val" style="color:var(--wn);">'+pen+'</div><div class="detail-stat-label">En attente</div></div><div class="detail-stat"><div class="detail-stat-val" style="color:var(--ac);">'+app+'</div><div class="detail-stat-label">Approuvees</div></div><div class="detail-stat"><div class="detail-stat-val" style="color:var(--dn);">'+rej+'</div><div class="detail-stat-label">Refusees</div></div></div>';
-  h+='<div class="dtw"><div class="dth"><h3>Historique des absences</h3></div><table><thead><tr><th>Module</th><th>Type</th><th>Date</th><th>Statut</th><th>Actions</th></tr></thead><tbody>';
-  if(!sa.length)h+='<tr><td colspan="5" style="text-align:center;color:var(--fd);padding:20px;">Aucune absence</td></tr>';
-  else sa.sort(function(a,b){return(b.id||0)-(a.id||0);}).forEach(function(a){var md=getModule(a.moduleId);var tp=getType(a.typeId);h+='<tr><td>'+(md?md.name:'?')+'</td><td>'+(tp?tp.name:'?')+'</td><td>'+fmtDate(a.startDate)+'</td><td>'+statusBadge(a.status)+'</td><td><button class="ab" onclick="editA('+a.id+')"><i class="fa-solid fa-pen"></i></button><button class="ab dg" onclick="askDelete(\'absence\','+a.id+')"><i class="fa-solid fa-trash-can"></i></button></td></tr>';});
-  h+='</tbody></table></div>';pg.innerHTML=h;
-  document.querySelectorAll('.page').forEach(function(el){el.classList.remove('active');});pg.classList.add('active');
-}
-
-/* CRUD Etudiant */
-function openSM(editId){
-  document.getElementById('SMT2').textContent=editId?'Modifier etudiant':'Nouvel etudiant';
-  document.getElementById('SID').value=editId||'';
-  var sel=document.getElementById('SCL');fillClassSelect(sel,'Choisir une classe');if(!editId)sel.value='all';
-  document.getElementById('SFR').value='';document.getElementById('SLN').value='';document.getElementById('SEM').value='';
-  if(editId){var s=getStudent(editId);if(s){document.getElementById('SFR').value=s.prenom;document.getElementById('SLN').value=s.nom;sel.value=s.classe;document.getElementById('SEM').value=s.email||'';}}
-  openModal('MST');
-}
-function editS(id){openSM(id);}
-function saveS(){
-  var eid=document.getElementById('SID').value;var p=document.getElementById('SFR').value.trim();var n=document.getElementById('SLN').value.trim();var c=document.getElementById('SCL').value;var e=document.getElementById('SEM').value.trim();
-  if(!p||!n||!c||c==='all'){toast('Veuillez remplir le prenom, nom et classe','error');return;}
-  if(eid){var s=getStudent(parseInt(eid));if(s){s.prenom=p;s.nom=n;s.classe=c;s.email=e;}}
-  else{students.push({id:nid++,prenom:p,nom:n,classe:c,email:e});}
-  saveToStorage();closeModal('MST');renderStudents();toast(eid?'Etudiant modifie':'Etudiant ajoute','success');
+  h+='<div class="dtw"><div class="dth"><h3>Historique des absences</h3></div><table><thead><tr><th>Module</th><th>Type</th><th>Date & Heure</th><th>Statut</th><th>Motif</th></tr></thead><tbody>';
+  if(sa.length===0){h+='<tr><td colspan="5" class="empty-state"><p>Aucune absence</p></td></tr>';}
+  else{sa.forEach(function(a){var m=getModule(a.moduleId);var t=getType(a.typeId);h+='<tr><td style="font-size:12px;">'+(m?m.name:'-')+'</td><td><span style="display:inline-flex;align-items:center;gap:5px;font-size:11.5px;"><span style="width:7px;height:7px;border-radius:50%;background:'+(t?t.color:'var(--fm)')+';"></span>'+(t?t.name:'-')+'</span></td><td style="font-size:12px;color:var(--fm);white-space:nowrap;">'+fmtDate(a.startDate)+'</td><td>'+statusBadge(a.status)+'</td><td style="font-size:12px;color:var(--fd);max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+(a.reason||'-')+'</td></tr>';});}
+  h+='</tbody></table></div>';
+  var pg=document.getElementById('page-stu-detail');pg.innerHTML=h;pg.classList.add('active');
+  document.querySelectorAll('.ni').forEach(function(el){el.classList.remove('active');});
 }
 
 /* ====== MODULES ====== */
 function renderModules(){
-  document.getElementById('MC2').textContent=modules.length;
-  var f=document.getElementById('MTF');f.innerHTML='';var classes=getClasses();
-  var allBtn=document.createElement('button');allBtn.className='fb'+(modClass==='all'?' active':'');allBtn.textContent='Toutes';allBtn.onclick=function(){modClass='all';renderModules();};f.appendChild(allBtn);
-  classes.forEach(function(c){var b=document.createElement('button');b.className='fb'+(modClass===c?' active':'');b.textContent=c;b.onclick=function(){modClass=c;renderModules();};f.appendChild(b);});
-  var list=modClass==='all'?modules:modules.filter(function(m){return m.classe===modClass;});
-  var q=(modSearch||'').toLowerCase();
-  if(q)list=list.filter(function(m){return(m.name+' '+m.classe).toLowerCase().indexOf(q)>=0;});
-  var g=document.getElementById('MG'),gh='';
+  var classes=getClasses();
+  var h='';
+  classes.forEach(function(cl){h+='<button class="fb'+(modClass===cl?' active':'')+'" onclick="modClass=\''+cl+'\';renderModules();">'+cl+'</button>';});
+  h+='<button class="fb'+(modClass==='all'?' active':'')+'" onclick="modClass=\'all\';renderModules();">Tous</button>';
+  document.getElementById('MTF').innerHTML=h;
+  var list=modClass!=='all'?modules.filter(function(m){return m.classe===modClass;}):modules;
+  if(modSearch){var q=modSearch.toLowerCase();list=list.filter(function(m){return m.name.toLowerCase().indexOf(q)>=0;});}
+  document.getElementById('MC2').textContent=list.length;
+  var cards='';
   list.forEach(function(m){
-    var ma=absences.filter(function(a){return a.moduleId===m.id;});var tot=ma.length;var pen=ma.filter(function(a){return a.status==='pending';}).length;
-    var stCount=students.filter(function(s){return s.classe===m.classe;}).length;
-    gh+='<div class="mgc" onclick="showModDetail('+m.id+')"><div class="mgg" style="background:'+m.color+';"></div><div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;"><div style="width:8px;height:8px;border-radius:50%;background:'+m.color+';flex-shrink:0;"></div><div class="mgnm">'+m.name+'</div></div><div class="mgtc">'+m.classe+'</div><div class="mgme"><div class="mgmi"><i class="fa-solid fa-user-graduate"></i> '+stCount+' etudiants</div><div class="mgmi"><i class="fa-solid fa-clipboard-list"></i> '+tot+' absences</div><div class="mgmi"><i class="fa-solid fa-clock"></i> '+pen+' en attente</div></div><div class="lb"><div class="lbb"><div class="lbf" style="width:'+(stCount>0?Math.min(100,Math.round(tot/stCount*100)):0)+'%;background:'+m.color+';"></div></div><div class="lbt">'+tot+' absence'+(tot>1?'s':'')+'</div></div></div>';
+    var ma=absences.filter(function(a){return a.moduleId===m.id;});
+    var tot=ma.length;
+    cards+='<div class="mgc" onclick="showModDetail('+m.id+')"><div class="mgg" style="background:'+m.color+';"></div><div class="mgnm">'+m.name+'</div><div class="mgtc">'+m.classe+'</div><div class="mgme"><div class="mgmi"><i class="fa-solid fa-list-check"></i> '+tot+' absences</div><div class="mgmi"><i class="fa-solid fa-clock" style="color:var(--wn);"></i> '+ma.filter(function(a){return a.status==='pending';}).length+' en attente</div></div><div class="lb"><div class="lbb"><div class="lbf" style="width:'+(tot?Math.round(ma.filter(function(a){return a.status==='approved';}).length/tot*100):100)+'%;background:'+m.color+';"></div></div><div class="lbt">'+(tot?Math.round(ma.filter(function(a){return a.status==='approved';}).length/tot*100):100)+'% approuvees</div></div></div>';
   });
-  g.innerHTML=gh||'<div class="empty-state" style="grid-column:1/-1;"><i class="fa-solid fa-book-open"></i><p>Aucun module trouve</p></div>';
+  document.getElementById('MG').innerHTML=cards||'<div class="empty-state" style="grid-column:1/-1;"><i class="fa-solid fa-book-open"></i><p>Aucun module</p></div>';
 }
 function showModDetail(id){
   var m=getModule(id);if(!m)return;
-  var ma=absences.filter(function(a){return a.moduleId===id;});var tot=ma.length,pen=ma.filter(function(a){return a.status==='pending';}).length,app=ma.filter(function(a){return a.status==='approved';}).length,rej=ma.filter(function(a){return a.status==='rejected';}).length;
-  var stCount=students.filter(function(s){return s.classe===m.classe;}).length;
-  var pg=document.getElementById('page-mod-detail');
-  var h='<button class="back-btn" onclick="go(\'modules\')"><i class="fa-solid fa-arrow-left"></i> Retour aux modules</button>';
-  h+='<div class="detail-hero"><div class="detail-hero-glow" style="background:'+m.color+';"></div><div style="display:flex;align-items:center;gap:18px;position:relative;z-index:1;"><div style="width:60px;height:60px;border-radius:14px;background:'+m.color+';display:flex;align-items:center;justify-content:center;font-size:22px;color:#fff;"><i class="fa-solid fa-book-open"></i></div><div><h2 style="font-size:22px;font-weight:700;">'+m.name+'</h2><div style="color:var(--fm);font-size:14px;margin-top:2px;">'+m.classe+' — '+stCount+' etudiants</div></div><div style="margin-left:auto;display:flex;gap:8px;"><button class="bs" onclick="editM('+m.id+')"><i class="fa-solid fa-pen"></i> Modifier</button><button class="bs" style="border-color:var(--dn);color:var(--dn);" onclick="askDelete(\'module\','+m.id+')"><i class="fa-solid fa-trash-can"></i></button></div></div></div>';
+  currentDetailModId=id;
+  var ma=absences.filter(function(a){return a.moduleId===id;}).sort(function(a,b){return(b.startDate||'').localeCompare(a.startDate||'');});
+  var tot=ma.length,pen=ma.filter(function(a){return a.status==='pending';}).length,app=ma.filter(function(a){return a.status==='approved';}).length,rej=ma.filter(function(a){return a.status==='rejected';}).length;
+  var h='<button class="back-btn" onclick="go(\'modules\')"><i class="fa-solid fa-arrow-left"></i> Retour</button>';
+  h+='<div class="detail-hero"><div class="detail-hero-glow" style="background:'+m.color+';"></div><div style="position:relative;z-index:1;"><h2 style="font-size:22px;font-weight:700;">'+m.name+'</h2><p style="color:var(--fm);font-size:13px;margin-top:3px;">'+m.classe+'</p></div></div>';
   h+='<div class="detail-stats"><div class="detail-stat"><div class="detail-stat-val">'+tot+'</div><div class="detail-stat-label">Total</div></div><div class="detail-stat"><div class="detail-stat-val" style="color:var(--wn);">'+pen+'</div><div class="detail-stat-label">En attente</div></div><div class="detail-stat"><div class="detail-stat-val" style="color:var(--ac);">'+app+'</div><div class="detail-stat-label">Approuvees</div></div><div class="detail-stat"><div class="detail-stat-val" style="color:var(--dn);">'+rej+'</div><div class="detail-stat-label">Refusees</div></div></div>';
-  h+='<div class="dtw"><div class="dth"><h3>Absences dans ce module</h3></div><table><thead><tr><th>Etudiant</th><th>Type</th><th>Date</th><th>Statut</th><th>Actions</th></tr></thead><tbody>';
-  if(!ma.length)h+='<tr><td colspan="5" style="text-align:center;color:var(--fd);padding:20px;">Aucune absence</td></tr>';
-  else ma.sort(function(a,b){return(b.id||0)-(a.id||0);}).forEach(function(a){var st=getStudent(a.studentId);var tp=getType(a.typeId);h+='<tr><td>'+(st?st.prenom+' '+st.nom:'?')+'</td><td>'+(tp?tp.name:'?')+'</td><td>'+fmtDate(a.startDate)+'</td><td>'+statusBadge(a.status)+'</td><td><button class="ab" onclick="editA('+a.id+')"><i class="fa-solid fa-pen"></i></button><button class="ab dg" onclick="askDelete(\'absence\','+a.id+')"><i class="fa-solid fa-trash-can"></i></button></td></tr>';});
-  h+='</tbody></table></div>';pg.innerHTML=h;
-  document.querySelectorAll('.page').forEach(function(el){el.classList.remove('active');});pg.classList.add('active');
-}
-
-/* CRUD Module */
-function openMM(editId){
-  document.getElementById('MMT2').textContent=editId?'Modifier module':'Nouveau module';
-  document.getElementById('MID').value=editId||'';
-  var sel=document.getElementById('MCL');fillClassSelect(sel,'Choisir une classe');if(!editId)sel.value='all';
-  document.getElementById('MNM').value='';document.getElementById('MCO').value=gc(nid);
-  if(editId){var m=getModule(editId);if(m){document.getElementById('MNM').value=m.name;sel.value=m.classe;document.getElementById('MCO').value=m.color;}}
-  openModal('MMO');
-}
-function editM(id){openMM(id);}
-function saveM(){
-  var eid=document.getElementById('MID').value;var nm=document.getElementById('MNM').value.trim();var cl=document.getElementById('MCL').value;var co=document.getElementById('MCO').value;
-  if(!nm||!cl||cl==='all'){toast('Veuillez remplir le nom et la classe','error');return;}
-  if(eid){var m=getModule(parseInt(eid));if(m){m.name=nm;m.classe=cl;m.color=co;}}
-  else{modules.push({id:nid++,name:nm,classe:cl,color:co});}
-  saveToStorage();closeModal('MMO');renderModules();toast(eid?'Module modifie':'Module ajoute','success');
+  h+='<div class="dtw"><div class="dth"><h3>Absences dans ce module</h3></div><table><thead><tr><th>Etudiant</th><th>Type</th><th>Date & Heure</th><th>Statut</th><th>Motif</th></tr></thead><tbody>';
+  if(ma.length===0){h+='<tr><td colspan="5" class="empty-state"><p>Aucune absence</p></td></tr>';}
+  else{ma.forEach(function(a){var s=getStudent(a.studentId);var t=getType(a.typeId);h+='<tr><td>'+(s?'<div class="ec"><div class="ea" style="background:var(--ac);">'+initials(s.prenom,s.nom)+'</div><div><div class="en">'+s.prenom+' '+s.nom+'</div></div></div>':'-')+'</td><td><span style="display:inline-flex;align-items:center;gap:5px;font-size:11.5px;"><span style="width:7px;height:7px;border-radius:50%;background:'+(t?t.color:'var(--fm)')+';"></span>'+(t?t.name:'-')+'</span></td><td style="font-size:12px;color:var(--fm);white-space:nowrap;">'+fmtDate(a.startDate)+'</td><td>'+statusBadge(a.status)+'</td><td style="font-size:12px;color:var(--fd);max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+(a.reason||'-')+'</td></tr>';});}
+  h+='</tbody></table></div>';
+  var pg=document.getElementById('page-mod-detail');pg.innerHTML=h;pg.classList.add('active');
+  document.querySelectorAll('.ni').forEach(function(el){el.classList.remove('active');});
 }
 
 /* ====== TYPES ====== */
 function renderTypes(){
-  var tb=document.getElementById('TB'),rh='';
-  types.forEach(function(t){var cnt=absences.filter(function(a){return a.typeId===t.id;}).length;rh+='<tr><td><span style="display:inline-flex;align-items:center;gap:8px;"><span style="width:10px;height:10px;border-radius:50%;background:'+t.color+';"></span><span style="font-weight:600;">'+t.name+'</span></span></td><td><span style="display:inline-block;width:24px;height:24px;border-radius:6px;background:'+t.color+';"></span></td><td>'+cnt+'</td><td><button class="ab" onclick="editT('+t.id+')"><i class="fa-solid fa-pen"></i></button><button class="ab dg" onclick="askDelete(\'type\','+t.id+')"><i class="fa-solid fa-trash-can"></i></button></td></tr>';});
-  tb.innerHTML=rh;
-}
-function openTM(editId){
-  document.getElementById('TYT2').textContent=editId?'Modifier type':'Nouveau type';
-  document.getElementById('TID').value=editId||'';
-  document.getElementById('TNM').value='';document.getElementById('TCO').value='#10b981';
-  if(editId){var t=getType(editId);if(t){document.getElementById('TNM').value=t.name;document.getElementById('TCO').value=t.color;}}
-  openModal('MTY');
-}
-function editT(id){openTM(id);}
-function saveT(){
-  var eid=document.getElementById('TID').value;var nm=document.getElementById('TNM').value.trim();var co=document.getElementById('TCO').value;
-  if(!nm){toast('Veuillez saisir un nom','error');return;}
-  if(eid){var t=getType(parseInt(eid));if(t){t.name=nm;t.color=co;}}
-  else{types.push({id:nid++,name:nm,color:co});}
-  saveToStorage();closeModal('MTY');renderTypes();toast(eid?'Type modifie':'Type ajoute','success');
+  var h='';
+  types.forEach(function(t){
+    var cnt=absences.filter(function(a){return a.typeId===t.id;}).length;
+    h+='<tr><td><span style="display:inline-flex;align-items:center;gap:8px;font-weight:600;"><span style="width:12px;height:12px;border-radius:4px;background:'+t.color+';"></span>'+t.name+'</span></td><td><span style="font-family:monospace;font-size:12px;color:var(--fm);">'+t.color+'</span></td><td><span style="font-weight:700;">'+cnt+'</span></td><td><button class="ab" onclick="editT('+t.id+')" title="Modifier"><i class="fa-solid fa-pen-to-square"></i></button><button class="ab dg" onclick="delT('+t.id+')" title="Supprimer"><i class="fa-solid fa-trash-can"></i></button></td></tr>';
+  });
+  document.getElementById('TB').innerHTML=h||'<tr><td colspan="4" class="empty-state"><p>Aucun type</p></td></tr>';
 }
 
-/* ====== SUPPRESSION ====== */
-function askDelete(type,id){
-  delTarget={type:type,id:id};
-  var lb={absence:'cette absence',student:'cet etudiant et toutes ses absences',module:'ce module et toutes ses absences associees',type:'ce type d\'absence'};
-  document.getElementById('MCF_BODY').innerHTML='<div style="text-align:center;padding:10px 0;"><div class="confirm-danger-icon"><i class="fa-solid fa-trash-can"></i></div><h4 style="font-size:17px;font-weight:700;">Confirmer la suppression</h4><p style="color:var(--fm);font-size:13px;margin-top:8px;">Voulez-vous vraiment supprimer '+(lb[type]||'cet element')+' ?</p><p style="color:var(--fd);font-size:11.5px;margin-top:6px;">Cette action est irreversible.</p></div>';
-  document.getElementById('MCF_BTN').innerHTML='<i class="fa-solid fa-trash-can"></i> Supprimer';document.getElementById('MCF_BTN').onclick=execDelete;document.getElementById('MCF_BTN').disabled=false;document.getElementById('MCF_BTN').style.opacity='1';document.getElementById('MCF_BTN').style.cursor='pointer';
+/* ====== MODAL ABSENCE ====== */
+function openAM(){
+  document.getElementById('AMT').textContent='Nouvelle absence';
+  document.getElementById('AID').value='';
+  fillStudentSelect(document.getElementById('AST'));
+  fillModuleSelect(document.getElementById('AMO'));
+  fillTypeSelect(document.getElementById('ATY'));
+  document.getElementById('ASD').value=nowLocal();
+  var endDt=new Date();endDt.setHours(endDt.getHours()+2);endDt.setMinutes(endDt.getMinutes());
+  document.getElementById('AED').value=endDt.getFullYear()+'-'+String(endDt.getMonth()+1).padStart(2,'0')+'-'+String(endDt.getDate()).padStart(2,'0')+'T'+String(endDt.getHours()).padStart(2,'0')+':'+String(endDt.getMinutes()).padStart(2,'0');
+  document.getElementById('AST2').value='pending';
+  document.getElementById('ARE').value='';
+  openModal('MAB');
+}
+function editA(id){
+  var a=absences.find(function(x){return x.id===id;});if(!a)return;
+  document.getElementById('AMT').textContent='Modifier absence';
+  document.getElementById('AID').value=id;
+  fillStudentSelect(document.getElementById('AST'));document.getElementById('AST').value=a.studentId;
+  fillModuleSelect(document.getElementById('AMO'));document.getElementById('AMO').value=a.moduleId;
+  fillTypeSelect(document.getElementById('ATY'));document.getElementById('ATY').value=a.typeId;
+  document.getElementById('ASD').value=a.startDate||'';
+  document.getElementById('AED').value=a.endDate||'';
+  document.getElementById('AST2').value=a.status;
+  document.getElementById('ARE').value=a.reason||'';
+  openModal('MAB');
+}
+function saveA(){
+  var id=document.getElementById('AID').value;
+  var obj={
+    studentId:parseInt(document.getElementById('AST').value),
+    moduleId:parseInt(document.getElementById('AMO').value),
+    startDate:document.getElementById('ASD').value,
+    endDate:document.getElementById('AED').value,
+    typeId:parseInt(document.getElementById('ATY').value),
+    status:document.getElementById('AST2').value,
+    reason:document.getElementById('ARE').value
+  };
+  if(!obj.studentId||!obj.moduleId||!obj.startDate){toast('Veuillez remplir les champs obligatoires','error');return;}
+  if(id){
+    var idx=absences.findIndex(function(a){return a.id==id;});
+    if(idx>=0){obj.id=parseInt(id);absences[idx]=obj;}
+  }else{
+    obj.id=nid++;absences.push(obj);
+  }
+  saveToStorage();closeModal('MAB');toast(id?'Absence modifiee':'Absence ajoutee','success');
+  renderAbsences();renderDashboard();
+}
+function delA(id){
+  delTarget={type:'absence',id:id};
+  document.getElementById('MCF_BODY').innerHTML='<div class="confirm-danger-icon"><i class="fa-solid fa-trash-can"></i></div><div style="text-align:center;"><h3 style="font-size:17px;font-weight:700;">Supprimer cette absence ?</h3><p class="confirm-sub">Cette action est irreversible.</p></div>';
+  document.getElementById('MCF_BTN').innerHTML='<i class="fa-solid fa-trash-can"></i> Supprimer';
   openModal('MCF');
 }
+
+/* ====== MODAL ETUDIANT ====== */
+function openSM(){
+  document.getElementById('SMT2').textContent='Nouvel etudiant';
+  document.getElementById('SID').value='';
+  document.getElementById('SFR').value='';document.getElementById('SLN').value='';
+  fillClassSelect(document.getElementById('SCL'),'Choisir...');
+  document.getElementById('SCL').value='';
+  document.getElementById('SEM').value='';
+  openModal('MST');
+}
+function editS(id){
+  var s=getStudent(id);if(!s)return;
+  document.getElementById('SMT2').textContent='Modifier etudiant';
+  document.getElementById('SID').value=id;
+  document.getElementById('SFR').value=s.prenom;document.getElementById('SLN').value=s.nom;
+  fillClassSelect(document.getElementById('SCL'),'Choisir...');
+  document.getElementById('SCL').value=s.classe;
+  document.getElementById('SEM').value=s.email||'';
+  openModal('MST');
+}
+function saveS(){
+  var id=document.getElementById('SID').value;
+  var obj={prenom:document.getElementById('SFR').value.trim(),nom:document.getElementById('SLN').value.trim(),classe:document.getElementById('SCL').value,email:document.getElementById('SEM').value.trim()};
+  if(!obj.prenom||!obj.nom||!obj.classe){toast('Veuillez remplir les champs obligatoires','error');return;}
+  if(id){
+    var idx=students.findIndex(function(s){return s.id==id;});
+    if(idx>=0){obj.id=parseInt(id);students[idx]=obj;}
+  }else{obj.id=nid++;students.push(obj);}
+  saveToStorage();closeModal('MST');toast(id?'Etudiant modifie':'Etudiant ajoute','success');
+  renderStudents();
+}
+function delS(id){
+  delTarget={type:'student',id:id};
+  var s=getStudent(id);
+  document.getElementById('MCF_BODY').innerHTML='<div class="confirm-danger-icon"><i class="fa-solid fa-user-slash"></i></div><div style="text-align:center;"><h3 style="font-size:17px;font-weight:700;">Supprimer cet etudiant ?</h3><p class="confirm-sub">'+(s?s.prenom+' '+s.nom:'')+'<br>Ses absences seront aussi supprimees.</p></div>';
+  document.getElementById('MCF_BTN').innerHTML='<i class="fa-solid fa-trash-can"></i> Supprimer';
+  openModal('MCF');
+}
+
+/* ====== MODAL MODULE ====== */
+function openMM(){
+  document.getElementById('MMT2').textContent='Nouveau module';
+  document.getElementById('MID').value='';document.getElementById('MNM').value='';
+  fillClassSelect(document.getElementById('MCL'),'Choisir...');
+  document.getElementById('MCL').value='';document.getElementById('MCO').value='#8b5cf6';
+  openModal('MMO');
+}
+function editM(id){
+  var m=getModule(id);if(!m)return;
+  document.getElementById('MMT2').textContent='Modifier module';
+  document.getElementById('MID').value=id;document.getElementById('MNM').value=m.name;
+  fillClassSelect(document.getElementById('MCL'),'Choisir...');
+  document.getElementById('MCL').value=m.classe;document.getElementById('MCO').value=m.color;
+  openModal('MMO');
+}
+function saveM(){
+  var id=document.getElementById('MID').value;
+  var obj={name:document.getElementById('MNM').value.trim(),classe:document.getElementById('MCL').value,color:document.getElementById('MCO').value};
+  if(!obj.name||!obj.classe){toast('Veuillez remplir les champs obligatoires','error');return;}
+  if(id){
+    var idx=modules.findIndex(function(m){return m.id==id;});
+    if(idx>=0){obj.id=parseInt(id);modules[idx]=obj;}
+  }else{obj.id=nid++;modules.push(obj);}
+  saveToStorage();closeModal('MMO');toast(id?'Module modifie':'Module ajoute','success');
+  renderModules();
+}
+function delM(id){
+  delTarget={type:'module',id:id};
+  var m=getModule(id);
+  document.getElementById('MCF_BODY').innerHTML='<div class="confirm-danger-icon"><i class="fa-solid fa-book-open"></i></div><div style="text-align:center;"><h3 style="font-size:17px;font-weight:700;">Supprimer ce module ?</h3><p class="confirm-sub">'+(m?m.name:'')+'<br>Les absences associees seront aussi supprimees.</p></div>';
+  document.getElementById('MCF_BTN').innerHTML='<i class="fa-solid fa-trash-can"></i> Supprimer';
+  openModal('MCF');
+}
+
+/* ====== MODAL TYPE ====== */
+function openTM(){
+  document.getElementById('TYT2').textContent='Nouveau type';
+  document.getElementById('TID').value='';document.getElementById('TNM').value='';document.getElementById('TCO').value='#10b981';
+  openModal('MTY');
+}
+function editT(id){
+  var t=getType(id);if(!t)return;
+  document.getElementById('TYT2').textContent='Modifier type';
+  document.getElementById('TID').value=id;document.getElementById('TNM').value=t.name;document.getElementById('TCO').value=t.color;
+  openModal('MTY');
+}
+function saveT(){
+  var id=document.getElementById('TID').value;
+  var obj={name:document.getElementById('TNM').value.trim(),color:document.getElementById('TCO').value};
+  if(!obj.name){toast('Veuillez saisir un nom','error');return;}
+  if(id){
+    var idx=types.findIndex(function(t){return t.id==id;});
+    if(idx>=0){obj.id=parseInt(id);types[idx]=obj;}
+  }else{obj.id=nid++;types.push(obj);}
+  saveToStorage();closeModal('MTY');toast(id?'Type modifie':'Type ajoute','success');
+  renderTypes();
+}
+function delT(id){
+  delTarget={type:'type',id:id};
+  var t=getType(id);
+  document.getElementById('MCF_BODY').innerHTML='<div class="confirm-danger-icon"><i class="fa-solid fa-tags"></i></div><div style="text-align:center;"><h3 style="font-size:17px;font-weight:700;">Supprimer ce type ?</h3><p class="confirm-sub">'+(t?t.name:'')+'</p></div>';
+  document.getElementById('MCF_BTN').innerHTML='<i class="fa-solid fa-trash-can"></i> Supprimer';
+  openModal('MCF');
+}
+
+/* ====== EXEC DELETE ====== */
 function execDelete(){
   if(!delTarget)return;
-  var t=delTarget.type,id=delTarget.id;
-  if(t==='absence')absences=absences.filter(function(a){return a.id!==id;});
-  else if(t==='student'){absences=absences.filter(function(a){return a.studentId!==id;});students=students.filter(function(s){return s.id!==id;});}
-  else if(t==='module'){absences=absences.filter(function(a){return a.moduleId!==id;});modules=modules.filter(function(m){return m.id!==id;});}
-  else if(t==='type'){types=types.filter(function(x){return x.id!==id;});}
-  delTarget=null;saveToStorage();closeModal('MCF');refreshCurrentPage();toast('Suppression effectuee','success');
-}
-function refreshCurrentPage(){
-  var active=document.querySelector('.page.active');if(!active)return;
-  var p=active.id.replace('page-','');
-  if(p==='dashboard')renderDashboard();else if(p==='absences'){renderAbsFilters();renderAbsences();}else if(p==='calendar')renderCalendar();else if(p==='students')renderStudents();else if(p==='modules')renderModules();else if(p==='types')renderTypes();
+  if(delTarget.type==='absence'){absences=absences.filter(function(a){return a.id!==delTarget.id;});toast('Absence supprimee','success');renderAbsences();renderDashboard();}
+  else if(delTarget.type==='student'){var sid=delTarget.id;students=students.filter(function(s){return s.id!==sid;});absences=absences.filter(function(a){return a.studentId!==sid;});toast('Etudiant supprime','success');renderStudents();}
+  else if(delTarget.type==='module'){var mid=delTarget.id;modules=modules.filter(function(m){return m.id!==mid;});absences=absences.filter(function(a){return a.moduleId!==mid;});toast('Module supprime','success');renderModules();}
+  else if(delTarget.type==='type'){var tid=delTarget.id;types=types.filter(function(t){return t.id!==tid;});toast('Type supprime','success');renderTypes();}
+  else if(delTarget.type==='allStudents'){students=[];absences=[];toast('Tous les etudiants supprimes','success');renderStudents();}
+  else if(delTarget.type==='allModules'){modules=[];absences=[];toast('Tous les modules supprimes','success');renderModules();}
+  else if(delTarget.type==='resetAbs'){absences=[];toast('Absences reinitialisees','success');renderDashboard();}
+  else if(delTarget.type==='fullReset'){students=[];modules=[];absences=[];types=DEF_TYPES.slice();clearStorage();initData();toast('Donnees reinitialisees','success');renderDashboard();}
+  delTarget=null;saveToStorage();closeModal('MCF');
 }
 
-/* Supprimer TOUS les etudiants */
+/* ====== ACTIONS GROUPEES ====== */
 function doDeleteAllStudents(){
-  if(!students.length){toast('Aucun etudiant a supprimer','info');return;}
-  var count=students.length,absCount=absences.length;
-  document.getElementById('MCF_BODY').innerHTML='<div style="text-align:center;padding:10px 0;"><div class="confirm-danger-icon"><i class="fa-solid fa-users-slash"></i></div><h4 style="font-size:18px;font-weight:700;color:var(--dn);margin-bottom:6px;">Supprimer tous les etudiants</h4><p style="color:var(--fm);font-size:13px;line-height:1.6;">Cette action est <strong style="color:var(--dn);">irreversible</strong>. Tous les etudiants seront supprimes ainsi que toutes les absences associees.</p><div class="confirm-count" style="background:var(--dns);color:var(--dn);"><i class="fa-solid fa-user-graduate"></i> '+count+' etudiant'+(count>1?'s':'')+'</div>'+(absCount>0?'<div class="confirm-count" style="background:var(--wns);color:var(--wn);margin-top:6px;"><i class="fa-solid fa-clipboard-list"></i> '+absCount+' absence'+(absCount>1?'s':'')+'</div>':'')+'<p style="color:var(--fm);font-size:12px;margin-top:14px;">Les modules et types seront conserves.</p><div class="confirm-input-wrap"><label>Tapez <strong style="color:var(--dn);">SUPPRIMER</strong> pour confirmer</label><input type="text" id="MCF_CONFIRM_INPUT" placeholder="SUPPRIMER" autocomplete="off" oninput="toggleConfirmBtn()"><div class="ci-hint">Cette verification prevent une suppression accidentelle</div></div></div>';
-  document.getElementById('MCF_BTN').innerHTML='<i class="fa-solid fa-users-slash"></i> Supprimer '+count+' etudiants';document.getElementById('MCF_BTN').onclick=execDeleteAllStudents;document.getElementById('MCF_BTN').disabled=true;document.getElementById('MCF_BTN').style.opacity='.4';document.getElementById('MCF_BTN').style.cursor='not-allowed';
-  openModal('MCF');setTimeout(function(){var inp=document.getElementById('MCF_CONFIRM_INPUT');if(inp)inp.focus();},350);
+  delTarget={type:'allStudents'};
+  document.getElementById('MCF_BODY').innerHTML='<div class="confirm-danger-icon"><i class="fa-solid fa-users-slash"></i></div><div style="text-align:center;"><h3 style="font-size:17px;font-weight:700;">Supprimer tous les etudiants ?</h3><p class="confirm-sub">Cette action supprimera aussi toutes les absences.</p><div class="confirm-count" style="background:var(--dns);color:var(--dn);"><i class="fa-solid fa-users"></i> '+students.length+' etudiants</div><div class="confirm-input-wrap"><label>Tapez SUPPRIMER pour confirmer</label><input type="text" id="CONFIRM_INPUT" placeholder="SUPPRIMER"><div class="ci-hint">Cette action est irreversible</div></div></div>';
+  document.getElementById('MCF_BTN').innerHTML='<i class="fa-solid fa-trash-can"></i> Tout supprimer';
+  document.getElementById('MCF_BTN').onclick=function(){var v=document.getElementById('CONFIRM_INPUT').value;if(v!=='SUPPRIMER'){toast('Tapez SUPPRIMER pour confirmer','error');return;}execDelete();document.getElementById('MCF_BTN').onclick=execDelete;};
+  openModal('MCF');
 }
-function toggleConfirmBtn(){
-  var inp=document.getElementById('MCF_CONFIRM_INPUT');var btn=document.getElementById('MCF_BTN');if(!inp||!btn)return;
-  var match=inp.value.trim()==='SUPPRIMER';btn.disabled=!match;btn.style.opacity=match?'1':'.4';btn.style.cursor=match?'pointer':'not-allowed';
-}
-function execDeleteAllStudents(){
-  students=[];absences=[];saveToStorage();closeModal('MCF');refreshCurrentPage();toast('Tous les etudiants ont ete supprimes','success');
-}
-
-/* Supprimer TOUS les modules */
 function doDeleteAllModules(){
-  if(!modules.length){toast('Aucun module a supprimer','info');return;}
-  var count=modules.length,absCount=absences.length;
-  document.getElementById('MCF_BODY').innerHTML='<div style="text-align:center;padding:10px 0;"><div class="confirm-danger-icon"><i class="fa-solid fa-book-open"></i></div><h4 style="font-size:18px;font-weight:700;color:var(--dn);margin-bottom:6px;">Supprimer tous les modules</h4><p style="color:var(--fm);font-size:13px;line-height:1.6;">Cette action est <strong style="color:var(--dn);">irreversible</strong>. Tous les modules seront supprimes ainsi que toutes les absences associees.</p><div class="confirm-count" style="background:var(--dns);color:var(--dn);"><i class="fa-solid fa-book-open"></i> '+count+' module'+(count>1?'s':'')+'</div>'+(absCount>0?'<div class="confirm-count" style="background:var(--wns);color:var(--wn);margin-top:6px;"><i class="fa-solid fa-clipboard-list"></i> '+absCount+' absence'+(absCount>1?'s':'')+'</div>':'')+'<p style="color:var(--fm);font-size:12px;margin-top:14px;">Les etudiants et types seront conserves.</p><div class="confirm-input-wrap"><label>Tapez <strong style="color:var(--dn);">SUPPRIMER</strong> pour confirmer</label><input type="text" id="MCF_CONFIRM_INPUT" placeholder="SUPPRIMER" autocomplete="off" oninput="toggleConfirmBtn()"><div class="ci-hint">Cette verification prevent une suppression accidentelle</div></div></div>';
-  document.getElementById('MCF_BTN').innerHTML='<i class="fa-solid fa-book-open"></i> Supprimer '+count+' modules';document.getElementById('MCF_BTN').onclick=execDeleteAllModules;document.getElementById('MCF_BTN').disabled=true;document.getElementById('MCF_BTN').style.opacity='.4';document.getElementById('MCF_BTN').style.cursor='not-allowed';
-  openModal('MCF');setTimeout(function(){var inp=document.getElementById('MCF_CONFIRM_INPUT');if(inp)inp.focus();},350);
+  delTarget={type:'allModules'};
+  document.getElementById('MCF_BODY').innerHTML='<div class="confirm-danger-icon"><i class="fa-solid fa-trash-can"></i></div><div style="text-align:center;"><h3 style="font-size:17px;font-weight:700;">Supprimer tous les modules ?</h3><p class="confirm-sub">Cette action supprimera aussi toutes les absences.</p><div class="confirm-count" style="background:var(--dns);color:var(--dn);"><i class="fa-solid fa-book-open"></i> '+modules.length+' modules</div><div class="confirm-input-wrap"><label>Tapez SUPPRIMER pour confirmer</label><input type="text" id="CONFIRM_INPUT" placeholder="SUPPRIMER"><div class="ci-hint">Cette action est irreversible</div></div></div>';
+  document.getElementById('MCF_BTN').innerHTML='<i class="fa-solid fa-trash-can"></i> Tout supprimer';
+  document.getElementById('MCF_BTN').onclick=function(){var v=document.getElementById('CONFIRM_INPUT').value;if(v!=='SUPPRIMER'){toast('Tapez SUPPRIMER pour confirmer','error');return;}execDelete();document.getElementById('MCF_BTN').onclick=execDelete;};
+  openModal('MCF');
 }
-function execDeleteAllModules(){
-  modules=[];absences=[];saveToStorage();closeModal('MCF');refreshCurrentPage();toast('Tous les modules ont ete supprimes','success');
+function doReset(){
+  delTarget={type:'resetAbs'};
+  document.getElementById('MCF_BODY').innerHTML='<div class="confirm-warning-icon"><i class="fa-solid fa-rotate-left"></i></div><div style="text-align:center;"><h3 style="font-size:17px;font-weight:700;">Reinitialiser les absences ?</h3><p class="confirm-sub">Toutes les absences seront supprimees. Les etudiants et modules seront conserves.</p><div class="confirm-count" style="background:var(--wns);color:var(--wn);"><i class="fa-solid fa-list-check"></i> '+absences.length+' absences</div></div>';
+  document.getElementById('MCF_BTN').innerHTML='<i class="fa-solid fa-rotate-left"></i> Reinitialiser';
+  document.getElementById('MCF_BTN').onclick=function(){execDelete();document.getElementById('MCF_BTN').onclick=execDelete;};
+  openModal('MCF');
+}
+function doFullReset(){
+  delTarget={type:'fullReset'};
+  document.getElementById('MCF_BODY').innerHTML='<div class="confirm-danger-icon"><i class="fa-solid fa-triangle-exclamation"></i></div><div style="text-align:center;"><h3 style="font-size:17px;font-weight:700;">Reinitialiser toutes les donnees ?</h3><p class="confirm-sub">Toutes les donnees seront effacees et reinitialisees aux valeurs par defaut.</p><div class="confirm-input-wrap"><label>Tapez REINIT pour confirmer</label><input type="text" id="CONFIRM_INPUT" placeholder="REINIT"><div class="ci-hint">Cette action est irreversible</div></div></div>';
+  document.getElementById('MCF_BTN').innerHTML='<i class="fa-solid fa-triangle-exclamation"></i> Reinitialiser tout';
+  document.getElementById('MCF_BTN').onclick=function(){var v=document.getElementById('CONFIRM_INPUT').value;if(v!=='REINIT'){toast('Tapez REINIT pour confirmer','error');return;}execDelete();document.getElementById('MCF_BTN').onclick=execDelete;};
+  openModal('MCF');
 }
 
 /* ====== EXPORTS ====== */
 function exportCSV(){
-  if(!absences.length){toast('Aucune absence a exporter','info');return;}
-  var ws=XLSX.utils.json_to_sheet(absences.map(function(a){var st=getStudent(a.studentId);var md=getModule(a.moduleId);var tp=getType(a.typeId);return{'Etudiant':st?st.prenom+' '+st.nom:'','Classe':st?st.classe:'','Module':md?md.name:'','Type':tp?tp.name:'','Debut':a.startDate,'Fin':a.endDate||'','Statut':a.status,'Motif':a.reason||''};}));
-  var wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'Absences');XLSX.writeFile(wb,'absences_gestabs.xlsx');toast('Absences exportees','success');
+  if(absences.length===0){toast('Aucune absence a exporter','error');return;}
+  var csv='Etudiant,Classe,Module,Type,Date Debut,Heure Debut,Date Fin,Heure Fin,Statut,Motif\n';
+  absences.forEach(function(a){
+    var s=getStudent(a.studentId);var m=getModule(a.moduleId);var t=getType(a.typeId);
+    var sd=a.startDate||'',ed=a.endDate||'';
+    var sdate='',stime='',edate='',etime='';
+    if(sd.indexOf('T')>=0){sdate=sd.split('T')[0];stime=sd.split('T')[1]||'';}
+    else{sdate=sd;}
+    if(ed.indexOf('T')>=0){edate=ed.split('T')[0];etime=ed.split('T')[1]||'';}
+    else{edate=ed;}
+    csv+='"'+(s?s.prenom+' '+s.nom:'')+'","'+(s?s.classe:'')+'","'+(m?m.name:'')+'","'+(t?t.name:'')+'","'+sdate+'","'+stime+'","'+edate+'","'+etime+'","'+a.status+'","'+(a.reason||'')+'"\n';
+  });
+  downloadFile(csv,'absences_'+todayStr()+'.csv','text/csv');
+  toast('Export CSV reussi','success');
 }
 function exportStudents(){
-  if(!students.length){toast('Aucun etudiant a exporter','info');return;}
-  var ws=XLSX.utils.json_to_sheet(students.map(function(s){return{'Prenom':s.prenom,'Nom':s.nom,'Classe':s.classe,'Email':s.email||''};}));
-  var wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'Etudiants');XLSX.writeFile(wb,'etudiants_gestabs.xlsx');toast('Etudiants exportes','success');
+  if(students.length===0){toast('Aucun etudiant','error');return;}
+  var csv='Prenom,Nom,Classe,Email\n';
+  students.forEach(function(s){csv+='"'+s.prenom+'","'+s.nom+'","'+s.classe+'","'+(s.email||'')+'"\n';});
+  downloadFile(csv,'etudiants_'+todayStr()+'.csv','text/csv');
+  toast('Export etudiants reussi','success');
 }
 function exportModules(){
-  if(!modules.length){toast('Aucun module a exporter','info');return;}
-  var ws=XLSX.utils.json_to_sheet(modules.map(function(m){return{'Nom':m.name,'Classe':m.classe,'Couleur':m.color};}));
-  var wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'Modules');XLSX.writeFile(wb,'modules_gestabs.xlsx');toast('Modules exportes','success');
+  if(modules.length===0){toast('Aucun module','error');return;}
+  var csv='Module,Classe,Couleur\n';
+  modules.forEach(function(m){csv+='"'+m.name+'","'+m.classe+'","'+m.color+'"\n';});
+  downloadFile(csv,'modules_'+todayStr()+'.csv','text/csv');
+  toast('Export modules reussi','success');
+}
+function downloadFile(content,name,type){
+  var blob=new Blob([content],{type:type+';charset=utf-8;'});
+  var link=document.createElement('a');link.href=URL.createObjectURL(blob);link.download=name;link.click();
 }
 
-/* ====== REINITIALISATION ====== */
-function doReset(){
-  document.getElementById('MCF_BODY').innerHTML='<div style="text-align:center;padding:10px 0;"><div class="confirm-warning-icon"><i class="fa-solid fa-rotate-left"></i></div><h4 style="font-size:17px;font-weight:700;">Reinitialiser les absences</h4><p style="color:var(--fm);font-size:13px;margin-top:8px;">Toutes les absences seront supprimees. Les etudiants, modules et types seront conserves.</p></div>';
-  document.getElementById('MCF_BTN').innerHTML='<i class="fa-solid fa-rotate-left"></i> Reinitialiser';document.getElementById('MCF_BTN').onclick=function(){absences=[];saveToStorage();closeModal('MCF');refreshCurrentPage();toast('Absences reinitialisees','success');};document.getElementById('MCF_BTN').disabled=false;document.getElementById('MCF_BTN').style.opacity='1';document.getElementById('MCF_BTN').style.cursor='pointer';
-  openModal('MCF');
-}
-function doFullReset(){
-  document.getElementById('MCF_BODY').innerHTML='<div style="text-align:center;padding:10px 0;"><div class="confirm-danger-icon"><i class="fa-solid fa-triangle-exclamation"></i></div><h4 style="font-size:17px;font-weight:700;color:var(--dn);">Reinitialiser tout</h4><p style="color:var(--fm);font-size:13px;margin-top:8px;">Toutes les donnees seront supprimees et les donnees par defaut seront restaurees.</p><div class="confirm-input-wrap"><label>Tapez <strong style="color:var(--dn);">RESET</strong> pour confirmer</label><input type="text" id="MCF_CONFIRM_INPUT" placeholder="RESET" autocomplete="off" oninput="toggleFullResetBtn()"><div class="ci-hint">Cette verification prevent une reinitialisation accidentelle</div></div></div>';
-  document.getElementById('MCF_BTN').innerHTML='<i class="fa-solid fa-triangle-exclamation"></i> Tout reinitialiser';document.getElementById('MCF_BTN').onclick=execFullReset;document.getElementById('MCF_BTN').disabled=true;document.getElementById('MCF_BTN').style.opacity='.4';document.getElementById('MCF_BTN').style.cursor='not-allowed';
-  openModal('MCF');setTimeout(function(){var inp=document.getElementById('MCF_CONFIRM_INPUT');if(inp)inp.focus();},350);
-}
-function toggleFullResetBtn(){
-  var inp=document.getElementById('MCF_CONFIRM_INPUT');var btn=document.getElementById('MCF_BTN');if(!inp||!btn)return;
-  var match=inp.value.trim()==='RESET';btn.disabled=!match;btn.style.opacity=match?'1':'.4';btn.style.cursor=match?'pointer':'not-allowed';
-}
-function execFullReset(){clearStorage();initData();closeModal('MCF');refreshCurrentPage();toast('Donnees reinitialisees avec succes','success');}
-
-/* ========================================================================
-   IMPORT EXCEL UNIFIE (Etudiants + Modules)
-   ======================================================================== */
-
-/* Configuration des colonnes attendues par mode */
-var IMP_CONFIG={
-  student:{
-    label:'Etudiants',
-    badgeClass:'stu-badge',
-    icon:'fa-user-graduate',
-    subText:'ou cliquez pour parcourir<br>Le fichier doit contenir les colonnes : Prenom, Nom, Classe (minimum)',
-    formatInfo:'Colonnes requises : <strong style="color:var(--fg);">Prenom</strong>, <strong style="color:var(--fg);">Nom</strong>, <strong style="color:var(--fg);">Classe</strong><br>Colonnes optionnelles : <strong style="color:var(--fg);">Email</strong><br>La premiere ligne doit contenir les en-tetes. Les lignes vides sont ignorees.',
-    tipInfo:'Vous pouvez exporter un modele vide depuis la section Configuration, puis le remplir et le reimporter.',
-    fields:[
-      {key:'prenom',label:'Prenom',required:true},
-      {key:'nom',label:'Nom',required:true},
-      {key:'classe',label:'Classe',required:true},
-      {key:'email',label:'Email',required:false}
-    ],
-    checks:[
-      {id:'IMP_SKIPDUP',label:'Ignorer les doublons (meme nom + meme classe)',checked:true},
-      {id:'IMP_OVERWRITE',label:'Remplacer les doublons existants',checked:false}
-    ],
-    validLabel:'etudiants',
-    validateRow:function(row,map){
-      var p=(row[map.prenom]||'').toString().trim();var n=(row[map.nom]||'').toString().trim();var c=(row[map.classe]||'').toString().trim();
-      if(!p||!n||!c)return{ok:false,err:'Prenom, Nom ou Classe manquant'};
-      return{ok:true,data:{prenom:p,nom:n,classe:c,email:(row[map.email]||'').toString().trim()}};
-    },
-    isDup:function(data){return students.find(function(s){return s.prenom.toLowerCase()===data.prenom.toLowerCase()&&s.nom.toLowerCase()===data.nom.toLowerCase()&&s.classe.toLowerCase()===data.classe.toLowerCase();});},
-    doImport:function(validRows,overwrite){
-      var count=0;
-      validRows.forEach(function(item){
-        var dup=item.dup;
-        if(dup&&overwrite){dup.prenom=item.data.prenom;dup.nom=item.data.nom;dup.classe=item.data.classe;dup.email=item.data.email;count++;}
-        else if(!dup){students.push({id:nid++,prenom:item.data.prenom,nom:item.data.nom,classe:item.data.classe,email:item.data.email});count++;}
-      });
-      return count;
-    }
-  },
-  module:{
-    label:'Modules',
-    badgeClass:'mod-badge',
-    icon:'fa-book-open',
-    subText:'ou cliquez pour parcourir<br>Le fichier doit contenir les colonnes : Nom, Classe (minimum)',
-    formatInfo:'Colonnes requises : <strong style="color:var(--fg);">Nom</strong>, <strong style="color:var(--fg);">Classe</strong><br>Colonnes optionnelles : <strong style="color:var(--fg);">Couleur</strong> (code hexadecimal, ex: #8b5cf6)<br>La premiere ligne doit contenir les en-tetes. Les lignes vides sont ignorees.',
-    tipInfo:'Si la colonne Couleur est absente ou vide, une couleur sera attribuee automatiquement. Vous pouvez exporter les modules existants comme modele.',
-    fields:[
-      {key:'nom',label:'Nom du module',required:true},
-      {key:'classe',label:'Classe',required:true},
-      {key:'couleur',label:'Couleur',required:false}
-    ],
-    checks:[
-      {id:'IMP_SKIPDUP',label:'Ignorer les doublons (meme nom + meme classe)',checked:true},
-      {id:'IMP_OVERWRITE',label:'Remplacer les doublons existants',checked:false}
-    ],
-    validLabel:'modules',
-    validateRow:function(row,map){
-      var n=(row[map.nom]||'').toString().trim();var c=(row[map.classe]||'').toString().trim();
-      if(!n||!c)return{ok:false,err:'Nom ou Classe manquant'};
-      var col=(row[map.couleur]||'').toString().trim();
-      /* Valider le format couleur */
-      if(col&&!/^#[0-9a-fA-F]{6}$/.test(col))col='';
-      if(!col)col=gc(nid+Math.floor(Math.random()*100));
-      return{ok:true,data:{name:n,classe:c,color:col}};
-    },
-    isDup:function(data){return modules.find(function(m){return m.name.toLowerCase()===data.name.toLowerCase()&&m.classe.toLowerCase()===data.classe.toLowerCase();});},
-    doImport:function(validRows,overwrite){
-      var count=0;
-      validRows.forEach(function(item){
-        var dup=item.dup;
-        if(dup&&overwrite){dup.name=item.data.name;dup.classe=item.data.classe;dup.color=item.data.color;count++;}
-        else if(!dup){modules.push({id:nid++,name:item.data.name,classe:item.data.classe,color:item.data.color});count++;}
-      });
-      return count;
-    }
-  }
-};
-
-/* Ouvrir le modal d'import */
+/* ====== IMPORT EXCEL ====== */
 function openImportModal(mode){
   impState={mode:mode,rows:[],headers:[],validCount:0,dupCount:0,errCount:0,colMap:{}};
-  var cfg=IMP_CONFIG[mode];
-  /* Titre */
-  document.getElementById('IMP_TITLE').innerHTML='<i class="fa-solid fa-file-excel" style="color:'+(mode==='module'?'var(--vi)':'var(--ac)')+';margin-right:8px;"></i>Importer '+cfg.label+' depuis Excel';
-  /* Badge type */
-  document.getElementById('IMP_TYPE_BADGE').className='import-type-badge '+cfg.badgeClass;
-  document.getElementById('IMP_TYPE_BADGE').innerHTML='<i class="fa-solid '+cfg.icon+'"></i> '+cfg.label;
-  /* Sous-titre */
-  document.getElementById('IMP_SUB').innerHTML=cfg.subText;
-  /* Info format */
-  document.getElementById('IMP_FORMAT_INFO').innerHTML=cfg.formatInfo;
-  /* Astuce */
-  document.getElementById('IMP_TIP_INFO').innerHTML=cfg.tipInfo;
-  /* Reset file input */
+  document.getElementById('IMP_STEP1').style.display='';
+  document.getElementById('IMP_STEP2').style.display='none';
+  document.getElementById('IMP_BACK').style.display='none';
+  document.getElementById('IMP_VALIDATE').style.display='none';
   document.getElementById('IMP_FILE').value='';
-  /* Afficher etape 1 */
-  document.getElementById('IMP_STEP1').style.display='';document.getElementById('IMP_STEP2').style.display='none';
-  document.getElementById('IMP_BACK').style.display='none';document.getElementById('IMP_VALIDATE').style.display='none';
-  /* Drag and drop */
-  setupDragDrop();
+  var badge=document.getElementById('IMP_TYPE_BADGE');
+  if(mode==='student'){
+    badge.className='import-type-badge stu-badge';badge.innerHTML='<i class="fa-solid fa-user-graduate"></i> Etudiants';
+    document.getElementById('IMP_FORMAT_INFO').innerHTML='Colonnes attendues : <strong>Prenom</strong>, <strong>Nom</strong>, <strong>Classe</strong>, <strong>Email</strong> (optionnel)';
+    document.getElementById('IMP_TIP_INFO').innerHTML='La premiere ligne doit contenir les en-tetes. Les lignes vides seront ignorees. Les doublons (meme prenom+nom+classe) seront signales.';
+  }else{
+    badge.className='import-type-badge mod-badge';badge.innerHTML='<i class="fa-solid fa-book-open"></i> Modules';
+    document.getElementById('IMP_FORMAT_INFO').innerHTML='Colonnes attendues : <strong>Module</strong> (ou Nom), <strong>Classe</strong>, <strong>Couleur</strong> (optionnel, format hex #RRGGBB)';
+    document.getElementById('IMP_TIP_INFO').innerHTML='Si la couleur n\'est pas specifiee, une couleur par defaut sera attribuee. Les doublons (meme nom+classe) seront signales.';
+  }
   openModal('MIMP');
 }
-
-/* Configuration du drag and drop */
-function setupDragDrop(){
-  var zone=document.getElementById('IMP_DROP');
-  /* Retirer les anciens listeners en clonant */
-  var newZone=zone.cloneNode(true);zone.parentNode.replaceChild(newZone,zone);
-  newZone.addEventListener('dragover',function(e){e.preventDefault();e.stopPropagation();newZone.classList.add('drag-over');});
-  newZone.addEventListener('dragleave',function(e){e.preventDefault();e.stopPropagation();newZone.classList.remove('drag-over');});
-  newZone.addEventListener('drop',function(e){e.preventDefault();e.stopPropagation();newZone.classList.remove('drag-over');if(e.dataTransfer.files.length)processImportFile(e.dataTransfer.files[0]);});
-  newZone.addEventListener('click',function(){document.getElementById('IMP_FILE').click();});
-}
-
-/* Handler du file input */
 function handleImportFile(input){
-  if(input.files&&input.files[0])processImportFile(input.files[0]);
-}
-
-/* Traiter le fichier Excel */
-function processImportFile(file){
-  var ext=file.name.split('.').pop().toLowerCase();
-  if(['xlsx','xls','csv'].indexOf(ext)<0){toast('Format de fichier non supporte. Utilisez .xlsx, .xls ou .csv','error');return;}
+  if(!input.files||!input.files[0])return;
+  var file=input.files[0];
   var reader=new FileReader();
   reader.onload=function(e){
     try{
@@ -843,123 +927,200 @@ function processImportFile(file){
       var wb=XLSX.read(data,{type:'array'});
       var ws=wb.Sheets[wb.SheetNames[0]];
       var json=XLSX.utils.sheet_to_json(ws,{header:1,defval:''});
-      if(json.length<2){toast('Le fichier est vide ou ne contient pas assez de lignes','error');return;}
-      impState.headers=json[0].map(function(h){return h.toString().trim();});
-      impState.rows=json.slice(1).filter(function(r){return r.some(function(c){return c.toString().trim()!=='';});});
-      if(!impState.rows.length){toast('Aucune donnee trouvee apres la ligne d\'en-tete','error');return;}
-      showImportPreview();
-    }catch(err){toast('Erreur de lecture du fichier : '+err.message,'error');}
+      if(json.length<2){toast('Le fichier est vide ou ne contient pas de donnees','error');return;}
+      impState.headers=json[0].map(function(h){return String(h).trim();});
+      impState.rows=json.slice(1).filter(function(r){return r.some(function(c){return String(c).trim()!=='';});});
+      analyzeImport();
+    }catch(err){toast('Erreur de lecture du fichier','error');}
   };
   reader.readAsArrayBuffer(file);
 }
-
-/* Afficher l'apercu de l'import */
-function showImportPreview(){
-  var cfg=IMP_CONFIG[impState.mode];
+function analyzeImport(){
+  var mode=impState.mode;
   var headers=impState.headers;
   var rows=impState.rows;
   /* Mapping automatique des colonnes */
-  impState.colMap={};
-  cfg.fields.forEach(function(f){
-    var idx=-1;
-    /* Cherche correspondance exacte */
-    headers.forEach(function(h,i){if(h.toLowerCase()===f.key.toLowerCase())idx=i;});
-    /* Cherche correspondance partielle */
-    if(idx<0)headers.forEach(function(h,i){if(h.toLowerCase().indexOf(f.key.toLowerCase())>=0)idx=i;});
-    impState.colMap[f.key]=idx>=0?idx:0;
+  var fields=mode==='student'?['Prenom','Nom','Classe','Email']:['Module','Classe','Couleur'];
+  var aliases={
+    'Prenom':['prenom','prename','first name','first_name','prénom','prénom','prenom','given name'],
+    'Nom':['nom','name','last name','last_name','family name','nom de famille'],
+    'Classe':['classe','class','groupe','group','section','filiere'],
+    'Email':['email','mail','e-mail','courriel','adresse email'],
+    'Module':['module','nom','name','matiere','subject','course'],
+    'Couleur':['couleur','color','colour','teinte']
+  };
+  var colMap={};
+  fields.forEach(function(f){
+    colMap[f]=-1;
+    var als=aliases[f]||[];
+    for(var i=0;i<headers.length;i++){
+      var h=headers[i].toLowerCase().trim();
+      if(f.toLowerCase()===h||als.indexOf(h)>=0){colMap[f]=i;break;}
+    }
   });
-  /* Validation des lignes */
-  var validRows=[];var dupCount=0;var errCount=0;var errMessages=[];
-  rows.forEach(function(row,i){
-    var result=cfg.validateRow(row,impState.colMap);
-    if(!result.ok){errCount++;errMessages.push('Ligne '+(i+2)+' : '+result.err);return;}
-    var dup=cfg.isDup(result.data);
-    if(dup){dupCount++;}
-    validRows.push({index:i,data:result.data,dup:dup,error:null});
+  impState.colMap=colMap;
+  /* Validation */
+  var validCount=0,dupCount=0,errCount=0;
+  var seen={};
+  rows.forEach(function(r,idx){
+    if(mode==='student'){
+      var pre=String(r[colMap['Prenom']]||'').trim();
+      var nom=String(r[colMap['Nom']]||'').trim();
+      var cls=String(r[colMap['Classe']]||'').trim();
+      if(!pre||!nom||!cls){errCount++;return;}
+      var key=pre+'|'+nom+'|'+cls;
+      if(seen[key]){dupCount++;return;}
+      seen[key]=1;validCount++;
+    }else{
+      var mod=String(r[colMap['Module']]||'').trim();
+      var cls2=String(r[colMap['Classe']]||'').trim();
+      if(!mod||!cls2){errCount++;return;}
+      var key2=mod+'|'+cls2;
+      if(seen[key2]){dupCount++;return;}
+      seen[key2]=1;validCount++;
+    }
   });
-  impState.validCount=validRows.filter(function(v){return!v.dup;}).length;
-  impState.dupCount=dupCount;
-  impState.errCount=errCount;
-  impState.validRows=validRows;
-  /* Stats */
-  var statsHtml='<div class="import-stat"><div class="import-stat-val" style="color:var(--fg);">'+rows.length+'</div><div class="import-stat-lbl">Total lignes</div></div>';
-  statsHtml+='<div class="import-stat"><div class="import-stat-val" style="color:var(--ac);">'+impState.validCount+'</div><div class="import-stat-lbl">Nouveaux</div></div>';
-  if(dupCount>0)statsHtml+='<div class="import-stat"><div class="import-stat-val" style="color:var(--wn);">'+dupCount+'</div><div class="import-stat-lbl">Doublons</div></div>';
-  if(errCount>0)statsHtml+='<div class="import-stat"><div class="import-stat-val" style="color:var(--dn);">'+errCount+'</div><div class="import-stat-lbl">Erreurs</div></div>';
-  document.getElementById('IMP_STATS').innerHTML=statsHtml;
-  /* Mapping colonnes */
-  var mapHtml='';
-  cfg.fields.forEach(function(f){
-    mapHtml+='<div><label>'+f.label+(f.required?' <span style="color:var(--dn);">*</span>':'')+'</label><select onchange="impState.colMap[\''+f.key+'\']=parseInt(this.value);showImportPreview();" style="width:100%;padding:7px 10px;font-size:12px;background:var(--bgc);border:1px solid var(--bd);border-radius:7px;color:var(--fg);">';
-    mapHtml+='<option value="-1">-- Non mappe --</option>';
-    headers.forEach(function(h,i){var sel=impState.colMap[f.key]===i?' selected':'';mapHtml+='<option value="'+i+'"'+sel+'>'+h+'</option>';});
-    mapHtml+='</select></div>';
-  });
-  document.getElementById('IMP_COLMAP').innerHTML=mapHtml;
-  /* Checks */
-  var checksHtml='';
-  cfg.checks.forEach(function(ch){checksHtml+='<label class="import-check"><input type="checkbox" id="'+ch.id+'" '+(ch.checked?'checked':'')+' onchange="showImportPreview();"> '+ch.label+'</label>';});
-  document.getElementById('IMP_CHECKS').innerHTML=checksHtml;
-  /* Preview tableau */
-  var maxPreview=Math.min(rows.length,50);
-  document.getElementById('IMP_PREV_COUNT').textContent=maxPreview;
-  var prevHtml='<table><thead><tr>';
-  headers.forEach(function(h){prevHtml+='<th>'+h+'</th>';});
-  prevHtml+='<th>Statut</th></tr></thead><tbody>';
-  for(var i=0;i<maxPreview;i++){
-    var row=rows[i];var vr=validRows.find(function(v){return v.index===i;});
-    var rowClass='row-ok';var statusIcon='';
-    if(!vr){rowClass='row-err';statusIcon='<span style="color:var(--dn);font-size:10px;"><i class="fa-solid fa-xmark"></i></span>';}
-    else if(vr.dup){rowClass='row-dup';statusIcon='<span style="color:var(--wn);font-size:10px;" title="Doublon"><i class="fa-solid fa-copy"></i></span>';}
-    else{statusIcon='<span style="color:var(--ac);font-size:10px;"><i class="fa-solid fa-check"></i></span>';}
-    prevHtml+='<tr class="'+rowClass+'">';
-    headers.forEach(function(h,hi){prevHtml+='<td>'+(row[hi]!==undefined?row[hi].toString():'')+'</td>';});
-    prevHtml+='<td>'+statusIcon+'</td></tr>';
-  }
-  if(rows.length>50)prevHtml+='<tr><td colspan="'+(headers.length+1)+'" style="text-align:center;color:var(--fd);font-size:11px;padding:8px;">... et '+(rows.length-50)+' autres lignes</td></tr>';
-  prevHtml+='</tbody></table>';
-  document.getElementById('IMP_PREVIEW').innerHTML=prevHtml;
-  /* Boutons */
-  var importableCount=impState.validCount;
-  var overwrite=document.getElementById('IMP_OVERWRITE')&&document.getElementById('IMP_OVERWRITE').checked;
-  if(overwrite)importableCount+=dupCount;
-  document.getElementById('IMP_VALID_COUNT').textContent=importableCount;
-  document.getElementById('IMP_VALID_LABEL').textContent=cfg.validLabel;
-  /* Afficher etape 2 */
-  document.getElementById('IMP_STEP1').style.display='none';document.getElementById('IMP_STEP2').style.display='';
+  impState.validCount=validCount;impState.dupCount=dupCount;impState.errCount=errCount;
+  showImportStep2();
+}
+function showImportStep2(){
+  document.getElementById('IMP_STEP1').style.display='none';
+  document.getElementById('IMP_STEP2').style.display='';
   document.getElementById('IMP_BACK').style.display='';
-  document.getElementById('IMP_VALIDATE').style.display=importableCount>0?'':'none';
-  if(errCount>0&&importableCount===0){toast('Aucune ligne valide a importer. Verifiez le mapping des colonnes.','error');}
-}
-
-/* Retour a l'etape 1 */
-function importBack(){
-  document.getElementById('IMP_STEP1').style.display='';document.getElementById('IMP_STEP2').style.display='none';
-  document.getElementById('IMP_BACK').style.display='none';document.getElementById('IMP_VALIDATE').style.display='none';
-  document.getElementById('IMP_FILE').value='';
-}
-
-/* Executer l'import */
-function executeImport(){
-  var cfg=IMP_CONFIG[impState.mode];
-  var overwrite=document.getElementById('IMP_OVERWRITE')&&document.getElementById('IMP_OVERWRITE').checked;
-  var skipDup=document.getElementById('IMP_SKIPDUP')&&document.getElementById('IMP_SKIPDUP').checked;
-  var toImport=impState.validRows.filter(function(v){
-    if(v.error)return false;
-    if(v.dup){if(overwrite)return true;if(skipDup)return false;return true;}
-    return true;
+  document.getElementById('IMP_VALIDATE').style.display='';
+  document.getElementById('IMP_VALID_COUNT').textContent=impState.validCount;
+  document.getElementById('IMP_VALID_LABEL').textContent=impState.mode==='student'?'etudiants':'modules';
+  /* Stats */
+  document.getElementById('IMP_STATS').innerHTML=
+    '<div class="import-stat"><div class="import-stat-val" style="color:var(--ac);">'+impState.validCount+'</div><div class="import-stat-lbl">Valides</div></div>'+
+    '<div class="import-stat"><div class="import-stat-val" style="color:var(--wn);">'+impState.dupCount+'</div><div class="import-stat-lbl">Doublons</div></div>'+
+    '<div class="import-stat"><div class="import-stat-val" style="color:var(--dn);">'+impState.errCount+'</div><div class="import-stat-lbl">Erreurs</div></div>';
+  /* Mapping colonnes */
+  var cmh='';
+  var fields=impState.mode==='student'?['Prenom','Nom','Classe','Email']:['Module','Classe','Couleur'];
+  fields.forEach(function(f){
+    var opts='<option value="-1">-- Non mappe --</option>';
+    impState.headers.forEach(function(h,i){opts+='<option value="'+i+'"'+(impState.colMap[f]===i?' selected':'')+'>'+h+'</option>';});
+    cmh+='<div><label>'+f+'</label><select onchange="impState.colMap[\''+f+'\']=parseInt(this.value);">'+opts+'</select></div>';
   });
-  var count=cfg.doImport(toImport,overwrite);
+  document.getElementById('IMP_COLMAP').innerHTML=cmh;
+  /* Options */
+  var chkHtml='<label class="import-check"><input type="checkbox" id="IMP_SKIP_DUP" checked> Ignorer les doublons</label>';
+  document.getElementById('IMP_CHECKS').innerHTML=chkHtml;
+  /* Apercu */
+  var prevCount=Math.min(impState.rows.length,20);
+  document.getElementById('IMP_PREV_COUNT').textContent=prevCount;
+  var pth='<table><thead><tr>';
+  var fields2=impState.mode==='student'?['Prenom','Nom','Classe','Email']:['Module','Classe','Couleur'];
+  fields2.forEach(function(f){pth+='<th>'+f+'</th>';});
+  pth+='<th>Statut</th></tr></thead><tbody>';
+  var seen2={};
+  for(var i=0;i<prevCount;i++){
+    var r=impState.rows[i];
+    var vals=fields2.map(function(f){var ci=impState.colMap[f];return ci>=0?String(r[ci]||'').trim():'<em style="color:var(--dn);">?</em>';});
+    var rowClass='row-ok';
+    var statusHtml='<span style="color:var(--ac);"><i class="fa-solid fa-check"></i> OK</span>';
+    if(impState.mode==='student'){
+      var pre=String(r[impState.colMap['Prenom']]||'').trim();
+      var nom=String(r[impState.colMap['Nom']]||'').trim();
+      var cls=String(r[impState.colMap['Classe']]||'').trim();
+      if(!pre||!nom||!cls){rowClass='row-err';statusHtml='<span style="color:var(--dn);"><i class="fa-solid fa-xmark"></i> Incomplet</span>';}
+      else{var key=pre+'|'+nom+'|'+cls;if(seen2[key]){rowClass='row-dup';statusHtml='<span style="color:var(--wn);"><i class="fa-solid fa-copy"></i> Doublon</span>';}seen2[key]=1;}
+    }else{
+      var mod=String(r[impState.colMap['Module']]||'').trim();
+      var cls2=String(r[impState.colMap['Classe']]||'').trim();
+      if(!mod||!cls2){rowClass='row-err';statusHtml='<span style="color:var(--dn);"><i class="fa-solid fa-xmark"></i> Incomplet</span>';}
+      else{var key2=mod+'|'+cls2;if(seen2[key2]){rowClass='row-dup';statusHtml='<span style="color:var(--wn);"><i class="fa-solid fa-copy"></i> Doublon</span>';}seen2[key2]=1;}
+    }
+    pth+='<tr class="'+rowClass+'">';
+    vals.forEach(function(v){pth+='<td>'+v+'</td>';});
+    pth+='<td>'+statusHtml+'</td></tr>';
+  }
+  pth+='</tbody></table>';
+  document.getElementById('IMP_PREVIEW').innerHTML=pth;
+}
+function importBack(){
+  document.getElementById('IMP_STEP1').style.display='';
+  document.getElementById('IMP_STEP2').style.display='none';
+  document.getElementById('IMP_BACK').style.display='none';
+  document.getElementById('IMP_VALIDATE').style.display='none';
+}
+function executeImport(){
+  var mode=impState.mode;
+  var colMap=impState.colMap;
+  var skipDup=document.getElementById('IMP_SKIP_DUP')&&document.getElementById('IMP_SKIP_DUP').checked;
+  var count=0;
+  var seen3={};
+  if(mode==='student'){
+    impState.rows.forEach(function(r){
+      var pre=String(r[colMap['Prenom']]||'').trim();
+      var nom=String(r[colMap['Nom']]||'').trim();
+      var cls=String(r[colMap['Classe']]||'').trim();
+      var em=colMap['Email']>=0?String(r[colMap['Email']]||'').trim():'';
+      if(!pre||!nom||!cls)return;
+      var key=pre+'|'+nom+'|'+cls;
+      if(skipDup&&seen3[key])return;
+      seen3[key]=1;
+      students.push({id:nid++,prenom:pre,nom:nom,classe:cls,email:em});
+      count++;
+    });
+  }else{
+    var colorIdx=modules.length+1;
+    impState.rows.forEach(function(r){
+      var mod=String(r[colMap['Module']]||'').trim();
+      var cls=String(r[colMap['Classe']]||'').trim();
+      var col=colMap['Couleur']>=0?String(r[colMap['Couleur']]||'').trim():'';
+      if(!mod||!cls)return;
+      var key=mod+'|'+cls;
+      if(skipDup&&seen3[key])return;
+      seen3[key]=1;
+      if(!col||!/^#[0-9a-fA-F]{6}$/.test(col)){col=gc(colorIdx);colorIdx++;}
+      modules.push({id:nid++,name:mod,classe:cls,color:col});
+      count++;
+    });
+  }
   saveToStorage();closeModal('MIMP');
-  /* Rafraichir la page correspondante */
-  if(impState.mode==='student')renderStudents();
-  else if(impState.mode==='module')renderModules();
-  renderDashboard();
-  toast(count+' '+cfg.validLabel+(count>1?'s':'')+' importe'+(count>1?'s':'')+' avec succes','success');
+  toast(count+' '+(mode==='student'?'etudiants':'modules')+' importes','success');
+  if(mode==='student')renderStudents();else renderModules();
 }
 
-/* ====== DEMARRAGE ====== */
-initData();renderDashboard();
+/* Drag & drop */
+(function(){
+  document.addEventListener('DOMContentLoaded',function(){
+    var drop=document.getElementById('IMP_DROP');
+    if(!drop)return;
+    ['dragenter','dragover'].forEach(function(ev){drop.addEventListener(ev,function(e){e.preventDefault();e.stopPropagation();drop.classList.add('drag-over');});});
+    ['dragleave','drop'].forEach(function(ev){drop.addEventListener(ev,function(e){e.preventDefault();e.stopPropagation();drop.classList.remove('drag-over');});});
+    drop.addEventListener('drop',function(e){var files=e.dataTransfer.files;if(files.length>0){document.getElementById('IMP_FILE').files=files;handleImportFile(document.getElementById('IMP_FILE'));}});
+  });
+})();
+
+/* ====== DEMO DATA (si aucune absence) ====== */
+function seedDemoAbsences(){
+  if(absences.length>0)return;
+  var demoTypes=[1,2,3,1,2,4,1,3,5,2,1,1,3,2,1];
+  var demoStatuses=['pending','approved','rejected','approved','pending','approved','pending','approved','rejected','approved','pending','approved','pending','rejected','approved'];
+  for(var i=0;i<15;i++){
+    var sid=students[Math.floor(Math.random()*students.length)].id;
+    var cls=getStudent(sid).classe;
+    var ms=modules.filter(function(m){return m.classe===cls;});
+    if(ms.length===0)continue;
+    var mid=ms[Math.floor(Math.random()*ms.length)].id;
+    var d=new Date();d.setDate(d.getDate()-Math.floor(Math.random()*30));
+    var h=8+Math.floor(Math.random()*4);
+    var mn=Math.random()<0.5?0:30;
+    var ds=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')+'T'+String(h).padStart(2,'0')+':'+String(mn).padStart(2,'0');
+    var ed=new Date(d);ed.setHours(ed.getHours()+2);
+    var eds=ed.getFullYear()+'-'+String(ed.getMonth()+1).padStart(2,'0')+'-'+String(ed.getDate()).padStart(2,'0')+'T'+String(ed.getHours()).padStart(2,'0')+':'+String(ed.getMinutes()).padStart(2,'0');
+    absences.push({id:nid++,studentId:sid,moduleId:mid,startDate:ds,endDate:eds,typeId:demoTypes[i],status:demoStatuses[i],reason:''});
+  }
+  saveToStorage();
+}
+
+/* ====== INIT ====== */
+initData();
+seedDemoAbsences();
+renderDashboard();
 </script>
 </body>
 </html>
