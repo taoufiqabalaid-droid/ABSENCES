@@ -199,29 +199,70 @@ var calMonth,calYear,stuClass='all',modClass='all';
 var currentDetailStuId=null,currentDetailModId=null,delTarget=null;
 
 /* === SUPPRESSION === */
-function askDelete(type,id,after){
-    delTarget={type:type,id:id,after:after||'all'};
-    var labels={absence:'cette absence',student:'cet etudiant',module:'ce module',type:'ce type'};
-    document.getElementById('CFT').textContent='Confirmer la suppression';
-    document.getElementById('CFX').textContent='Voulez-vous vraiment supprimer '+labels[type]+' ?';
+function askDelete(type, id, after) {
+    delTarget = { type: type, id: id, after: after || 'all' };
+    var labels = { absence: 'cette absence', student: 'cet etudiant', module: 'ce module', type: 'ce type' };
+    document.getElementById('CFT').textContent = 'Confirmer la suppression';
+    document.getElementById('CFX').textContent = 'Voulez-vous vraiment supprimer ' + labels[type] + ' ?';
     openModal('MCF');
 }
-function execDelete(){
+
+function execDelete() {
     closeModal('MCF');
-    if(!delTarget)return;
-    var t=delTarget.type,id=delTarget.id,after=delTarget.after;
-    if(t==='absence'){absences=absences.filter(function(x){return x.id!==id;});toast('Absence supprimee');}
-    else if(t==='student'){students=students.filter(function(x){return x.id!==id;});absences=absences.filter(function(a){return a.studentId!==id;});toast('Etudiant supprime');}
-    else if(t==='module'){modules=modules.filter(function(x){return x.id!==id;});absences=absences.filter(function(a){return a.moduleId!==id;});toast('Module supprime');}
-    else if(t==='type'){types=types.filter(function(x){return x.id!==id;});toast('Type supprime');}
-    delTarget=null;
-    if(after==='stuDetail'&&currentDetailStuId)showStuDetail(currentDetailStuId);
-    else if(after==='modDetail'&&currentDetailModId)showModDetail(currentDetailModId);
-    else renderAll();
+    if (!delTarget) return;
+
+    var t = delTarget.type;
+    var id = delTarget.id;
+    var after = delTarget.after;
+    delTarget = null;
+
+    /* Réinitialisation globale */
+    if (t === '_reset') {
+        absences = [];
+        renderAll();
+        toast('Donnees reinitialisees');
+        return;
+    }
+
+    /* Suppression d'une absence */
+    if (t === 'absence') {
+        absences = absences.filter(function (x) { return x.id !== id; });
+        toast('Absence supprimee');
+    }
+    /* Suppression d'un étudiant + ses absences */
+    else if (t === 'student') {
+        students = students.filter(function (x) { return x.id !== id; });
+        absences = absences.filter(function (a) { return a.studentId !== id; });
+        toast('Etudiant supprime');
+    }
+    /* Suppression d'un module + ses absences */
+    else if (t === 'module') {
+        modules = modules.filter(function (x) { return x.id !== id; });
+        absences = absences.filter(function (a) { return a.moduleId !== id; });
+        toast('Module supprime');
+    }
+    /* Suppression d'un type */
+    else if (t === 'type') {
+        types = types.filter(function (x) { return x.id !== id; });
+        toast('Type supprime');
+    }
+
+    /* Rafraîchir la vue appropriée */
+    if (after === 'stuDetail' && currentDetailStuId) {
+        showStuDetail(currentDetailStuId);
+    } else if (after === 'modDetail' && currentDetailModId) {
+        showModDetail(currentDetailModId);
+    } else {
+        renderAll();
+    }
 }
-function doReset(){delTarget={type:'_reset',id:0,after:'all'};document.getElementById('CFT').textContent='Reinitialiser';document.getElementById('CFX').textContent='Toutes les absences seront supprimees. Continuer ?';openModal('MCF');}
-var _realExec=execDelete;
-execDelete=function(){if(delTarget&&delTarget.type==='_reset'){closeModal('MCF');absences=[];delTarget=null;renderAll();toast('Donnees reinitialisees');return;}_realExec();};
+
+function doReset() {
+    delTarget = { type: '_reset', id: 0, after: 'all' };
+    document.getElementById('CFT').textContent = 'Reinitialiser';
+    document.getElementById('CFX').textContent = 'Toutes les absences seront supprimees. Continuer ?';
+    openModal('MCF');
+}
 
 /* === UTILITAIRES === */
 function fmtD(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
