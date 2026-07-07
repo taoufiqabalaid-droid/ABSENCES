@@ -725,7 +725,12 @@ document.querySelectorAll('.mo').forEach(function(modal){
 });
 
 /* ====== DÉMARRAGE ====== */
-initData();
+loadData();
+
+if (students.length === 0) {
+    initData();
+    saveData();
+}
 </script>
 </body>
 </html>
