@@ -170,8 +170,6 @@ tbody tr{border-bottom:1px solid var(--bd);transition:background .15s}tbody tr:l
 .md-import{width:680px}
 .confirm-danger-icon{width:64px;height:64px;border-radius:50%;background:var(--dns);color:var(--dn);display:flex;align-items:center;justify-content:center;font-size:26px;margin:0 auto 16px;animation:cpulse 1.5s ease infinite}
 @keyframes cpulse{0%,100%{box-shadow:0 0 0 0 rgba(239,68,68,.3)}50%{box-shadow:0 0 0 12px rgba(239,68,68,0)}}
-.confirm-warning-icon{width:64px;height:64px;border-radius:50%;background:var(--wns);color:var(--wn);display:flex;align-items:center;justify-content:center;font-size:26px;margin:0 auto 16px;animation:wpulse 1.5s ease infinite}
-@keyframes wpulse{0%,100%{box-shadow:0 0 0 0 rgba(245,158,11,.3)}50%{box-shadow:0 0 0 12px rgba(245,158,11,0)}}
 .confirm-sub{color:var(--fm);font-size:13px;line-height:1.6;margin-top:8px}
 .confirm-count{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:7px;font-weight:700;font-family:'Space Grotesk',sans-serif;font-size:18px;margin-top:12px}
 .confirm-input-wrap{margin-top:14px;padding:12px;background:var(--bg);border-radius:9px;border:1px solid var(--bd)}
@@ -191,10 +189,10 @@ tbody tr{border-bottom:1px solid var(--bd);transition:background .15s}tbody tr:l
 <header class="th"><div style="display:flex;align-items:center;gap:14px;"><button class="mt" onclick="document.getElementById('SB').classList.toggle('open')"><i class="fa-solid fa-bars"></i></button><div class="sb"><i class="fa-solid fa-magnifying-glass"></i><input type="text" placeholder="Rechercher..." id="GS" oninput="globalSearch(this.value)"></div></div><div class="ha"><button class="hb" onclick="toast('Aucune notification','info')"><i class="fa-solid fa-bell"></i><span class="nd" id="ND"></span></button><button class="hb" onclick="exportCSV()"><i class="fa-solid fa-download"></i></button><div class="ua">SC</div></div></header>
 
 <!-- DASHBOARD -->
-<section class="page active" id="page-dashboard"><div style="margin-bottom:24px"><h1 style="font-size:26px;font-weight:700;">Tableau de bord</h1><p style="color:var(--fm);font-size:13px;">— <span id="CD"></span></p></div><div class="kg" id="KPI"></div><div style="display:grid;grid-template-columns:1fr 1.5fr;gap:18px;"><div class="cc"><h3 style="font-size:15px;font-weight:600;margin-bottom:18px;">Par classe</h3><div class="cbc" id="CB"></div></div><div class="dtw"><div class="dth"><h3>Dernieres demandes</h3><button class="bs" onclick="go('absences')" style="padding:6px 12px;font-size:12px;">Voir tout <i class="fa-solid fa-arrow-right" style="font-size:10px;"></i></button></div><table><thead><tr><th>Etudiant</th><th>Module</th><th>Date & Heure</th><th>Statut</th></tr></thead><tbody id="DR"></tbody></table></div></div></section>
+<section class="page active" id="page-dashboard"><div style="margin-bottom:24px"><h1 style="font-size:26px;font-weight:700;">Tableau de bord</h1><p style="color:var(--fm);font-size:13px;">— <span id="CD"></span></p></div><div class="kg" id="KPI"></div><div style="display:grid;grid-template-columns:1fr 1.5fr;gap:18px;"><div class="cc"><h3 style="font-size:15px;font-weight:600;margin-bottom:18px;">Par classe</h3><div class="cbc" id="CB"></div></div><div class="dtw"><div class="dth"><h3>Dernieres demandes</h3><button class="bs" onclick="go('absences')" style="padding:6px 12px;font-size:12px;">Voir tout <i class="fa-solid fa-arrow-right" style="font-size:10px;"></i></button></div><table><thead><tr><th>Etudiant</th><th>Module</th><th>Date & Heure</th></tr></thead><tbody id="DR"></tbody></table></div></div></section>
 
 <!-- ABSENCES -->
-<section class="page" id="page-absences"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:10px;"><div><h1 style="font-size:26px;font-weight:700;">Gestion des absences</h1></div><button class="bp1" onclick="openAM()"><i class="fa-solid fa-plus"></i> Nouvelle absence</button></div><div class="dtw"><div class="dth" style="flex-wrap:wrap;gap:10px;"><div class="tfs" id="SF"></div><div class="tfs"><select class="fs" style="width:140px;padding:6px 11px;font-size:12px;" id="FC" onchange="absClass=this.value;absModule='all';absPage=1;renderAbsFilters();renderAbsences();"><option value="all">Toutes classes</option></select><select class="fs" style="width:140px;padding:6px 11px;font-size:12px;" id="FM" onchange="absModule=this.value;absPage=1;renderAbsences();"><option value="all">Tous modules</option></select></div></div><div style="overflow-x:auto;"><table><thead><tr><th>Etudiant</th><th>Classe</th><th>Module</th><th>Type</th><th>Date & Heure</th><th>Statut</th><th>Actions</th></tr></thead><tbody id="AB"></tbody></table></div><div class="pg" id="PG"></div></div></section>
+<section class="page" id="page-absences"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:10px;"><div><h1 style="font-size:26px;font-weight:700;">Gestion des absences</h1></div><button class="bp1" onclick="openAM()"><i class="fa-solid fa-plus"></i> Nouvelle absence</button></div><div class="dtw"><div class="dth" style="flex-wrap:wrap;gap:10px;"><div class="tfs" id="SF"></div><div class="tfs"><select class="fs" style="width:140px;padding:6px 11px;font-size:12px;" id="FC" onchange="absClass=this.value;absModule='all';absPage=1;renderAbsFilters();renderAbsences();"><option value="all">Toutes classes</option></select><select class="fs" style="width:140px;padding:6px 11px;font-size:12px;" id="FM" onchange="absModule=this.value;absPage=1;renderAbsences();"><option value="all">Tous modules</option></select></div></div><div style="overflow-x:auto;"><table><thead><tr><th>Etudiant</th><th>Module</th><th>Type</th><th>Date & Heure</th><th>Actions</th></tr></thead><tbody id="AB"></tbody></table></div><div class="pg" id="PG"></div></div></section>
 
 <!-- CALENDAR -->
 <section class="page" id="page-calendar"><div style="margin-bottom:24px"><h1 style="font-size:26px;font-weight:700;">Calendrier</h1></div><div style="display:grid;grid-template-columns:1fr 320px;gap:18px;"><div class="cc" id="CM"></div><div><div class="cc" style="margin-bottom:14px;"><h3 style="font-size:14px;font-weight:600;margin-bottom:14px;">Legendes</h3><div style="display:flex;flex-direction:column;gap:9px;"><div style="display:flex;align-items:center;gap:9px;"><span style="width:9px;height:9px;border-radius:50%;background:var(--ac);"></span><span style="font-size:12.5px;color:var(--fm);">Approuvee</span></div><div style="display:flex;align-items:center;gap:9px;"><span style="width:9px;height:9px;border-radius:50%;background:var(--wn);"></span><span style="font-size:12.5px;color:var(--fm);">En attente</span></div><div style="display:flex;align-items:center;gap:9px;"><span style="width:9px;height:9px;border-radius:50%;background:var(--dn);"></span><span style="font-size:12.5px;color:var(--fm);">Refusee</span></div></div></div><div class="cc"><h3 style="font-size:14px;font-weight:600;margin-bottom:14px;">Absences du jour</h3><div id="CDD"><p style="color:var(--fd);font-size:12.5px;text-align:center;padding:18px 0;">Cliquez sur un jour</p></div></div></div></div></section>
@@ -242,7 +240,7 @@ tbody tr{border-bottom:1px solid var(--bd);transition:background .15s}tbody tr:l
 <div class="mo" id="MAB"><div class="md"><div class="mh"><h3 id="AMT">Nouvelle absence</h3><button class="mx" onclick="closeModal('MAB')"><i class="fa-solid fa-xmark"></i></button></div><div class="mb"><input type="hidden" id="AID"><div class="fg"><label class="fl">Etudiant</label><select class="fs" id="AST"></select></div><div class="fg"><label class="fl">Module</label><select class="fs" id="AMO"></select></div><div class="fr"><div class="fg"><label class="fl">Debut (date & heure)</label><input type="datetime-local" class="fi" id="ASD"></div><div class="fg"><label class="fl">Fin (date & heure)</label><input type="datetime-local" class="fi" id="AED"></div></div><div class="fr"><div class="fg"><label class="fl">Type</label><select class="fs" id="ATY"></select></div><div class="fg"><label class="fl">Statut</label><select class="fs" id="AST2"><option value="pending">En attente</option><option value="approved">Approuvee</option><option value="rejected">Refusee</option></select></div></div><div class="fg"><label class="fl">Motif</label><textarea class="fi" id="ARE" rows="2" placeholder="Raison..." style="resize:vertical;"></textarea></div></div><div class="mf"><button class="bs" onclick="closeModal('MAB')">Annuler</button><button class="bp1" onclick="saveA()"><i class="fa-solid fa-check"></i> Enregistrer</button></div></div></div>
 
 <!-- MODAL ETUDIANT -->
-<div class="mo" id="MST"><div class="md"><div class="mh"><h3 id="SMT2">Nouvel etudiant</h3><button class="mx" onclick="closeModal('MST')"><i class="fa-solid fa-xmark"></i></button></div><div class="mb"><input type="hidden" id="SID"><div class="fr"><div class="fg"><label class="fl">Prenom</label><input type="text" class="fi" id="SFR" placeholder="Prenom"></div><div class="fg"><label class="fl">Nom</label><input type="text" class="fi" id="SLN" placeholder="Nom"></div></div><div class="fr"><div class="fg"><label class="fl">Classe</label><select class="fs" id="SCL"></select></div><div class="fg"><label class="fl">Email</label><input type="email" class="fi" id="SEM" placeholder="email@univ.fr"></div></div></div><div class="mf"><button class="bs" onclick="closeModal('MST')">Annuler</button><button class="bp1" onclick="saveS()"><i class="fa-solid fa-check"></i> Enregistrer</button></div></div></div>
+<div class="mo" id="MST"><div class="md"><div class="mh"><h3 id="SMT2">Nouvel etudiant</h3><button class="mx" onclick="closeModal('MST')"><i class="fa-solid fa-xmark"></i></button></div><div class="mb"><input type="hidden" id="SID"><div class="fr"><div class="fg"><label class="fl">Nom</label><input type="text" class="fi" id="SLN" placeholder="Nom"></div><div class="fg"><label class="fl">Prenom</label><input type="text" class="fi" id="SFR" placeholder="Prenom"></div></div><div class="fg"><label class="fl">Classe</label><select class="fs" id="SCL"></select></div></div><div class="mf"><button class="bs" onclick="closeModal('MST')">Annuler</button><button class="bp1" onclick="saveS()"><i class="fa-solid fa-check"></i> Enregistrer</button></div></div></div>
 
 <!-- MODAL MODULE -->
 <div class="mo" id="MMO"><div class="md"><div class="mh"><h3 id="MMT2">Nouveau module</h3><button class="mx" onclick="closeModal('MMO')"><i class="fa-solid fa-xmark"></i></button></div><div class="mb"><input type="hidden" id="MID"><div class="fg"><label class="fl">Nom du module</label><input type="text" class="fi" id="MNM" placeholder="Nom"></div><div class="fr"><div class="fg"><label class="fl">Classe</label><select class="fs" id="MCL"></select></div><div class="fg"><label class="fl">Couleur</label><input type="color" class="fi" id="MCO" value="#8b5cf6" style="height:42px;padding:4px 8px;cursor:pointer;"></div></div></div><div class="mf"><button class="bs" onclick="closeModal('MMO')">Annuler</button><button class="bp1" onclick="saveM()"><i class="fa-solid fa-check"></i> Enregistrer</button></div></div></div>
@@ -308,8 +306,6 @@ var absPage=1,absFilter='all',absClass='all',absModule='all',absSearch='';
 var calMonth,calYear,stuClass='all',modClass='all',modSearch='';
 var currentDetailStuId=null,currentDetailModId=null,delTarget=null;
 var PP=8;
-
-/* Etat import */
 var impState={mode:'student',rows:[],headers:[],validCount:0,dupCount:0,errCount:0,colMap:{}};
 
 /* ====== PERSISTANCE ====== */
@@ -335,14 +331,9 @@ function initData(){
     types=DEF_TYPES.slice();nid=sid+mid;
     saveToStorage();
   }
-  /* Migration : convertir anciennes dates sans heure en datetime-local */
   absences.forEach(function(a){
-    if(a.startDate && a.startDate.indexOf('T')===-1){
-      a.startDate = a.startDate + 'T08:00';
-    }
-    if(a.endDate && a.endDate.indexOf('T')===-1){
-      a.endDate = a.endDate + 'T10:00';
-    }
+    if(a.startDate&&a.startDate.indexOf('T')===-1) a.startDate=a.startDate+'T08:00';
+    if(a.endDate&&a.endDate.indexOf('T')===-1) a.endDate=a.endDate+'T10:00';
   });
   saveToStorage();
 }
@@ -387,517 +378,430 @@ function getClasses(){var s={};students.forEach(function(st){s[st.classe]=1;});m
 function getStudent(id){return students.find(function(s){return s.id===id;});}
 function getModule(id){return modules.find(function(m){return m.id===id;});}
 function getType(id){return types.find(function(t){return t.id===id;});}
-
-/* Formater date+heure : "15/01/2025 à 08:30" */
-function fmtDate(d){
-  if(!d)return'';
-  var dt=d.indexOf('T')>=0?d.split('T'):d.split(' ');
-  var p=dt[0].split('-');
-  var timeStr=dt[1]||'';
-  var h='',m='';
-  if(timeStr){
-    var tp=timeStr.split(':');
-    h=tp[0]||'';m=tp[1]||'';
-  }
-  var result=p[2]+'/'+p[1]+'/'+p[0];
-  if(h && m) result += ' à '+h+':'+m;
-  return result;
+function formatDate(dt){
+  if(!dt)return'-';
+  var d=new Date(dt);
+  return String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0')+'/'+d.getFullYear()+' \u00e0 '+String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');
 }
-
-/* Extraire juste la date (pour calendrier) : "2025-01-15" */
-function dateOnly(d){
-  if(!d)return'';
-  if(d.indexOf('T')>=0) return d.split('T')[0];
-  return d.split(' ')[0];
+function formatDateShort(dt){
+  if(!dt)return'-';
+  var d=new Date(dt);
+  return String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0');
 }
-
-/* Obtenir datetime-local par défaut (maintenant) */
-function nowLocal(){
-  var d=new Date();
-  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')+'T'+String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');
+/* Nom puis Prenom */
+function stuName(s){return s.nom+' '+s.prenom;}
+function stuInitials(s){return(s.nom[0]||'')+(s.prenom[0]||'');}
+function getAbsForStudent(sid){return absences.filter(function(a){return a.studentId===sid;});}
+function getAbsForModule(mid){return absences.filter(function(a){return a.moduleId===mid;});}
+function getAbsForClass(cl){return absences.filter(function(a){var s=getStudent(a.studentId);return s&&s.classe===cl;});}
+function statusBadge(st){
+  if(st==='approved')return'<span class="badge ba"><i class="fa-solid fa-check" style="font-size:9px;"></i> Approuv\u00e9e</span>';
+  if(st==='rejected')return'<span class="badge br"><i class="fa-solid fa-xmark" style="font-size:9px;"></i> Refus\u00e9e</span>';
+  return'<span class="badge bp"><i class="fa-solid fa-clock" style="font-size:9px;"></i> En attente</span>';
 }
-function todayStr(){var d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
-
-function statusBadge(s){
-  if(s==='approved')return'<span class="badge ba"><i class="fa-solid fa-circle-check"></i> Approuvee</span>';
-  if(s==='rejected')return'<span class="badge br"><i class="fa-solid fa-circle-xmark"></i> Refusee</span>';
-  return'<span class="badge bp"><i class="fa-solid fa-clock"></i> En attente</span>';
-}
-function initials(p,n){return(p[0]||'')+(n[0]||'');}
-function fillClassSelect(sel,all){
-  var c=getClasses();
-  var h='<option value="all">'+(all||'Toutes')+'</option>';
-  c.forEach(function(cl){h+='<option value="'+cl+'">'+cl+'</option>';});
-  sel.innerHTML=h;
-}
-function fillStudentSelect(sel){
-  var h='';
-  students.forEach(function(s){h+='<option value="'+s.id+'">'+s.prenom+' '+s.nom+' ('+s.classe+')</option>';});
-  sel.innerHTML=h;
-}
-function fillModuleSelect(sel,cl){
-  var h='';
-  var ms=cl&&cl!=='all'?modules.filter(function(m){return m.classe===cl;}):modules;
-  ms.forEach(function(m){h+='<option value="'+m.id+'">'+m.name+'</option>';});
-  sel.innerHTML=h;
-}
-function fillTypeSelect(sel){
-  var h='';
-  types.forEach(function(t){h+='<option value="'+t.id+'">'+t.name+'</option>';});
-  sel.innerHTML=h;
+function hexToRgb(hex){if(!hex)return'128,128,128';var r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);return r+','+g+','+b;}
+function kpiCard(icon,color,bg,val,label,trend,tc){
+  return'<div class="kc"><div class="ki" style="background:'+bg+';color:'+color+';"><i class="fa-solid '+icon+'"></i></div><div class="kv">'+val+'</div><div class="kl">'+label+'</div>'+(trend?'<div class="kt" style="color:'+(tc||'var(--fm)')+';">'+trend+'</div>':'')+'<div class="kgw" style="background:'+color+';"></div></div>';
 }
 
 /* ====== DASHBOARD ====== */
 function renderDashboard(){
   var now=new Date();
-  document.getElementById('CD').innerHTML=now.toLocaleDateString('fr-FR',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
-  var total=absences.length,pend=absences.filter(function(a){return a.status==='pending';}).length;
-  var appr=absences.filter(function(a){return a.status==='approved';}).length;
-  var rej=absences.filter(function(a){return a.status==='rejected';}).length;
-  var pendingClass=pend>0?'style="color:var(--wn);"':'style="color:var(--fm);"';
+  document.getElementById('CD').textContent=now.toLocaleDateString('fr-FR',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  var total=absences.length;
+  var pending=absences.filter(function(a){return a.status==='pending';}).length;
+  var approved=absences.filter(function(a){return a.status==='approved';}).length;
+  var rejected=absences.filter(function(a){return a.status==='rejected';}).length;
+  var pt=pending>0?'<span class="kt" style="color:var(--wn);"><i class="fa-solid fa-arrow-up" style="font-size:9px;"></i> '+pending+' en attente</span>':'<span class="kt" style="color:var(--ac);"><i class="fa-solid fa-check" style="font-size:9px;"></i> A jour</span>';
   document.getElementById('KPI').innerHTML=
-    '<div class="kc"><div class="ki" style="background:var(--acs);color:var(--ac);"><i class="fa-solid fa-list-check"></i></div><div class="kv">'+total+'</div><div class="kl">Total absences</div><div class="kt" style="color:var(--fm);"><i class="fa-solid fa-database"></i> enregistrees</div><div class="kgw" style="background:var(--ac);"></div></div>'+
-    '<div class="kc"><div class="ki" style="background:var(--wns);color:var(--wn);"><i class="fa-solid fa-clock"></i></div><div class="kv">'+pend+'</div><div class="kl">En attente</div><div class="kt" '+pendingClass+'><i class="fa-solid fa-triangle-exclamation"></i> '+((total?Math.round(pend/total*100):0))+'% du total</div><div class="kgw" style="background:var(--wn);"></div></div>'+
-    '<div class="kc"><div class="ki" style="background:rgba(16,185,129,.15);color:var(--ac);"><i class="fa-solid fa-circle-check"></i></div><div class="kv">'+appr+'</div><div class="kl">Approuvees</div><div class="kt" style="color:var(--ac);"><i class="fa-solid fa-arrow-trend-up"></i> '+((total?Math.round(appr/total*100):0))+'%</div><div class="kgw" style="background:var(--ac);"></div></div>'+
-    '<div class="kc"><div class="ki" style="background:var(--dns);color:var(--dn);"><i class="fa-solid fa-circle-xmark"></i></div><div class="kv">'+rej+'</div><div class="kl">Refusees</div><div class="kt" style="color:var(--dn);"><i class="fa-solid fa-arrow-trend-down"></i> '+((total?Math.round(rej/total*100):0))+'%</div><div class="kgw" style="background:var(--dn);"></div></div>';
-
-  /* Graphique par classe */
-  var classCounts={};
-  absences.forEach(function(a){var s=getStudent(a.studentId);if(s)classCounts[s.classe]=(classCounts[s.classe]||0)+1;});
-  var keys=Object.keys(classCounts).sort();
-  var maxV=Math.max.apply(null,keys.map(function(k){return classCounts[k];}).concat([1]));
-  var cbh='';
-  keys.forEach(function(k){
-    var pct=Math.round(classCounts[k]/maxV*100);
-    var short=k.replace('S3','S3').replace('S4','S4').replace('S5','S5');
-    cbh+='<div class="cbw"><div class="cbr" style="height:'+pct+'%;background:var(--ac);"></div><div class="cbl">'+short+'</div></div>';
-  });
-  document.getElementById('CB').innerHTML=cbh||'<div class="empty-state"><p>Aucune donnee</p></div>';
-
-  /* Dernières demandes */
-  var recent=absences.slice().sort(function(a,b){return(b.startDate||'').localeCompare(a.startDate||'');}).slice(0,5);
-  var drh='';
-  recent.forEach(function(a){
-    var s=getStudent(a.studentId);var m=getModule(a.moduleId);
-    if(!s||!m)return;
-    drh+='<tr><td><div class="ec"><div class="ea" style="background:var(--ac);">'+initials(s.prenom,s.nom)+'</div><div><div class="en">'+s.prenom+' '+s.nom+'</div><div class="es">'+s.classe+'</div></div></div></td><td style="font-size:12px;">'+m.name+'</td><td style="font-size:12px;color:var(--fm);white-space:nowrap;">'+fmtDate(a.startDate)+'</td><td>'+statusBadge(a.status)+'</td></tr>';
-  });
-  document.getElementById('DR').innerHTML=drh||'<tr><td colspan="4" class="empty-state"><p>Aucune absence</p></td></tr>';
-  document.getElementById('PB').textContent=pend;
-  if(pend>0)document.getElementById('ND').style.display='';else document.getElementById('ND').style.display='none';
+    kpiCard('fa-calendar-check','var(--ac)','var(--acs)',total,'Total absences',pt,'var(--ac)')+
+    kpiCard('fa-clock','var(--wn)','var(--wns)',pending,'En attente','','var(--wn)')+
+    kpiCard('fa-circle-check','var(--ac)','var(--acs)',approved,'Approuv\u00e9es','','var(--ac)')+
+    kpiCard('fa-circle-xmark','var(--dn)','var(--dns)',rejected,'Refus\u00e9es','','var(--dn)');
+  document.getElementById('PB').textContent=pending;
+  document.getElementById('PB').style.display=pending>0?'':'none';
+  document.getElementById('ND').style.display=pending>0?'':'none';
+  /* Chart par classe */
+  var cls=getClasses();var mx=0;
+  var cd=cls.map(function(c){var n=getAbsForClass(c).length;if(n>mx)mx=n;return{name:c,count:n};});
+  if(!mx)mx=1;
+  document.getElementById('CB').innerHTML=cd.map(function(d){
+    var h=Math.max(3,(d.count/mx)*110);
+    return'<div class="cbw"><div class="cbr" style="height:'+h+'px;background:var(--ac);"></div><div class="cbl">'+d.name.replace(' S','<br>S')+'</div></div>';
+  }).join('')||'<div style="color:var(--fd);font-size:12px;text-align:center;width:100%;padding:30px 0;">Aucune donn\u00e9e</div>';
+  /* Dernieres demandes - SANS statut */
+  var recent=absences.slice().sort(function(a,b){return new Date(b.startDate)-new Date(a.startDate);}).slice(0,5);
+  document.getElementById('DR').innerHTML=recent.map(function(a){
+    var s=getStudent(a.studentId),m=getModule(a.moduleId);
+    if(!s||!m)return'';
+    return'<tr><td><div class="ec"><div class="ea" style="background:'+gc(s.id)+';">'+stuInitials(s)+'</div><div><div class="en">'+stuName(s)+'</div></div></div></td><td>'+m.name+'</td><td>'+formatDate(a.startDate)+'</td></tr>';
+  }).join('')||'<tr><td colspan="3" style="text-align:center;color:var(--fd);padding:30px;">Aucune absence</td></tr>';
 }
 
 /* ====== ABSENCES ====== */
 function renderAbsFilters(){
-  var filters=[{k:'all',l:'Tous'},{k:'pending',l:'En attente'},{k:'approved',l:'Approuvees'},{k:'rejected',l:'Refusees'}];
-  var h='';
-  filters.forEach(function(f){h+='<button class="fb'+(absFilter===f.k?' active':'')+'" onclick="absFilter=\''+f.k+'\';absPage=1;renderAbsFilters();renderAbsences();">'+f.l+'</button>';});
-  document.getElementById('SF').innerHTML=h;
-  fillClassSelect(document.getElementById('FC'),'Toutes classes');
-  document.getElementById('FC').value=absClass;
-  var ms=absClass!=='all'?modules.filter(function(m){return m.classe===absClass;}):modules;
-  var mh='<option value="all">Tous modules</option>';
-  ms.forEach(function(m){mh+='<option value="'+m.id+'">'+m.name+'</option>';});
-  document.getElementById('FM').innerHTML=mh;
-  document.getElementById('FM').value=absModule;
+  var cls=getClasses();
+  var fc=document.getElementById('FC');
+  fc.innerHTML='<option value="all">Toutes classes</option>'+cls.map(function(c){return'<option value="'+c+'"'+(absClass===c?' selected':'')+'>'+c+'</option>';}).join('');
+  var statuses=[{v:'all',l:'Tous statuts'},{v:'pending',l:'En attente'},{v:'approved',l:'Approuv\u00e9es'},{v:'rejected',l:'Refus\u00e9es'}];
+  document.getElementById('SF').innerHTML=statuses.map(function(s){return'<button class="fb'+(absFilter===s.v?' active':'')+'" onclick="absFilter=\''+s.v+'\';absPage=1;renderAbsFilters();renderAbsences();">'+s.l+'</button>';}).join('');
+  var mods=absClass==='all'?modules:modules.filter(function(m){return m.classe===absClass;});
+  var fm=document.getElementById('FM');
+  fm.innerHTML='<option value="all">Tous modules</option>'+mods.map(function(m){return'<option value="'+m.id+'"'+(absModule==m.id?' selected':'')+'>'+m.name+'</option>';}).join('');
 }
 function renderAbsences(){
   var list=absences.slice();
   if(absFilter!=='all')list=list.filter(function(a){return a.status===absFilter;});
-  if(absClass!=='all'){var cls=students.filter(function(s){return s.classe===absClass;}).map(function(s){return s.id;});list=list.filter(function(a){return cls.indexOf(a.studentId)>=0;});}
+  if(absClass!=='all')list=list.filter(function(a){var s=getStudent(a.studentId);return s&&s.classe===absClass;});
   if(absModule!=='all')list=list.filter(function(a){return a.moduleId==absModule;});
-  if(absSearch){var q=absSearch.toLowerCase();list=list.filter(function(a){var s=getStudent(a.studentId);return s&&(s.prenom+' '+s.nom).toLowerCase().indexOf(q)>=0;});}
-  list.sort(function(a,b){return(b.startDate||'').localeCompare(a.startDate||'');});
-  var total=list.length,pages=Math.ceil(total/PP)||1;if(absPage>pages)absPage=pages;
+  if(absSearch){var q=absSearch.toLowerCase();list=list.filter(function(a){var s=getStudent(a.studentId),m=getModule(a.moduleId);return(s&&stuName(s).toLowerCase().indexOf(q)>=0)||(m&&m.name.toLowerCase().indexOf(q)>=0);});}
+  list.sort(function(a,b){return new Date(b.startDate)-new Date(a.startDate);});
+  var total=list.length,pages=Math.ceil(total/PP)||1;
+  if(absPage>pages)absPage=pages;
   var start=(absPage-1)*PP,page=list.slice(start,start+PP);
-  var bh='';
-  page.forEach(function(a){
-    var s=getStudent(a.studentId);var m=getModule(a.moduleId);var t=getType(a.typeId);
-    if(!s||!m)return;
-    var tnm=t?t.name:'-';var tcol=t?t.color:'var(--fm)';
-    bh+='<tr><td><div class="ec"><div class="ea" style="background:var(--ac);">'+initials(s.prenom,s.nom)+'</div><div><div class="en">'+s.prenom+' '+s.nom+'</div></div></div></td><td style="font-size:12px;color:var(--fm);">'+s.classe+'</td><td style="font-size:12px;">'+m.name+'</td><td><span style="display:inline-flex;align-items:center;gap:5px;font-size:11.5px;"><span style="width:7px;height:7px;border-radius:50%;background:'+tcol+';flex-shrink:0;"></span>'+tnm+'</span></td><td style="font-size:12px;color:var(--fm);white-space:nowrap;">'+fmtDate(a.startDate)+'</td><td>'+statusBadge(a.status)+'</td><td><button class="ab" onclick="editA('+a.id+')" title="Modifier"><i class="fa-solid fa-pen-to-square"></i></button><button class="ab dg" onclick="delA('+a.id+')" title="Supprimer"><i class="fa-solid fa-trash-can"></i></button></td></tr>';
-  });
-  document.getElementById('AB').innerHTML=bh||'<tr><td colspan="7" class="empty-state"><i class="fa-solid fa-inbox"></i><p>Aucune absence trouvee</p></td></tr>';
+  /* SANS colonnes Classe et Statut */
+  document.getElementById('AB').innerHTML=page.map(function(a){
+    var s=getStudent(a.studentId),m=getModule(a.moduleId),t=getType(a.typeId);
+    if(!s||!m)return'';
+    var tn=t?t.name:'-';
+    return'<tr><td><div class="ec"><div class="ea" style="background:'+gc(s.id)+';">'+stuInitials(s)+'</div><div><div class="en">'+stuName(s)+'</div><div class="es">'+s.classe+'</div></div></div></td><td>'+m.name+'</td><td><span class="badge" style="background:'+(t?'rgba('+hexToRgb(t.color)+',.12)':'var(--bgh)')+';color:'+(t?t.color:'var(--fm)')+';">'+tn+'</span></td><td>'+formatDate(a.startDate)+'</td><td><button class="ab" onclick="editA('+a.id+')" title="Modifier"><i class="fa-solid fa-pen"></i></button><button class="ab dg" onclick="confirmDelete(\'absence\','+a.id+')" title="Supprimer"><i class="fa-solid fa-trash-can"></i></button></td></tr>';
+  }).join('')||'<tr><td colspan="5" style="text-align:center;color:var(--fd);padding:30px;">Aucune absence trouv\u00e9e</td></tr>';
   /* Pagination */
-  var pgh='';
-  if(pages>1){
-    pgh+='<button class="pb" onclick="absPage=Math.max(1,absPage-1);renderAbsences();" '+(absPage<=1?'disabled style="opacity:.4;"':'')+'><i class="fa-solid fa-chevron-left"></i></button>';
-    for(var i=1;i<=pages;i++){
-      if(pages>7&&i>2&&i<pages-1&&Math.abs(i-absPage)>1){if(i===3||i===pages-2)pgh+='<span style="color:var(--fd);font-size:12px;">...</span>';continue;}
-      pgh+='<button class="pb'+(i===absPage?' active':'')+'" onclick="absPage='+i+';renderAbsences();">'+i+'</button>';
-    }
-    pgh+='<button class="pb" onclick="absPage=Math.min('+pages+',absPage+1);renderAbsences();" '+(absPage>=pages?'disabled style="opacity:.4;"':'')+'><i class="fa-solid fa-chevron-right"></i></button>';
+  var pg=document.getElementById('PG');
+  if(pages<=1){pg.innerHTML='';return;}
+  var btns='';
+  btns+='<button class="pb" onclick="absPage=1;renderAbsences();"'+(absPage===1?' disabled':'')+'><i class="fa-solid fa-angles-left" style="font-size:10px;"></i></button>';
+  btns+='<button class="pb" onclick="absPage--;renderAbsences();"'+(absPage===1?' disabled':'')+'><i class="fa-solid fa-angle-left" style="font-size:10px;"></i></button>';
+  for(var i=1;i<=pages;i++){
+    if(pages>7&&i>2&&i<pages-1&&Math.abs(i-absPage)>1){if(i===3||i===pages-2)btns+='<span style="color:var(--fd);padding:0 4px;">...</span>';continue;}
+    btns+='<button class="pb'+(i===absPage?' active':'')+'" onclick="absPage='+i+';renderAbsences();">'+i+'</button>';
   }
-  document.getElementById('PG').innerHTML=pgh;
+  btns+='<button class="pb" onclick="absPage++;renderAbsences();"'+(absPage===pages?' disabled':'')+'><i class="fa-solid fa-angle-right" style="font-size:10px;"></i></button>';
+  btns+='<button class="pb" onclick="absPage='+pages+';renderAbsences();"'+(absPage===pages?' disabled':'')+'><i class="fa-solid fa-angles-right" style="font-size:10px;"></i></button>';
+  pg.innerHTML=btns;
 }
 
-/* ====== CALENDRIER ====== */
+/* ====== CALENDAR ====== */
 function renderCalendar(){
   var now=new Date();
-  if(calMonth===undefined){calMonth=now.getMonth();calYear=now.getFullYear();}
-  var months=['Janvier','Fevrier','Mars','Avril','Mai','Juin','Juillet','Aout','Septembre','Octobre','Novembre','Decembre'];
-  var first=new Date(calYear,calMonth,1),last=new Date(calYear,calMonth+1,0);
-  var startDay=(first.getDay()+6)%7;
+  if(calYear===undefined){calMonth=now.getMonth();calYear=now.getFullYear();}
+  var months=['Janvier','F\u00e9vrier','Mars','Avril','Mai','Juin','Juillet','Ao\u00fbt','Septembre','Octobre','Novembre','D\u00e9cembre'];
   var days=['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'];
-  var dh='<div class="ch"><h3 style="font-size:15px;font-weight:600;">'+months[calMonth]+' '+calYear+'</h3><div class="cn"><button onclick="calMonth--;if(calMonth<0){calMonth=11;calYear--;}renderCalendar();"><i class="fa-solid fa-chevron-left"></i></button><button onclick="calMonth=now.getMonth();calYear=now.getFullYear();renderCalendar();" style="font-size:11px;width:auto;padding:0 10px;">Auj.</button><button onclick="calMonth++;if(calMonth>11){calMonth=0;calYear++;}renderCalendar();"><i class="fa-solid fa-chevron-right"></i></button></div></div>';
-  dh+='<div class="cg">';
-  days.forEach(function(d){dh+='<div class="cdl">'+d+'</div>';});
-  for(var i=0;i<startDay;i++){
-    var pd=new Date(calYear,calMonth,1-(startDay-i));
-    dh+='<div class="cd om">'+pd.getDate()+'</div>';
-  }
-  var tds=todayStr();
-  for(var d=1;d<=last.getDate();d++){
-    var ds=calYear+'-'+String(calMonth+1).padStart(2,'0')+'-'+String(d).padStart(2,'0');
-    var dayAbs=absences.filter(function(a){return dateOnly(a.startDate)===ds;});
+  var first=new Date(calYear,calMonth,1);
+  var lastDay=new Date(calYear,calMonth+1,0).getDate();
+  var startDay=(first.getDay()+6)%7;
+  var prevLast=new Date(calYear,calMonth,0).getDate();
+  var td=now.getDate(),tm=now.getMonth(),ty=now.getFullYear();
+  var absDates={};
+  absences.forEach(function(a){var d=formatDateShort(a.startDate);if(!absDates[d])absDates[d]=[];absDates[d].push(a);});
+  var html='<div class="ch"><h3 style="font-size:15px;font-weight:600;">'+months[calMonth]+' '+calYear+'</h3><div class="cn"><button onclick="calMonth--;if(calMonth<0){calMonth=11;calYear--;}renderCalendar();"><i class="fa-solid fa-chevron-left"></i></button><button onclick="calMonth=now.getMonth();calYear=now.getFullYear();renderCalendar();"><i class="fa-solid fa-dot" style="font-size:8px;"></i></button><button onclick="calMonth++;if(calMonth>11){calMonth=0;calYear++;}renderCalendar();"><i class="fa-solid fa-chevron-right"></i></button></div></div>';
+  html+='<div class="cg">';
+  days.forEach(function(d){html+='<div class="cdl">'+d+'</div>';});
+  for(var i=0;i<startDay;i++){html+='<div class="cd om">'+(prevLast-startDay+1+i)+'</div>';}
+  for(var d=1;d<=lastDay;d++){
+    var key=String(d).padStart(2,'0')+'/'+String(calMonth+1).padStart(2,'0');
+    var isToday=d===td&&calMonth===tm&&calYear===ty;
+    var dayAbs=absDates[key]||[];
     var cls='cd';
-    if(ds===tds)cls+=' today';
+    if(isToday)cls+=' today';
     if(dayAbs.length>0){
-      var hasPend=dayAbs.some(function(a){return a.status==='pending';});
-      var hasAppr=dayAbs.some(function(a){return a.status==='approved';});
-      if(hasPend)cls+=' ha';else if(hasAppr)cls+=' hap';else cls+=' ha';
+      var hasR=dayAbs.some(function(a){return a.status==='rejected';});
+      var hasPe=dayAbs.some(function(a){return a.status==='pending';});
+      var hasP=dayAbs.some(function(a){return a.status==='approved';});
+      if(hasR)cls+=' ha';else if(hasPe)cls+=' hpp';else if(hasP)cls+=' hap';
     }
-    dh+='<div class="'+cls+'" onclick="showCalDay(\''+ds+'\')">'+d+'</div>';
+    html+='<div class="'+cls+'" onclick="showDayDetail(\''+key+'/'+calYear+'\')">'+d+'</div>';
   }
-  var rem=7-((startDay+last.getDate())%7);
-  if(rem<7){for(var i=1;i<=rem;i++){dh+='<div class="cd om">'+i+'</div>';}}
-  dh+='</div>';
-  document.getElementById('CM').innerHTML=dh;
+  var totalCells=startDay+lastDay;
+  var rem=totalCells%7===0?0:7-totalCells%7;
+  for(var i=1;i<=rem;i++){html+='<div class="cd om">'+i+'</div>';}
+  html+='</div>';
+  document.getElementById('CM').innerHTML=html;
 }
-function showCalDay(ds){
-  var dayAbs=absences.filter(function(a){return dateOnly(a.startDate)===ds;});
-  var h='';
-  if(dayAbs.length===0){h='<p style="color:var(--fd);font-size:12.5px;text-align:center;padding:18px 0;">Aucune absence le '+fmtDate(ds)+'</p>';}
-  else{
-    dayAbs.forEach(function(a){
-      var s=getStudent(a.studentId);var m=getModule(a.moduleId);
-      if(!s||!m)return;
-      h+='<div style="padding:10px 0;border-bottom:1px solid var(--bd);"><div style="font-size:13px;font-weight:600;">'+s.prenom+' '+s.nom+'</div><div style="font-size:11.5px;color:var(--fm);margin-top:3px;">'+m.name+'</div><div style="font-size:11px;color:var(--in);margin-top:2px;"><i class="fa-regular fa-clock" style="margin-right:3px;"></i>'+fmtDate(a.startDate)+'</div><div style="margin-top:5px;">'+statusBadge(a.status)+'</div></div>';
-    });
-  }
-  document.getElementById('CDD').innerHTML=h;
+function showDayDetail(dateStr){
+  var parts=dateStr.split('/');
+  var key=parts[0]+'/'+parts[1];
+  var dayAbs=absences.filter(function(a){return formatDateShort(a.startDate)===key;});
+  var el=document.getElementById('CDD');
+  if(!dayAbs.length){el.innerHTML='<p style="color:var(--fd);font-size:12.5px;text-align:center;padding:18px 0;">Aucune absence ce jour</p>';return;}
+  el.innerHTML=dayAbs.map(function(a){
+    var s=getStudent(a.studentId),m=getModule(a.moduleId);
+    if(!s||!m)return'';
+    return'<div style="padding:10px;background:var(--bg);border-radius:8px;border:1px solid var(--bd);margin-bottom:8px;"><div style="font-size:13px;font-weight:600;margin-bottom:4px;">'+stuName(s)+'</div><div style="font-size:11.5px;color:var(--fm);">'+m.name+'</div><div style="margin-top:6px;">'+statusBadge(a.status)+'</div></div>';
+  }).join('');
 }
 
 /* ====== ETUDIANTS ====== */
 function renderStudents(){
-  var classes=getClasses();
-  var h='';
-  classes.forEach(function(cl){h+='<button class="fb'+(stuClass===cl?' active':'')+'" onclick="stuClass=\''+cl+'\';renderStudents();">'+cl+'</button>';});
-  h+='<button class="fb'+(stuClass==='all'?' active':'')+'" onclick="stuClass=\'all\';renderStudents();">Toutes</button>';
-  document.getElementById('STF').innerHTML=h;
-  var list=stuClass!=='all'?students.filter(function(s){return s.classe===stuClass;}):students;
+  var cls=getClasses();
+  document.getElementById('STF').innerHTML='<button class="fb'+(stuClass==='all'?' active':'')+'" onclick="stuClass=\'all\';renderStudents();">Toutes</button>'+cls.map(function(c){return'<button class="fb'+(stuClass===c?' active':'')+'" onclick="stuClass=\''+c+'\';renderStudents();">'+c+'</button>';}).join('');
+  var list=stuClass==='all'?students:students.filter(function(s){return s.classe===stuClass;});
   document.getElementById('SC2').textContent=list.length;
-  var cards='';
-  list.forEach(function(s){
-    var sa=absences.filter(function(a){return a.studentId===s.id;});
-    var tot=sa.length,pen=sa.filter(function(a){return a.status==='pending';}).length,app=sa.filter(function(a){return a.status==='approved';}).length;
-    var pct=tot?Math.round(app/tot*100):100;
-    var col=pct>=80?'var(--ac)':pct>=50?'var(--wn)':'var(--dn)';
-    cards+='<div class="sc" data-name="'+s.prenom+' '+s.nom+'" onclick="showStuDetail('+s.id+')"><div class="sct"><div class="sca" style="background:var(--ac);">'+initials(s.prenom,s.nom)+'</div><div><div style="font-weight:600;font-size:14px;">'+s.prenom+' '+s.nom+'</div><div style="font-size:11.5px;color:var(--fm);">'+s.classe+'</div></div></div><div class="scs"><div class="ss"><div class="ssv">'+tot+'</div><div class="ssl">Total</div></div><div class="ss"><div class="ssv" style="color:var(--wn);">'+pen+'</div><div class="ssl">Attente</div></div><div class="ss"><div class="ssv" style="color:var(--ac);">'+app+'</div><div class="ssl">Approuv.</div></div></div><div class="lb"><div class="lbb"><div class="lbf" style="width:'+pct+'%;background:'+col+';"></div></div><div class="lbt">'+pct+'% assiduite</div></div></div>';
-  });
-  document.getElementById('SG').innerHTML=cards||'<div class="empty-state" style="grid-column:1/-1;"><i class="fa-solid fa-user-graduate"></i><p>Aucun etudiant</p></div>';
+  document.getElementById('SG').innerHTML=list.map(function(s){
+    var abs=getAbsForStudent(s.id);
+    var total=abs.length;
+    var pending=abs.filter(function(a){return a.status==='pending';}).length;
+    var approved=abs.filter(function(a){return a.status==='approved';}).length;
+    var pct=total?Math.round((approved/total)*100):0;
+    var barColor=pct>=70?'var(--ac)':pct>=40?'var(--wn)':'var(--dn)';
+    return'<div class="sc" data-name="'+stuName(s)+'" onclick="showStuDetail('+s.id+')"><div class="sct"><div class="sca" style="background:'+gc(s.id)+';">'+stuInitials(s)+'</div><div><div style="font-size:14px;font-weight:700;">'+stuName(s)+'</div><div style="font-size:11.5px;color:var(--fm);">'+s.classe+'</div></div></div><div class="scs"><div class="ss"><div class="ssv">'+total+'</div><div class="ssl">Total</div></div><div class="ss"><div class="ssv" style="color:var(--wn);">'+pending+'</div><div class="ssl">Attente</div></div><div class="ss"><div class="ssv" style="color:var(--ac);">'+approved+'</div><div class="ssl">Approuv.</div></div></div><div class="lb"><div class="lbb"><div class="lbf" style="width:'+pct+'%;background:'+barColor+';"></div></div><div class="lbt">'+pct+'% approuv\u00e9es</div></div></div>';
+  }).join('')||'<div class="empty-state" style="grid-column:1/-1;"><i class="fa-solid fa-user-graduate"></i><p>Aucun \u00e9tudiant trouv\u00e9</p></div>';
 }
 function showStuDetail(id){
-  var s=getStudent(id);if(!s)return;
   currentDetailStuId=id;
-  var sa=absences.filter(function(a){return a.studentId===id;}).sort(function(a,b){return(b.startDate||'').localeCompare(a.startDate||'');});
-  var tot=sa.length,pen=sa.filter(function(a){return a.status==='pending';}).length,app=sa.filter(function(a){return a.status==='approved';}).length,rej=sa.filter(function(a){return a.status==='rejected';}).length;
-  var h='<button class="back-btn" onclick="go(\'students\')"><i class="fa-solid fa-arrow-left"></i> Retour</button>';
-  h+='<div class="detail-hero"><div class="detail-hero-glow" style="background:var(--ac);"></div><div style="display:flex;align-items:center;gap:18px;position:relative;z-index:1;"><div class="sca" style="width:64px;height:64px;border-radius:16px;font-size:22px;background:var(--ac);">'+initials(s.prenom,s.nom)+'</div><div><h2 style="font-size:22px;font-weight:700;">'+s.prenom+' '+s.nom+'</h2><p style="color:var(--fm);font-size:13px;margin-top:3px;">'+s.classe+(s.email?' — '+s.email:'')+'</p></div></div></div>';
-  h+='<div class="detail-stats"><div class="detail-stat"><div class="detail-stat-val">'+tot+'</div><div class="detail-stat-label">Total</div></div><div class="detail-stat"><div class="detail-stat-val" style="color:var(--wn);">'+pen+'</div><div class="detail-stat-label">En attente</div></div><div class="detail-stat"><div class="detail-stat-val" style="color:var(--ac);">'+app+'</div><div class="detail-stat-label">Approuvees</div></div><div class="detail-stat"><div class="detail-stat-val" style="color:var(--dn);">'+rej+'</div><div class="detail-stat-label">Refusees</div></div></div>';
-  h+='<div class="dtw"><div class="dth"><h3>Historique des absences</h3></div><table><thead><tr><th>Module</th><th>Type</th><th>Date & Heure</th><th>Statut</th><th>Motif</th></tr></thead><tbody>';
-  if(sa.length===0){h+='<tr><td colspan="5" class="empty-state"><p>Aucune absence</p></td></tr>';}
-  else{sa.forEach(function(a){var m=getModule(a.moduleId);var t=getType(a.typeId);h+='<tr><td style="font-size:12px;">'+(m?m.name:'-')+'</td><td><span style="display:inline-flex;align-items:center;gap:5px;font-size:11.5px;"><span style="width:7px;height:7px;border-radius:50%;background:'+(t?t.color:'var(--fm)')+';"></span>'+(t?t.name:'-')+'</span></td><td style="font-size:12px;color:var(--fm);white-space:nowrap;">'+fmtDate(a.startDate)+'</td><td>'+statusBadge(a.status)+'</td><td style="font-size:12px;color:var(--fd);max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+(a.reason||'-')+'</td></tr>';});}
-  h+='</tbody></table></div>';
-  var pg=document.getElementById('page-stu-detail');pg.innerHTML=h;pg.classList.add('active');
-  document.querySelectorAll('.ni').forEach(function(el){el.classList.remove('active');});
+  var s=getStudent(id);if(!s)return;
+  var abs=getAbsForStudent(id);
+  var total=abs.length,pending=abs.filter(function(a){return a.status==='pending';}).length,approved=abs.filter(function(a){return a.status==='approved';}).length,rejected=abs.filter(function(a){return a.status==='rejected';}).length;
+  var el=document.getElementById('page-stu-detail');
+  el.innerHTML='<button class="back-btn" onclick="go(\'students\')"><i class="fa-solid fa-arrow-left"></i> Retour</button><div class="detail-hero"><div class="detail-hero-glow" style="background:'+gc(s.id)+';"></div><div style="display:flex;align-items:center;gap:18px;position:relative;z-index:1;"><div class="sca" style="width:64px;height:64px;font-size:22px;border-radius:16px;background:'+gc(s.id)+';">'+stuInitials(s)+'</div><div><h2 style="font-size:22px;font-weight:700;">'+stuName(s)+'</h2><div style="font-size:13px;color:var(--fm);margin-top:4px;">'+s.classe+'</div></div><div style="margin-left:auto;display:flex;gap:8px;"><button class="bs" onclick="editS('+s.id+')"><i class="fa-solid fa-pen"></i> Modifier</button><button class="bs" style="border-color:var(--dn);color:var(--dn);" onclick="confirmDelete(\'student\','+s.id+')"><i class="fa-solid fa-trash-can"></i> Supprimer</button></div></div></div><div class="detail-stats"><div class="detail-stat"><div class="detail-stat-val">'+total+'</div><div class="detail-stat-label">Total</div></div><div class="detail-stat"><div class="detail-stat-val" style="color:var(--wn);">'+pending+'</div><div class="detail-stat-label">En attente</div></div><div class="detail-stat"><div class="detail-stat-val" style="color:var(--ac);">'+approved+'</div><div class="detail-stat-label">Approuv\u00e9es</div></div><div class="detail-stat"><div class="detail-stat-val" style="color:var(--dn);">'+rejected+'</div><div class="detail-stat-label">Refus\u00e9es</div></div></div><div class="dtw"><div class="dth"><h3>Historique des absences</h3></div><table><thead><tr><th>Module</th><th>Type</th><th>Date & Heure</th><th>Statut</th><th>Actions</th></tr></thead><tbody>'+abs.map(function(a){var m=getModule(a.moduleId),t=getType(a.typeId);if(!m)return'';return'<tr><td>'+m.name+'</td><td>'+(t?t.name:'-')+'</td><td>'+formatDate(a.startDate)+'</td><td>'+statusBadge(a.status)+'</td><td><button class="ab" onclick="editA('+a.id+')" title="Modifier"><i class="fa-solid fa-pen"></i></button><button class="ab dg" onclick="confirmDelete(\'absence\','+a.id+')" title="Supprimer"><i class="fa-solid fa-trash-can"></i></button></td></tr>';}).join('')||'<tr><td colspan="5" style="text-align:center;color:var(--fd);padding:30px;">Aucune absence</td></tr>'+'</tbody></table></div>';
+  document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');});
+  el.classList.add('active');
 }
 
 /* ====== MODULES ====== */
 function renderModules(){
-  var classes=getClasses();
-  var h='';
-  classes.forEach(function(cl){h+='<button class="fb'+(modClass===cl?' active':'')+'" onclick="modClass=\''+cl+'\';renderModules();">'+cl+'</button>';});
-  h+='<button class="fb'+(modClass==='all'?' active':'')+'" onclick="modClass=\'all\';renderModules();">Tous</button>';
-  document.getElementById('MTF').innerHTML=h;
-  var list=modClass!=='all'?modules.filter(function(m){return m.classe===modClass;}):modules;
+  var cls=getClasses();
+  document.getElementById('MTF').innerHTML='<button class="fb'+(modClass==='all'?' active':'')+'" onclick="modClass=\'all\';renderModules();">Toutes</button>'+cls.map(function(c){return'<button class="fb'+(modClass===c?' active':'')+'" onclick="modClass=\''+c+'\';renderModules();">'+c+'</button>';}).join('');
+  var list=modClass==='all'?modules:modules.filter(function(m){return m.classe===modClass;});
   if(modSearch){var q=modSearch.toLowerCase();list=list.filter(function(m){return m.name.toLowerCase().indexOf(q)>=0;});}
   document.getElementById('MC2').textContent=list.length;
-  var cards='';
-  list.forEach(function(m){
-    var ma=absences.filter(function(a){return a.moduleId===m.id;});
-    var tot=ma.length;
-    cards+='<div class="mgc" onclick="showModDetail('+m.id+')"><div class="mgg" style="background:'+m.color+';"></div><div class="mgnm">'+m.name+'</div><div class="mgtc">'+m.classe+'</div><div class="mgme"><div class="mgmi"><i class="fa-solid fa-list-check"></i> '+tot+' absences</div><div class="mgmi"><i class="fa-solid fa-clock" style="color:var(--wn);"></i> '+ma.filter(function(a){return a.status==='pending';}).length+' en attente</div></div><div class="lb"><div class="lbb"><div class="lbf" style="width:'+(tot?Math.round(ma.filter(function(a){return a.status==='approved';}).length/tot*100):100)+'%;background:'+m.color+';"></div></div><div class="lbt">'+(tot?Math.round(ma.filter(function(a){return a.status==='approved';}).length/tot*100):100)+'% approuvees</div></div></div>';
-  });
-  document.getElementById('MG').innerHTML=cards||'<div class="empty-state" style="grid-column:1/-1;"><i class="fa-solid fa-book-open"></i><p>Aucun module</p></div>';
+  document.getElementById('MG').innerHTML=list.map(function(m){
+    var abs=getAbsForModule(m.id);var total=abs.length;var pending=abs.filter(function(a){return a.status==='pending';}).length;
+    var stuCount=students.filter(function(s){return s.classe===m.classe;}).length;
+    return'<div class="mgc" onclick="showModDetail('+m.id+')"><div class="mgg" style="background:'+m.color+';"></div><div class="mgnm">'+m.name+'</div><div class="mgtc">'+m.classe+' \u2014 '+stuCount+' \u00e9tudiants</div><div class="mgme"><div class="mgmi"><i class="fa-solid fa-calendar-check" style="color:var(--ac);"></i> '+total+' absences</div><div class="mgmi"><i class="fa-solid fa-clock" style="color:var(--wn);"></i> '+pending+' en attente</div></div></div>';
+  }).join('')||'<div class="empty-state" style="grid-column:1/-1;"><i class="fa-solid fa-book-open"></i><p>Aucun module trouv\u00e9</p></div>';
 }
 function showModDetail(id){
-  var m=getModule(id);if(!m)return;
   currentDetailModId=id;
-  var ma=absences.filter(function(a){return a.moduleId===id;}).sort(function(a,b){return(b.startDate||'').localeCompare(a.startDate||'');});
-  var tot=ma.length,pen=ma.filter(function(a){return a.status==='pending';}).length,app=ma.filter(function(a){return a.status==='approved';}).length,rej=ma.filter(function(a){return a.status==='rejected';}).length;
-  var h='<button class="back-btn" onclick="go(\'modules\')"><i class="fa-solid fa-arrow-left"></i> Retour</button>';
-  h+='<div class="detail-hero"><div class="detail-hero-glow" style="background:'+m.color+';"></div><div style="position:relative;z-index:1;"><h2 style="font-size:22px;font-weight:700;">'+m.name+'</h2><p style="color:var(--fm);font-size:13px;margin-top:3px;">'+m.classe+'</p></div></div>';
-  h+='<div class="detail-stats"><div class="detail-stat"><div class="detail-stat-val">'+tot+'</div><div class="detail-stat-label">Total</div></div><div class="detail-stat"><div class="detail-stat-val" style="color:var(--wn);">'+pen+'</div><div class="detail-stat-label">En attente</div></div><div class="detail-stat"><div class="detail-stat-val" style="color:var(--ac);">'+app+'</div><div class="detail-stat-label">Approuvees</div></div><div class="detail-stat"><div class="detail-stat-val" style="color:var(--dn);">'+rej+'</div><div class="detail-stat-label">Refusees</div></div></div>';
-  h+='<div class="dtw"><div class="dth"><h3>Absences dans ce module</h3></div><table><thead><tr><th>Etudiant</th><th>Type</th><th>Date & Heure</th><th>Statut</th><th>Motif</th></tr></thead><tbody>';
-  if(ma.length===0){h+='<tr><td colspan="5" class="empty-state"><p>Aucune absence</p></td></tr>';}
-  else{ma.forEach(function(a){var s=getStudent(a.studentId);var t=getType(a.typeId);h+='<tr><td>'+(s?'<div class="ec"><div class="ea" style="background:var(--ac);">'+initials(s.prenom,s.nom)+'</div><div><div class="en">'+s.prenom+' '+s.nom+'</div></div></div>':'-')+'</td><td><span style="display:inline-flex;align-items:center;gap:5px;font-size:11.5px;"><span style="width:7px;height:7px;border-radius:50%;background:'+(t?t.color:'var(--fm)')+';"></span>'+(t?t.name:'-')+'</span></td><td style="font-size:12px;color:var(--fm);white-space:nowrap;">'+fmtDate(a.startDate)+'</td><td>'+statusBadge(a.status)+'</td><td style="font-size:12px;color:var(--fd);max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+(a.reason||'-')+'</td></tr>';});}
-  h+='</tbody></table></div>';
-  var pg=document.getElementById('page-mod-detail');pg.innerHTML=h;pg.classList.add('active');
-  document.querySelectorAll('.ni').forEach(function(el){el.classList.remove('active');});
+  var m=getModule(id);if(!m)return;
+  var abs=getAbsForModule(id);
+  var el=document.getElementById('page-mod-detail');
+  el.innerHTML='<button class="back-btn" onclick="go(\'modules\')"><i class="fa-solid fa-arrow-left"></i> Retour</button><div class="detail-hero"><div class="detail-hero-glow" style="background:'+m.color+';"></div><div style="display:flex;align-items:center;gap:18px;position:relative;z-index:1;"><div style="width:64px;height:64px;border-radius:16px;background:'+m.color+';display:flex;align-items:center;justify-content:center;font-size:22px;color:#fff;"><i class="fa-solid fa-book-open"></i></div><div><h2 style="font-size:22px;font-weight:700;">'+m.name+'</h2><div style="font-size:13px;color:var(--fm);margin-top:4px;">'+m.classe+'</div></div><div style="margin-left:auto;display:flex;gap:8px;"><button class="bs" onclick="editM('+m.id+')"><i class="fa-solid fa-pen"></i> Modifier</button><button class="bs" style="border-color:var(--dn);color:var(--dn);" onclick="confirmDelete(\'module\','+m.id+')"><i class="fa-solid fa-trash-can"></i> Supprimer</button></div></div></div><div class="detail-stats"><div class="detail-stat"><div class="detail-stat-val">'+abs.length+'</div><div class="detail-stat-label">Total absences</div></div><div class="detail-stat"><div class="detail-stat-val" style="color:var(--wn);">'+abs.filter(function(a){return a.status==='pending';}).length+'</div><div class="detail-stat-label">En attente</div></div><div class="detail-stat"><div class="detail-stat-val" style="color:var(--ac);">'+abs.filter(function(a){return a.status==='approved';}).length+'</div><div class="detail-stat-label">Approuv\u00e9es</div></div><div class="detail-stat"><div class="detail-stat-val" style="color:var(--dn);">'+abs.filter(function(a){return a.status==='rejected';}).length+'</div><div class="detail-stat-label">Refus\u00e9es</div></div></div><div class="dtw"><div class="dth"><h3>Absences</h3></div><table><thead><tr><th>\u00c9tudiant</th><th>Type</th><th>Date & Heure</th><th>Statut</th><th>Actions</th></tr></thead><tbody>'+abs.map(function(a){var s=getStudent(a.studentId),t=getType(a.typeId);if(!s)return'';return'<tr><td><div class="ec"><div class="ea" style="background:'+gc(s.id)+';">'+stuInitials(s)+'</div><div><div class="en">'+stuName(s)+'</div></div></div></td><td>'+(t?t.name:'-')+'</td><td>'+formatDate(a.startDate)+'</td><td>'+statusBadge(a.status)+'</td><td><button class="ab" onclick="editA('+a.id+')" title="Modifier"><i class="fa-solid fa-pen"></i></button><button class="ab dg" onclick="confirmDelete(\'absence\','+a.id+')" title="Supprimer"><i class="fa-solid fa-trash-can"></i></button></td></tr>';}).join('')||'<tr><td colspan="5" style="text-align:center;color:var(--fd);padding:30px;">Aucune absence</td></tr>'+'</tbody></table></div>';
+  document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');});
+  el.classList.add('active');
 }
 
 /* ====== TYPES ====== */
 function renderTypes(){
-  var h='';
-  types.forEach(function(t){
-    var cnt=absences.filter(function(a){return a.typeId===t.id;}).length;
-    h+='<tr><td><span style="display:inline-flex;align-items:center;gap:8px;font-weight:600;"><span style="width:12px;height:12px;border-radius:4px;background:'+t.color+';"></span>'+t.name+'</span></td><td><span style="font-family:monospace;font-size:12px;color:var(--fm);">'+t.color+'</span></td><td><span style="font-weight:700;">'+cnt+'</span></td><td><button class="ab" onclick="editT('+t.id+')" title="Modifier"><i class="fa-solid fa-pen-to-square"></i></button><button class="ab dg" onclick="delT('+t.id+')" title="Supprimer"><i class="fa-solid fa-trash-can"></i></button></td></tr>';
-  });
-  document.getElementById('TB').innerHTML=h||'<tr><td colspan="4" class="empty-state"><p>Aucun type</p></td></tr>';
+  document.getElementById('TB').innerHTML=types.map(function(t){
+    var count=absences.filter(function(a){return a.typeId===t.id;}).length;
+    return'<tr><td style="font-weight:600;">'+t.name+'</td><td><span style="display:inline-block;width:18px;height:18px;border-radius:5px;background:'+t.color+';vertical-align:middle;"></span> <span style="font-size:11px;color:var(--fm);">'+t.color+'</span></td><td>'+count+'</td><td><button class="ab" onclick="editT('+t.id+')" title="Modifier"><i class="fa-solid fa-pen"></i></button><button class="ab dg" onclick="confirmDelete(\'type\','+t.id+')" title="Supprimer"><i class="fa-solid fa-trash-can"></i></button></td></tr>';
+  }).join('')||'<tr><td colspan="4" style="text-align:center;color:var(--fd);padding:30px;">Aucun type</td></tr>';
 }
 
-/* ====== MODAL ABSENCE ====== */
-function openAM(){
-  document.getElementById('AMT').textContent='Nouvelle absence';
+/* ====== ABSENCE CRUD ====== */
+function populateSelects(){
+  var cls=getClasses();
+  var clOpt='<option value="">-- Choisir --</option>'+cls.map(function(c){return'<option value="'+c+'">'+c+'</option>';}).join('');
+  document.getElementById('AST').innerHTML='<option value="">-- Choisir --</option>'+students.map(function(s){return'<option value="'+s.id+'">'+stuName(s)+' ('+s.classe+')</option>';}).join('');
+  document.getElementById('AMO').innerHTML='<option value="">-- Choisir --</option>'+modules.map(function(m){return'<option value="'+m.id+'">'+m.name+' ('+m.classe+')</option>';}).join('');
+  document.getElementById('ATY').innerHTML=types.map(function(t){return'<option value="'+t.id+'">'+t.name+'</option>';}).join('');
+  document.getElementById('SCL').innerHTML=clOpt;
+  document.getElementById('MCL').innerHTML=clOpt;
+}
+function openAM(id){
+  populateSelects();
   document.getElementById('AID').value='';
-  fillStudentSelect(document.getElementById('AST'));
-  fillModuleSelect(document.getElementById('AMO'));
-  fillTypeSelect(document.getElementById('ATY'));
-  document.getElementById('ASD').value=nowLocal();
-  var endDt=new Date();endDt.setHours(endDt.getHours()+2);endDt.setMinutes(endDt.getMinutes());
-  document.getElementById('AED').value=endDt.getFullYear()+'-'+String(endDt.getMonth()+1).padStart(2,'0')+'-'+String(endDt.getDate()).padStart(2,'0')+'T'+String(endDt.getHours()).padStart(2,'0')+':'+String(endDt.getMinutes()).padStart(2,'0');
+  document.getElementById('AST').value='';
+  document.getElementById('AMO').value='';
+  document.getElementById('ASD').value='';
+  document.getElementById('AED').value='';
+  document.getElementById('ATY').value=types.length?types[0].id:'';
   document.getElementById('AST2').value='pending';
   document.getElementById('ARE').value='';
+  document.getElementById('AMT').textContent='Nouvelle absence';
+  if(id){var a=absences.find(function(x){return x.id===id;});if(a){
+    document.getElementById('AID').value=a.id;
+    document.getElementById('AST').value=a.studentId;
+    document.getElementById('AMO').value=a.moduleId;
+    document.getElementById('ASD').value=a.startDate;
+    document.getElementById('AED').value=a.endDate||a.startDate;
+    document.getElementById('ATY').value=a.typeId;
+    document.getElementById('AST2').value=a.status;
+    document.getElementById('ARE').value=a.reason||'';
+    document.getElementById('AMT').textContent='Modifier absence';
+  }}
   openModal('MAB');
 }
-function editA(id){
-  var a=absences.find(function(x){return x.id===id;});if(!a)return;
-  document.getElementById('AMT').textContent='Modifier absence';
-  document.getElementById('AID').value=id;
-  fillStudentSelect(document.getElementById('AST'));document.getElementById('AST').value=a.studentId;
-  fillModuleSelect(document.getElementById('AMO'));document.getElementById('AMO').value=a.moduleId;
-  fillTypeSelect(document.getElementById('ATY'));document.getElementById('ATY').value=a.typeId;
-  document.getElementById('ASD').value=a.startDate||'';
-  document.getElementById('AED').value=a.endDate||'';
-  document.getElementById('AST2').value=a.status;
-  document.getElementById('ARE').value=a.reason||'';
-  openModal('MAB');
-}
+function editA(id){openAM(id);}
 function saveA(){
-  var id=document.getElementById('AID').value;
-  var obj={
-    studentId:parseInt(document.getElementById('AST').value),
-    moduleId:parseInt(document.getElementById('AMO').value),
-    startDate:document.getElementById('ASD').value,
-    endDate:document.getElementById('AED').value,
-    typeId:parseInt(document.getElementById('ATY').value),
-    status:document.getElementById('AST2').value,
-    reason:document.getElementById('ARE').value
-  };
-  if(!obj.studentId||!obj.moduleId||!obj.startDate){toast('Veuillez remplir les champs obligatoires','error');return;}
-  if(id){
-    var idx=absences.findIndex(function(a){return a.id==id;});
-    if(idx>=0){obj.id=parseInt(id);absences[idx]=obj;}
-  }else{
-    obj.id=nid++;absences.push(obj);
-  }
-  saveToStorage();closeModal('MAB');toast(id?'Absence modifiee':'Absence ajoutee','success');
-  renderAbsences();renderDashboard();
-}
-function delA(id){
-  delTarget={type:'absence',id:id};
-  document.getElementById('MCF_BODY').innerHTML='<div class="confirm-danger-icon"><i class="fa-solid fa-trash-can"></i></div><div style="text-align:center;"><h3 style="font-size:17px;font-weight:700;">Supprimer cette absence ?</h3><p class="confirm-sub">Cette action est irreversible.</p></div>';
-  document.getElementById('MCF_BTN').innerHTML='<i class="fa-solid fa-trash-can"></i> Supprimer';
-  openModal('MCF');
+  var sid=document.getElementById('AST').value,mid=document.getElementById('AMO').value,sd=document.getElementById('ASD').value,ed=document.getElementById('AED').value,tid=document.getElementById('ATY').value,st=document.getElementById('AST2').value,reason=document.getElementById('ARE').value;
+  if(!sid||!mid||!sd){toast('Veuillez remplir les champs obligatoires','error');return;}
+  var eid=document.getElementById('AID').value;
+  if(eid){var a=absences.find(function(x){return x.id==eid;});if(a){a.studentId=+sid;a.moduleId=+mid;a.startDate=sd;a.endDate=ed||sd;a.typeId=+tid;a.status=st;a.reason=reason;}}
+  else{absences.push({id:nid++,studentId:+sid,moduleId:+mid,startDate:sd,endDate:ed||sd,typeId:+tid,status:st,reason:reason});}
+  saveToStorage();closeModal('MAB');toast('Absence enregistr\u00e9e','success');renderAbsences();renderDashboard();
 }
 
-/* ====== MODAL ETUDIANT ====== */
-function openSM(){
-  document.getElementById('SMT2').textContent='Nouvel etudiant';
+/* ====== STUDENT CRUD (SANS EMAIL) ====== */
+function openSM(id){
+  populateSelects();
   document.getElementById('SID').value='';
-  document.getElementById('SFR').value='';document.getElementById('SLN').value='';
-  fillClassSelect(document.getElementById('SCL'),'Choisir...');
+  document.getElementById('SLN').value='';
+  document.getElementById('SFR').value='';
   document.getElementById('SCL').value='';
-  document.getElementById('SEM').value='';
+  document.getElementById('SMT2').textContent='Nouvel \u00e9tudiant';
+  if(id){var s=students.find(function(x){return x.id===id;});if(s){
+    document.getElementById('SID').value=s.id;
+    document.getElementById('SLN').value=s.nom;
+    document.getElementById('SFR').value=s.prenom;
+    document.getElementById('SCL').value=s.classe;
+    document.getElementById('SMT2').textContent='Modifier \u00e9tudiant';
+  }}
   openModal('MST');
 }
-function editS(id){
-  var s=getStudent(id);if(!s)return;
-  document.getElementById('SMT2').textContent='Modifier etudiant';
-  document.getElementById('SID').value=id;
-  document.getElementById('SFR').value=s.prenom;document.getElementById('SLN').value=s.nom;
-  fillClassSelect(document.getElementById('SCL'),'Choisir...');
-  document.getElementById('SCL').value=s.classe;
-  document.getElementById('SEM').value=s.email||'';
-  openModal('MST');
-}
+function editS(id){openSM(id);}
 function saveS(){
-  var id=document.getElementById('SID').value;
-  var obj={prenom:document.getElementById('SFR').value.trim(),nom:document.getElementById('SLN').value.trim(),classe:document.getElementById('SCL').value,email:document.getElementById('SEM').value.trim()};
-  if(!obj.prenom||!obj.nom||!obj.classe){toast('Veuillez remplir les champs obligatoires','error');return;}
-  if(id){
-    var idx=students.findIndex(function(s){return s.id==id;});
-    if(idx>=0){obj.id=parseInt(id);students[idx]=obj;}
-  }else{obj.id=nid++;students.push(obj);}
-  saveToStorage();closeModal('MST');toast(id?'Etudiant modifie':'Etudiant ajoute','success');
-  renderStudents();
-}
-function delS(id){
-  delTarget={type:'student',id:id};
-  var s=getStudent(id);
-  document.getElementById('MCF_BODY').innerHTML='<div class="confirm-danger-icon"><i class="fa-solid fa-user-slash"></i></div><div style="text-align:center;"><h3 style="font-size:17px;font-weight:700;">Supprimer cet etudiant ?</h3><p class="confirm-sub">'+(s?s.prenom+' '+s.nom:'')+'<br>Ses absences seront aussi supprimees.</p></div>';
-  document.getElementById('MCF_BTN').innerHTML='<i class="fa-solid fa-trash-can"></i> Supprimer';
-  openModal('MCF');
+  var nom=document.getElementById('SLN').value.trim(),prenom=document.getElementById('SFR').value.trim(),classe=document.getElementById('SCL').value;
+  if(!nom||!prenom||!classe){toast('Veuillez remplir tous les champs','error');return;}
+  var eid=document.getElementById('SID').value;
+  if(eid){var s=students.find(function(x){return x.id==eid;});if(s){s.nom=nom;s.prenom=prenom;s.classe=classe;}}
+  else{students.push({id:nid++,nom:nom,prenom:prenom,classe:classe,email:''});}
+  saveToStorage();closeModal('MST');toast('\u00c9tudiant enregistr\u00e9','success');renderStudents();populateSelects();
 }
 
-/* ====== MODAL MODULE ====== */
-function openMM(){
+/* ====== MODULE CRUD ====== */
+function openMM(id){
+  populateSelects();
+  document.getElementById('MID').value='';
+  document.getElementById('MNM').value='';
+  document.getElementById('MCL').value='';
+  document.getElementById('MCO').value='#8b5cf6';
   document.getElementById('MMT2').textContent='Nouveau module';
-  document.getElementById('MID').value='';document.getElementById('MNM').value='';
-  fillClassSelect(document.getElementById('MCL'),'Choisir...');
-  document.getElementById('MCL').value='';document.getElementById('MCO').value='#8b5cf6';
+  if(id){var m=modules.find(function(x){return x.id===id;});if(m){
+    document.getElementById('MID').value=m.id;
+    document.getElementById('MNM').value=m.name;
+    document.getElementById('MCL').value=m.classe;
+    document.getElementById('MCO').value=m.color;
+    document.getElementById('MMT2').textContent='Modifier module';
+  }}
   openModal('MMO');
 }
-function editM(id){
-  var m=getModule(id);if(!m)return;
-  document.getElementById('MMT2').textContent='Modifier module';
-  document.getElementById('MID').value=id;document.getElementById('MNM').value=m.name;
-  fillClassSelect(document.getElementById('MCL'),'Choisir...');
-  document.getElementById('MCL').value=m.classe;document.getElementById('MCO').value=m.color;
-  openModal('MMO');
-}
+function editM(id){openMM(id);}
 function saveM(){
-  var id=document.getElementById('MID').value;
-  var obj={name:document.getElementById('MNM').value.trim(),classe:document.getElementById('MCL').value,color:document.getElementById('MCO').value};
-  if(!obj.name||!obj.classe){toast('Veuillez remplir les champs obligatoires','error');return;}
-  if(id){
-    var idx=modules.findIndex(function(m){return m.id==id;});
-    if(idx>=0){obj.id=parseInt(id);modules[idx]=obj;}
-  }else{obj.id=nid++;modules.push(obj);}
-  saveToStorage();closeModal('MMO');toast(id?'Module modifie':'Module ajoute','success');
-  renderModules();
-}
-function delM(id){
-  delTarget={type:'module',id:id};
-  var m=getModule(id);
-  document.getElementById('MCF_BODY').innerHTML='<div class="confirm-danger-icon"><i class="fa-solid fa-book-open"></i></div><div style="text-align:center;"><h3 style="font-size:17px;font-weight:700;">Supprimer ce module ?</h3><p class="confirm-sub">'+(m?m.name:'')+'<br>Les absences associees seront aussi supprimees.</p></div>';
-  document.getElementById('MCF_BTN').innerHTML='<i class="fa-solid fa-trash-can"></i> Supprimer';
-  openModal('MCF');
+  var name=document.getElementById('MNM').value.trim(),classe=document.getElementById('MCL').value,color=document.getElementById('MCO').value;
+  if(!name||!classe){toast('Veuillez remplir tous les champs','error');return;}
+  var eid=document.getElementById('MID').value;
+  if(eid){var m=modules.find(function(x){return x.id==eid;});if(m){m.name=name;m.classe=classe;m.color=color;}}
+  else{modules.push({id:nid++,name:name,classe:classe,color:color});}
+  saveToStorage();closeModal('MMO');toast('Module enregistr\u00e9','success');renderModules();populateSelects();
 }
 
-/* ====== MODAL TYPE ====== */
-function openTM(){
+/* ====== TYPE CRUD ====== */
+function openTM(id){
+  document.getElementById('TID').value='';
+  document.getElementById('TNM').value='';
+  document.getElementById('TCO').value='#10b981';
   document.getElementById('TYT2').textContent='Nouveau type';
-  document.getElementById('TID').value='';document.getElementById('TNM').value='';document.getElementById('TCO').value='#10b981';
+  if(id){var t=types.find(function(x){return x.id===id;});if(t){
+    document.getElementById('TID').value=t.id;
+    document.getElementById('TNM').value=t.name;
+    document.getElementById('TCO').value=t.color;
+    document.getElementById('TYT2').textContent='Modifier type';
+  }}
   openModal('MTY');
 }
-function editT(id){
-  var t=getType(id);if(!t)return;
-  document.getElementById('TYT2').textContent='Modifier type';
-  document.getElementById('TID').value=id;document.getElementById('TNM').value=t.name;document.getElementById('TCO').value=t.color;
-  openModal('MTY');
-}
+function editT(id){openTM(id);}
 function saveT(){
-  var id=document.getElementById('TID').value;
-  var obj={name:document.getElementById('TNM').value.trim(),color:document.getElementById('TCO').value};
-  if(!obj.name){toast('Veuillez saisir un nom','error');return;}
-  if(id){
-    var idx=types.findIndex(function(t){return t.id==id;});
-    if(idx>=0){obj.id=parseInt(id);types[idx]=obj;}
-  }else{obj.id=nid++;types.push(obj);}
-  saveToStorage();closeModal('MTY');toast(id?'Type modifie':'Type ajoute','success');
-  renderTypes();
+  var name=document.getElementById('TNM').value.trim(),color=document.getElementById('TCO').value;
+  if(!name){toast('Veuillez saisir un nom','error');return;}
+  var eid=document.getElementById('TID').value;
+  if(eid){var t=types.find(function(x){return x.id==eid;});if(t){t.name=name;t.color=color;}}
+  else{types.push({id:nid++,name:name,color:color});}
+  saveToStorage();closeModal('MTY');toast('Type enregistr\u00e9','success');renderTypes();
 }
-function delT(id){
-  delTarget={type:'type',id:id};
-  var t=getType(id);
-  document.getElementById('MCF_BODY').innerHTML='<div class="confirm-danger-icon"><i class="fa-solid fa-tags"></i></div><div style="text-align:center;"><h3 style="font-size:17px;font-weight:700;">Supprimer ce type ?</h3><p class="confirm-sub">'+(t?t.name:'')+'</p></div>';
+
+/* ====== DELETE / CONFIRM ====== */
+function confirmDelete(type,id){
+  delTarget={type:type,id:id};
+  var body=document.getElementById('MCF_BODY');
+  if(type==='absence'){
+    body.innerHTML='<div class="confirm-danger-icon"><i class="fa-solid fa-trash-can"></i></div><div style="text-align:center;"><h3 style="font-size:17px;font-weight:700;">Supprimer cette absence ?</h3><p class="confirm-sub">Cette action est irr\u00e9versible.</p></div>';
+  }else if(type==='student'){
+    var s=getStudent(id);
+    body.innerHTML='<div class="confirm-danger-icon"><i class="fa-solid fa-user-slash"></i></div><div style="text-align:center;"><h3 style="font-size:17px;font-weight:700;">Supprimer cet \u00e9tudiant ?</h3><p class="confirm-sub">Toutes les absences de <strong>'+stuName(s)+'</strong> seront \u00e9galement supprim\u00e9es.</p></div>';
+  }else if(type==='module'){
+    var m=getModule(id);
+    body.innerHTML='<div class="confirm-danger-icon"><i class="fa-solid fa-trash-can"></i></div><div style="text-align:center;"><h3 style="font-size:17px;font-weight:700;">Supprimer ce module ?</h3><p class="confirm-sub">Toutes les absences du module <strong>'+m.name+'</strong> seront \u00e9galement supprim\u00e9es.</p></div>';
+  }else if(type==='type'){
+    body.innerHTML='<div class="confirm-danger-icon"><i class="fa-solid fa-trash-can"></i></div><div style="text-align:center;"><h3 style="font-size:17px;font-weight:700;">Supprimer ce type ?</h3><p class="confirm-sub">Les absences utilisant ce type ne seront pas supprim\u00e9es mais perdront leur type.</p></div>';
+  }
   document.getElementById('MCF_BTN').innerHTML='<i class="fa-solid fa-trash-can"></i> Supprimer';
   openModal('MCF');
 }
-
-/* ====== EXEC DELETE ====== */
+function execDeleteSingle(){
+  if(!delTarget)return;
+  var t=delTarget.type,id=delTarget.id;
+  if(t==='absence'){absences=absences.filter(function(a){return a.id!==id;});}
+  else if(t==='student'){
+    students=students.filter(function(s){return s.id!==id;});
+    absences=absences.filter(function(a){return a.studentId!==id;});
+    if(currentDetailStuId===id)go('students');
+  }else if(t==='module'){
+    modules=modules.filter(function(m){return m.id!==id;});
+    absences=absences.filter(function(a){return a.moduleId!==id;});
+    if(currentDetailModId===id)go('modules');
+  }else if(t==='type'){types=types.filter(function(x){return x.id!==id;});}
+  delTarget=null;closeModal('MCF');saveToStorage();toast('Supprim\u00e9','success');
+  renderDashboard();renderAbsences();renderStudents();renderModules();renderTypes();populateSelects();
+}
 function execDelete(){
   if(!delTarget)return;
-  if(delTarget.type==='absence'){absences=absences.filter(function(a){return a.id!==delTarget.id;});toast('Absence supprimee','success');renderAbsences();renderDashboard();}
-  else if(delTarget.type==='student'){var sid=delTarget.id;students=students.filter(function(s){return s.id!==sid;});absences=absences.filter(function(a){return a.studentId!==sid;});toast('Etudiant supprime','success');renderStudents();}
-  else if(delTarget.type==='module'){var mid=delTarget.id;modules=modules.filter(function(m){return m.id!==mid;});absences=absences.filter(function(a){return a.moduleId!==mid;});toast('Module supprime','success');renderModules();}
-  else if(delTarget.type==='type'){var tid=delTarget.id;types=types.filter(function(t){return t.id!==tid;});toast('Type supprime','success');renderTypes();}
-  else if(delTarget.type==='allStudents'){students=[];absences=[];toast('Tous les etudiants supprimes','success');renderStudents();}
-  else if(delTarget.type==='allModules'){modules=[];absences=[];toast('Tous les modules supprimes','success');renderModules();}
-  else if(delTarget.type==='resetAbs'){absences=[];toast('Absences reinitialisees','success');renderDashboard();}
-  else if(delTarget.type==='fullReset'){students=[];modules=[];absences=[];types=DEF_TYPES.slice();clearStorage();initData();toast('Donnees reinitialisees','success');renderDashboard();}
-  delTarget=null;saveToStorage();closeModal('MCF');
+  if(delTarget.type==='allstudents'){
+    var inp=document.getElementById('CFI');
+    if(!inp||inp.value!=='SUPPRIMER'){toast('Tapez SUPPRIMER pour confirmer','error');return;}
+    students=[];absences=[];delTarget=null;closeModal('MCF');saveToStorage();toast('Tous les \u00e9tudiants supprim\u00e9s','success');renderDashboard();renderStudents();renderAbsences();populateSelects();return;
+  }
+  if(delTarget.type==='allmodules'){
+    var inp=document.getElementById('CFI');
+    if(!inp||inp.value!=='SUPPRIMER'){toast('Tapez SUPPRIMER pour confirmer','error');return;}
+    modules=[];absences=[];delTarget=null;closeModal('MCF');saveToStorage();toast('Tous les modules supprim\u00e9s','success');renderDashboard();renderModules();renderAbsences();populateSelects();return;
+  }
+  execDeleteSingle();
 }
-
-/* ====== ACTIONS GROUPEES ====== */
 function doDeleteAllStudents(){
-  delTarget={type:'allStudents'};
-  document.getElementById('MCF_BODY').innerHTML='<div class="confirm-danger-icon"><i class="fa-solid fa-users-slash"></i></div><div style="text-align:center;"><h3 style="font-size:17px;font-weight:700;">Supprimer tous les etudiants ?</h3><p class="confirm-sub">Cette action supprimera aussi toutes les absences.</p><div class="confirm-count" style="background:var(--dns);color:var(--dn);"><i class="fa-solid fa-users"></i> '+students.length+' etudiants</div><div class="confirm-input-wrap"><label>Tapez SUPPRIMER pour confirmer</label><input type="text" id="CONFIRM_INPUT" placeholder="SUPPRIMER"><div class="ci-hint">Cette action est irreversible</div></div></div>';
+  delTarget={type:'allstudents',id:0};
+  document.getElementById('MCF_BODY').innerHTML='<div class="confirm-danger-icon"><i class="fa-solid fa-users-slash"></i></div><div style="text-align:center;"><h3 style="font-size:17px;font-weight:700;">Supprimer tous les \u00e9tudiants ?</h3><p class="confirm-sub">Cette action supprimera <strong>tous les \u00e9tudiants</strong> et <strong>toutes les absences</strong>. Elle est irr\u00e9versible.</p><div class="confirm-count" style="background:var(--dns);color:var(--dn);">'+students.length+' \u00e9tudiants</div><div class="confirm-input-wrap"><label>Tapez <strong>SUPPRIMER</strong> pour confirmer</label><input type="text" id="CFI" placeholder="SUPPRIMER"><div class="ci-hint">Cette action est irr\u00e9versible</div></div></div>';
   document.getElementById('MCF_BTN').innerHTML='<i class="fa-solid fa-trash-can"></i> Tout supprimer';
-  document.getElementById('MCF_BTN').onclick=function(){var v=document.getElementById('CONFIRM_INPUT').value;if(v!=='SUPPRIMER'){toast('Tapez SUPPRIMER pour confirmer','error');return;}execDelete();document.getElementById('MCF_BTN').onclick=execDelete;};
   openModal('MCF');
 }
 function doDeleteAllModules(){
-  delTarget={type:'allModules'};
-  document.getElementById('MCF_BODY').innerHTML='<div class="confirm-danger-icon"><i class="fa-solid fa-trash-can"></i></div><div style="text-align:center;"><h3 style="font-size:17px;font-weight:700;">Supprimer tous les modules ?</h3><p class="confirm-sub">Cette action supprimera aussi toutes les absences.</p><div class="confirm-count" style="background:var(--dns);color:var(--dn);"><i class="fa-solid fa-book-open"></i> '+modules.length+' modules</div><div class="confirm-input-wrap"><label>Tapez SUPPRIMER pour confirmer</label><input type="text" id="CONFIRM_INPUT" placeholder="SUPPRIMER"><div class="ci-hint">Cette action est irreversible</div></div></div>';
+  delTarget={type:'allmodules',id:0};
+  document.getElementById('MCF_BODY').innerHTML='<div class="confirm-danger-icon"><i class="fa-solid fa-trash-can"></i></div><div style="text-align:center;"><h3 style="font-size:17px;font-weight:700;">Supprimer tous les modules ?</h3><p class="confirm-sub">Cette action supprimera <strong>tous les modules</strong> et <strong>toutes les absences</strong>. Elle est irr\u00e9versible.</p><div class="confirm-count" style="background:var(--dns);color:var(--dn);">'+modules.length+' modules</div><div class="confirm-input-wrap"><label>Tapez <strong>SUPPRIMER</strong> pour confirmer</label><input type="text" id="CFI" placeholder="SUPPRIMER"><div class="ci-hint">Cette action est irr\u00e9versible</div></div></div>';
   document.getElementById('MCF_BTN').innerHTML='<i class="fa-solid fa-trash-can"></i> Tout supprimer';
-  document.getElementById('MCF_BTN').onclick=function(){var v=document.getElementById('CONFIRM_INPUT').value;if(v!=='SUPPRIMER'){toast('Tapez SUPPRIMER pour confirmer','error');return;}execDelete();document.getElementById('MCF_BTN').onclick=execDelete;};
-  openModal('MCF');
-}
-function doReset(){
-  delTarget={type:'resetAbs'};
-  document.getElementById('MCF_BODY').innerHTML='<div class="confirm-warning-icon"><i class="fa-solid fa-rotate-left"></i></div><div style="text-align:center;"><h3 style="font-size:17px;font-weight:700;">Reinitialiser les absences ?</h3><p class="confirm-sub">Toutes les absences seront supprimees. Les etudiants et modules seront conserves.</p><div class="confirm-count" style="background:var(--wns);color:var(--wn);"><i class="fa-solid fa-list-check"></i> '+absences.length+' absences</div></div>';
-  document.getElementById('MCF_BTN').innerHTML='<i class="fa-solid fa-rotate-left"></i> Reinitialiser';
-  document.getElementById('MCF_BTN').onclick=function(){execDelete();document.getElementById('MCF_BTN').onclick=execDelete;};
-  openModal('MCF');
-}
-function doFullReset(){
-  delTarget={type:'fullReset'};
-  document.getElementById('MCF_BODY').innerHTML='<div class="confirm-danger-icon"><i class="fa-solid fa-triangle-exclamation"></i></div><div style="text-align:center;"><h3 style="font-size:17px;font-weight:700;">Reinitialiser toutes les donnees ?</h3><p class="confirm-sub">Toutes les donnees seront effacees et reinitialisees aux valeurs par defaut.</p><div class="confirm-input-wrap"><label>Tapez REINIT pour confirmer</label><input type="text" id="CONFIRM_INPUT" placeholder="REINIT"><div class="ci-hint">Cette action est irreversible</div></div></div>';
-  document.getElementById('MCF_BTN').innerHTML='<i class="fa-solid fa-triangle-exclamation"></i> Reinitialiser tout';
-  document.getElementById('MCF_BTN').onclick=function(){var v=document.getElementById('CONFIRM_INPUT').value;if(v!=='REINIT'){toast('Tapez REINIT pour confirmer','error');return;}execDelete();document.getElementById('MCF_BTN').onclick=execDelete;};
   openModal('MCF');
 }
 
-/* ====== EXPORTS ====== */
+/* ====== EXPORTS (SANS EMAIL, SANS CLASSE/STATUT dans absences) ====== */
 function exportCSV(){
-  if(absences.length===0){toast('Aucune absence a exporter','error');return;}
-  var csv='Etudiant,Classe,Module,Type,Date Debut,Heure Debut,Date Fin,Heure Fin,Statut,Motif\n';
+  if(!absences.length){toast('Aucune absence \u00e0 exporter','error');return;}
+  var rows=[['\u00c9tudiant','Module','Type','D\u00e9but','Fin','Statut']];
   absences.forEach(function(a){
-    var s=getStudent(a.studentId);var m=getModule(a.moduleId);var t=getType(a.typeId);
-    var sd=a.startDate||'',ed=a.endDate||'';
-    var sdate='',stime='',edate='',etime='';
-    if(sd.indexOf('T')>=0){sdate=sd.split('T')[0];stime=sd.split('T')[1]||'';}
-    else{sdate=sd;}
-    if(ed.indexOf('T')>=0){edate=ed.split('T')[0];etime=ed.split('T')[1]||'';}
-    else{edate=ed;}
-    csv+='"'+(s?s.prenom+' '+s.nom:'')+'","'+(s?s.classe:'')+'","'+(m?m.name:'')+'","'+(t?t.name:'')+'","'+sdate+'","'+stime+'","'+edate+'","'+etime+'","'+a.status+'","'+(a.reason||'')+'"\n';
+    var s=getStudent(a.studentId),m=getModule(a.moduleId),t=getType(a.typeId);
+    rows.push([s?stuName(s):'',m?m.name:'',t?t.name:'',a.startDate,a.endDate||'',a.status]);
   });
-  downloadFile(csv,'absences_'+todayStr()+'.csv','text/csv');
-  toast('Export CSV reussi','success');
+  downloadCSV(rows,'absences_export.csv');
 }
 function exportStudents(){
-  if(students.length===0){toast('Aucun etudiant','error');return;}
-  var csv='Prenom,Nom,Classe,Email\n';
-  students.forEach(function(s){csv+='"'+s.prenom+'","'+s.nom+'","'+s.classe+'","'+(s.email||'')+'"\n';});
-  downloadFile(csv,'etudiants_'+todayStr()+'.csv','text/csv');
-  toast('Export etudiants reussi','success');
+  if(!students.length){toast('Aucun \u00e9tudiant \u00e0 exporter','error');return;}
+  var rows=[['Nom','Pr\u00e9nom','Classe']];
+  students.forEach(function(s){rows.push([s.nom,s.prenom,s.classe]);});
+  downloadCSV(rows,'etudiants_export.csv');
 }
 function exportModules(){
-  if(modules.length===0){toast('Aucun module','error');return;}
-  var csv='Module,Classe,Couleur\n';
-  modules.forEach(function(m){csv+='"'+m.name+'","'+m.classe+'","'+m.color+'"\n';});
-  downloadFile(csv,'modules_'+todayStr()+'.csv','text/csv');
-  toast('Export modules reussi','success');
+  if(!modules.length){toast('Aucun module \u00e0 exporter','error');return;}
+  var rows=[['Module','Classe','Couleur']];
+  modules.forEach(function(m){rows.push([m.name,m.classe,m.color]);});
+  downloadCSV(rows,'modules_export.csv');
 }
-function downloadFile(content,name,type){
-  var blob=new Blob([content],{type:type+';charset=utf-8;'});
-  var link=document.createElement('a');link.href=URL.createObjectURL(blob);link.download=name;link.click();
+function downloadCSV(rows,filename){
+  var csv=rows.map(function(r){return r.map(function(c){return'"'+String(c).replace(/"/g,'""')+'"';}).join(',');}).join('\n');
+  var blob=new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8;'});
+  var link=document.createElement('a');link.href=URL.createObjectURL(blob);link.download=filename;link.click();
+  toast('Fichier export\u00e9','success');
 }
 
-/* ====== IMPORT EXCEL ====== */
+/* ====== IMPORT ====== */
 function openImportModal(mode){
   impState={mode:mode,rows:[],headers:[],validCount:0,dupCount:0,errCount:0,colMap:{}};
   document.getElementById('IMP_STEP1').style.display='';
@@ -907,137 +811,113 @@ function openImportModal(mode){
   document.getElementById('IMP_FILE').value='';
   var badge=document.getElementById('IMP_TYPE_BADGE');
   if(mode==='student'){
-    badge.className='import-type-badge stu-badge';badge.innerHTML='<i class="fa-solid fa-user-graduate"></i> Etudiants';
-    document.getElementById('IMP_FORMAT_INFO').innerHTML='Colonnes attendues : <strong>Prenom</strong>, <strong>Nom</strong>, <strong>Classe</strong>, <strong>Email</strong> (optionnel)';
-    document.getElementById('IMP_TIP_INFO').innerHTML='La premiere ligne doit contenir les en-tetes. Les lignes vides seront ignorees. Les doublons (meme prenom+nom+classe) seront signales.';
+    badge.className='import-type-badge stu-badge';
+    badge.innerHTML='<i class="fa-solid fa-user-graduate"></i> \u00c9tudiants';
+    document.getElementById('IMP_FORMAT_INFO').textContent='Colonnes attendues : Nom, Pr\u00e9nom, Classe.';
+    document.getElementById('IMP_TIP_INFO').textContent='S\u00e9parez les colonnes par des tabulations ou des virgules. La premi\u00e8re ligne doit contenir les en-t\u00eates.';
   }else{
-    badge.className='import-type-badge mod-badge';badge.innerHTML='<i class="fa-solid fa-book-open"></i> Modules';
-    document.getElementById('IMP_FORMAT_INFO').innerHTML='Colonnes attendues : <strong>Module</strong> (ou Nom), <strong>Classe</strong>, <strong>Couleur</strong> (optionnel, format hex #RRGGBB)';
-    document.getElementById('IMP_TIP_INFO').innerHTML='Si la couleur n\'est pas specifiee, une couleur par defaut sera attribuee. Les doublons (meme nom+classe) seront signales.';
+    badge.className='import-type-badge mod-badge';
+    badge.innerHTML='<i class="fa-solid fa-book-open"></i> Modules';
+    document.getElementById('IMP_FORMAT_INFO').textContent='Colonnes attendues : Nom du module, Classe.';
+    document.getElementById('IMP_TIP_INFO').textContent='S\u00e9parez les colonnes par des tabulations ou des virgules. La premi\u00e8re ligne doit contenir les en-t\u00eates.';
   }
   openModal('MIMP');
 }
-function handleImportFile(input){
-  if(!input.files||!input.files[0])return;
-  var file=input.files[0];
+(function(){
+  document.addEventListener('DOMContentLoaded',function(){
+    var dz=document.getElementById('IMP_DROP');
+    if(!dz)return;
+    dz.addEventListener('dragover',function(e){e.preventDefault();dz.classList.add('drag-over');});
+    dz.addEventListener('dragleave',function(){dz.classList.remove('drag-over');});
+    dz.addEventListener('drop',function(e){e.preventDefault();dz.classList.remove('drag-over');if(e.dataTransfer.files.length)handleImportFileObj(e.dataTransfer.files[0]);});
+  });
+})();
+function handleImportFile(input){if(input.files.length)handleImportFileObj(input.files[0]);}
+function handleImportFileObj(file){
   var reader=new FileReader();
   reader.onload=function(e){
     try{
-      var data=new Uint8Array(e.target.result);
-      var wb=XLSX.read(data,{type:'array'});
+      var wb=XLSX.read(e.target.result,{type:'array'});
       var ws=wb.Sheets[wb.SheetNames[0]];
-      var json=XLSX.utils.sheet_to_json(ws,{header:1,defval:''});
-      if(json.length<2){toast('Le fichier est vide ou ne contient pas de donnees','error');return;}
-      impState.headers=json[0].map(function(h){return String(h).trim();});
-      impState.rows=json.slice(1).filter(function(r){return r.some(function(c){return String(c).trim()!=='';});});
-      analyzeImport();
+      var data=XLSX.utils.sheet_to_json(ws,{header:1,defval:''});
+      if(data.length<2){toast('Le fichier est vide','error');return;}
+      impState.headers=data[0].map(function(h){return String(h).trim();});
+      impState.rows=data.slice(1).filter(function(r){return r.some(function(c){return c!=='';});});
+      showImportPreview();
     }catch(err){toast('Erreur de lecture du fichier','error');}
   };
   reader.readAsArrayBuffer(file);
 }
-function analyzeImport(){
-  var mode=impState.mode;
-  var headers=impState.headers;
-  var rows=impState.rows;
-  /* Mapping automatique des colonnes */
-  var fields=mode==='student'?['Prenom','Nom','Classe','Email']:['Module','Classe','Couleur'];
-  var aliases={
-    'Prenom':['prenom','prename','first name','first_name','prénom','prénom','prenom','given name'],
-    'Nom':['nom','name','last name','last_name','family name','nom de famille'],
-    'Classe':['classe','class','groupe','group','section','filiere'],
-    'Email':['email','mail','e-mail','courriel','adresse email'],
-    'Module':['module','nom','name','matiere','subject','course'],
-    'Couleur':['couleur','color','colour','teinte']
-  };
-  var colMap={};
-  fields.forEach(function(f){
-    colMap[f]=-1;
-    var als=aliases[f]||[];
-    for(var i=0;i<headers.length;i++){
-      var h=headers[i].toLowerCase().trim();
-      if(f.toLowerCase()===h||als.indexOf(h)>=0){colMap[f]=i;break;}
-    }
-  });
-  impState.colMap=colMap;
-  /* Validation */
-  var validCount=0,dupCount=0,errCount=0;
-  var seen={};
-  rows.forEach(function(r,idx){
-    if(mode==='student'){
-      var pre=String(r[colMap['Prenom']]||'').trim();
-      var nom=String(r[colMap['Nom']]||'').trim();
-      var cls=String(r[colMap['Classe']]||'').trim();
-      if(!pre||!nom||!cls){errCount++;return;}
-      var key=pre+'|'+nom+'|'+cls;
-      if(seen[key]){dupCount++;return;}
-      seen[key]=1;validCount++;
-    }else{
-      var mod=String(r[colMap['Module']]||'').trim();
-      var cls2=String(r[colMap['Classe']]||'').trim();
-      if(!mod||!cls2){errCount++;return;}
-      var key2=mod+'|'+cls2;
-      if(seen[key2]){dupCount++;return;}
-      seen[key2]=1;validCount++;
-    }
-  });
-  impState.validCount=validCount;impState.dupCount=dupCount;impState.errCount=errCount;
-  showImportStep2();
-}
-function showImportStep2(){
+function showImportPreview(){
   document.getElementById('IMP_STEP1').style.display='none';
   document.getElementById('IMP_STEP2').style.display='';
   document.getElementById('IMP_BACK').style.display='';
-  document.getElementById('IMP_VALIDATE').style.display='';
-  document.getElementById('IMP_VALID_COUNT').textContent=impState.validCount;
-  document.getElementById('IMP_VALID_LABEL').textContent=impState.mode==='student'?'etudiants':'modules';
-  /* Stats */
-  document.getElementById('IMP_STATS').innerHTML=
-    '<div class="import-stat"><div class="import-stat-val" style="color:var(--ac);">'+impState.validCount+'</div><div class="import-stat-lbl">Valides</div></div>'+
-    '<div class="import-stat"><div class="import-stat-val" style="color:var(--wn);">'+impState.dupCount+'</div><div class="import-stat-lbl">Doublons</div></div>'+
-    '<div class="import-stat"><div class="import-stat-val" style="color:var(--dn);">'+impState.errCount+'</div><div class="import-stat-lbl">Erreurs</div></div>';
-  /* Mapping colonnes */
-  var cmh='';
-  var fields=impState.mode==='student'?['Prenom','Nom','Classe','Email']:['Module','Classe','Couleur'];
+  var mode=impState.mode;
+  var fields=mode==='student'?['nom','prenom','classe']:['nom','classe'];
+  var mapHtml='<div><label>Champ</label></div><div><label>Colonne du fichier</label></div>';
   fields.forEach(function(f){
-    var opts='<option value="-1">-- Non mappe --</option>';
-    impState.headers.forEach(function(h,i){opts+='<option value="'+i+'"'+(impState.colMap[f]===i?' selected':'')+'>'+h+'</option>';});
-    cmh+='<div><label>'+f+'</label><select onchange="impState.colMap[\''+f+'\']=parseInt(this.value);">'+opts+'</select></div>';
+    var opts=impState.headers.map(function(h,i){return'<option value="'+i+'"'+(h.toLowerCase().indexOf(f)>=0?' selected':'')+'>'+h+'</option>';}).join('');
+    mapHtml+='<label>'+f.charAt(0).toUpperCase()+f.slice(1)+'</label><select onchange="impState.colMap[\''+f+'\']=+this.value;updateImportValidation();"><option value="-1">-- Ignorer --</option>'+opts+'</select>';
   });
-  document.getElementById('IMP_COLMAP').innerHTML=cmh;
-  /* Options */
-  var chkHtml='<label class="import-check"><input type="checkbox" id="IMP_SKIP_DUP" checked> Ignorer les doublons</label>';
-  document.getElementById('IMP_CHECKS').innerHTML=chkHtml;
-  /* Apercu */
-  var prevCount=Math.min(impState.rows.length,20);
-  document.getElementById('IMP_PREV_COUNT').textContent=prevCount;
-  var pth='<table><thead><tr>';
-  var fields2=impState.mode==='student'?['Prenom','Nom','Classe','Email']:['Module','Classe','Couleur'];
-  fields2.forEach(function(f){pth+='<th>'+f+'</th>';});
-  pth+='<th>Statut</th></tr></thead><tbody>';
-  var seen2={};
-  for(var i=0;i<prevCount;i++){
-    var r=impState.rows[i];
-    var vals=fields2.map(function(f){var ci=impState.colMap[f];return ci>=0?String(r[ci]||'').trim():'<em style="color:var(--dn);">?</em>';});
-    var rowClass='row-ok';
-    var statusHtml='<span style="color:var(--ac);"><i class="fa-solid fa-check"></i> OK</span>';
-    if(impState.mode==='student'){
-      var pre=String(r[impState.colMap['Prenom']]||'').trim();
-      var nom=String(r[impState.colMap['Nom']]||'').trim();
-      var cls=String(r[impState.colMap['Classe']]||'').trim();
-      if(!pre||!nom||!cls){rowClass='row-err';statusHtml='<span style="color:var(--dn);"><i class="fa-solid fa-xmark"></i> Incomplet</span>';}
-      else{var key=pre+'|'+nom+'|'+cls;if(seen2[key]){rowClass='row-dup';statusHtml='<span style="color:var(--wn);"><i class="fa-solid fa-copy"></i> Doublon</span>';}seen2[key]=1;}
+  document.getElementById('IMP_COLMAP').innerHTML=mapHtml;
+  fields.forEach(function(f){
+    var idx=impState.headers.findIndex(function(h){return h.toLowerCase().indexOf(f)>=0;});
+    impState.colMap[f]=idx>=0?idx:-1;
+  });
+  document.getElementById('IMP_CHECKS').innerHTML=mode==='student'?'<label class="import-check"><input type="checkbox" id="IMP_SKIP_DUP" checked onchange="updateImportValidation();"> Ignorer les doublons (m\u00eame nom + pr\u00e9nom)</label>':'';
+  updateImportValidation();
+}
+function updateImportValidation(){
+  var mode=impState.mode;
+  var valid=0,dup=0,err=0;
+  var skipDup=document.getElementById('IMP_SKIP_DUP');
+  var doSkip=skipDup?skipDup.checked:false;
+  impState.rows.forEach(function(row){
+    if(mode==='student'){
+      var nm=String(row[impState.colMap.nom]||'').trim();
+      var pr=String(row[impState.colMap.prenom]||'').trim();
+      var cl=String(row[impState.colMap.classe]||'').trim();
+      if(!nm||!pr||!cl){err++;return;}
+      if(doSkip&&students.some(function(s){return s.nom.toLowerCase()===nm.toLowerCase()&&s.prenom.toLowerCase()===pr.toLowerCase()&&s.classe===cl;})){dup++;return;}
     }else{
-      var mod=String(r[impState.colMap['Module']]||'').trim();
-      var cls2=String(r[impState.colMap['Classe']]||'').trim();
-      if(!mod||!cls2){rowClass='row-err';statusHtml='<span style="color:var(--dn);"><i class="fa-solid fa-xmark"></i> Incomplet</span>';}
-      else{var key2=mod+'|'+cls2;if(seen2[key2]){rowClass='row-dup';statusHtml='<span style="color:var(--wn);"><i class="fa-solid fa-copy"></i> Doublon</span>';}seen2[key2]=1;}
+      var nm=String(row[impState.colMap.nom]||'').trim();
+      var cl=String(row[impState.colMap.classe]||'').trim();
+      if(!nm||!cl){err++;return;}
+      if(doSkip&&modules.some(function(m){return m.name.toLowerCase()===nm.toLowerCase()&&m.classe===cl;})){dup++;return;}
     }
-    pth+='<tr class="'+rowClass+'">';
-    vals.forEach(function(v){pth+='<td>'+v+'</td>';});
-    pth+='<td>'+statusHtml+'</td></tr>';
+    valid++;
+  });
+  impState.validCount=valid;impState.dupCount=dup;impState.errCount=err;
+  document.getElementById('IMP_STATS').innerHTML=
+    '<div class="import-stat"><div class="import-stat-val" style="color:var(--ac);">'+valid+'</div><div class="import-stat-lbl">Valides</div></div>'+
+    '<div class="import-stat"><div class="import-stat-val" style="color:var(--wn);">'+dup+'</div><div class="import-stat-lbl">Doublons</div></div>'+
+    '<div class="import-stat"><div class="import-stat-val" style="color:var(--dn);">'+err+'</div><div class="import-stat-lbl">Erreurs</div></div>';
+  var maxPreview=Math.min(impState.rows.length,20);
+  document.getElementById('IMP_PREV_COUNT').textContent=maxPreview;
+  var thead='<tr>'+impState.headers.map(function(h){return'<th>'+h+'</th>';}).join('')+'<th>\u00c9tat</th></tr>';
+  var tbody='';
+  for(var i=0;i<maxPreview;i++){
+    var row=impState.rows[i];
+    var state='ok',stateLabel='OK';
+    if(mode==='student'){
+      var nm=String(row[impState.colMap.nom]||'').trim();
+      var pr=String(row[impState.colMap.prenom]||'').trim();
+      var cl=String(row[impState.colMap.classe]||'').trim();
+      if(!nm||!pr||!cl){state='err';stateLabel='Erreur';}
+      else if(doSkip&&students.some(function(s){return s.nom.toLowerCase()===nm.toLowerCase()&&s.prenom.toLowerCase()===pr.toLowerCase()&&s.classe===cl;})){state='dup';stateLabel='Doublon';}
+    }else{
+      var nm=String(row[impState.colMap.nom]||'').trim();
+      var cl=String(row[impState.colMap.classe]||'').trim();
+      if(!nm||!cl){state='err';stateLabel='Erreur';}
+      else if(doSkip&&modules.some(function(m){return m.name.toLowerCase()===nm.toLowerCase()&&m.classe===cl;})){state='dup';stateLabel='Doublon';}
+    }
+    var stateColor=state==='ok'?'var(--ac)':state==='dup'?'var(--wn)':'var(--dn)';
+    tbody+='<tr class="row-'+state+'">'+row.map(function(c){return'<td>'+c+'</td>';}).join('')+'<td style="color:'+stateColor+';font-weight:600;font-size:10px;">'+stateLabel+'</td></tr>';
   }
-  pth+='</tbody></table>';
-  document.getElementById('IMP_PREVIEW').innerHTML=pth;
+  document.getElementById('IMP_PREVIEW').innerHTML='<table><thead>'+thead+'</thead><tbody>'+tbody+'</tbody></table>';
+  var vbtn=document.getElementById('IMP_VALIDATE');
+  if(valid>0){vbtn.style.display='';document.getElementById('IMP_VALID_COUNT').textContent=valid;document.getElementById('IMP_VALID_LABEL').textContent=mode==='student'?'\u00e9tudiants':'modules';}
+  else{vbtn.style.display='none';}
 }
 function importBack(){
   document.getElementById('IMP_STEP1').style.display='';
@@ -1047,79 +927,38 @@ function importBack(){
 }
 function executeImport(){
   var mode=impState.mode;
-  var colMap=impState.colMap;
-  var skipDup=document.getElementById('IMP_SKIP_DUP')&&document.getElementById('IMP_SKIP_DUP').checked;
+  var skipDup=document.getElementById('IMP_SKIP_DUP');
+  var doSkip=skipDup?skipDup.checked:false;
   var count=0;
-  var seen3={};
-  if(mode==='student'){
-    impState.rows.forEach(function(r){
-      var pre=String(r[colMap['Prenom']]||'').trim();
-      var nom=String(r[colMap['Nom']]||'').trim();
-      var cls=String(r[colMap['Classe']]||'').trim();
-      var em=colMap['Email']>=0?String(r[colMap['Email']]||'').trim():'';
-      if(!pre||!nom||!cls)return;
-      var key=pre+'|'+nom+'|'+cls;
-      if(skipDup&&seen3[key])return;
-      seen3[key]=1;
-      students.push({id:nid++,prenom:pre,nom:nom,classe:cls,email:em});
+  impState.rows.forEach(function(row){
+    if(mode==='student'){
+      var nm=String(row[impState.colMap.nom]||'').trim();
+      var pr=String(row[impState.colMap.prenom]||'').trim();
+      var cl=String(row[impState.colMap.classe]||'').trim();
+      if(!nm||!pr||!cl)return;
+      if(doSkip&&students.some(function(s){return s.nom.toLowerCase()===nm.toLowerCase()&&s.prenom.toLowerCase()===pr.toLowerCase()&&s.classe===cl;}))return;
+      students.push({id:nid++,nom:nm,prenom:pr,classe:cl,email:''});
       count++;
-    });
-  }else{
-    var colorIdx=modules.length+1;
-    impState.rows.forEach(function(r){
-      var mod=String(r[colMap['Module']]||'').trim();
-      var cls=String(r[colMap['Classe']]||'').trim();
-      var col=colMap['Couleur']>=0?String(r[colMap['Couleur']]||'').trim():'';
-      if(!mod||!cls)return;
-      var key=mod+'|'+cls;
-      if(skipDup&&seen3[key])return;
-      seen3[key]=1;
-      if(!col||!/^#[0-9a-fA-F]{6}$/.test(col)){col=gc(colorIdx);colorIdx++;}
-      modules.push({id:nid++,name:mod,classe:cls,color:col});
+    }else{
+      var nm=String(row[impState.colMap.nom]||'').trim();
+      var cl=String(row[impState.colMap.classe]||'').trim();
+      if(!nm||!cl)return;
+      if(doSkip&&modules.some(function(m){return m.name.toLowerCase()===nm.toLowerCase()&&m.classe===cl;}))return;
+      modules.push({id:nid++,name:nm,classe:cl,color:gc(nid)});
       count++;
-    });
-  }
-  saveToStorage();closeModal('MIMP');
-  toast(count+' '+(mode==='student'?'etudiants':'modules')+' importes','success');
-  if(mode==='student')renderStudents();else renderModules();
-}
-
-/* Drag & drop */
-(function(){
-  document.addEventListener('DOMContentLoaded',function(){
-    var drop=document.getElementById('IMP_DROP');
-    if(!drop)return;
-    ['dragenter','dragover'].forEach(function(ev){drop.addEventListener(ev,function(e){e.preventDefault();e.stopPropagation();drop.classList.add('drag-over');});});
-    ['dragleave','drop'].forEach(function(ev){drop.addEventListener(ev,function(e){e.preventDefault();e.stopPropagation();drop.classList.remove('drag-over');});});
-    drop.addEventListener('drop',function(e){var files=e.dataTransfer.files;if(files.length>0){document.getElementById('IMP_FILE').files=files;handleImportFile(document.getElementById('IMP_FILE'));}});
+    }
   });
-})();
-
-/* ====== DEMO DATA (si aucune absence) ====== */
-function seedDemoAbsences(){
-  if(absences.length>0)return;
-  var demoTypes=[1,2,3,1,2,4,1,3,5,2,1,1,3,2,1];
-  var demoStatuses=['pending','approved','rejected','approved','pending','approved','pending','approved','rejected','approved','pending','approved','pending','rejected','approved'];
-  for(var i=0;i<15;i++){
-    var sid=students[Math.floor(Math.random()*students.length)].id;
-    var cls=getStudent(sid).classe;
-    var ms=modules.filter(function(m){return m.classe===cls;});
-    if(ms.length===0)continue;
-    var mid=ms[Math.floor(Math.random()*ms.length)].id;
-    var d=new Date();d.setDate(d.getDate()-Math.floor(Math.random()*30));
-    var h=8+Math.floor(Math.random()*4);
-    var mn=Math.random()<0.5?0:30;
-    var ds=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')+'T'+String(h).padStart(2,'0')+':'+String(mn).padStart(2,'0');
-    var ed=new Date(d);ed.setHours(ed.getHours()+2);
-    var eds=ed.getFullYear()+'-'+String(ed.getMonth()+1).padStart(2,'0')+'-'+String(ed.getDate()).padStart(2,'0')+'T'+String(ed.getHours()).padStart(2,'0')+':'+String(ed.getMinutes()).padStart(2,'0');
-    absences.push({id:nid++,studentId:sid,moduleId:mid,startDate:ds,endDate:eds,typeId:demoTypes[i],status:demoStatuses[i],reason:''});
-  }
-  saveToStorage();
+  saveToStorage();closeModal('MIMP');toast(count+' \u00e9l\u00e9ments import\u00e9s','success');
+  if(mode==='student')renderStudents();else renderModules();
+  populateSelects();
 }
+
+/* ====== SETTINGS ACTIONS ====== */
+function doReset(){absences=[];saveToStorage();toast('Absences r\u00e9initialis\u00e9es','success');renderDashboard();renderAbsences();}
+function doFullReset(){clearStorage();location.reload();}
 
 /* ====== INIT ====== */
 initData();
-seedDemoAbsences();
 renderDashboard();
 </script>
 </body>
