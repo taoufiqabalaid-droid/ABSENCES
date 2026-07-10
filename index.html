@@ -285,7 +285,7 @@ tbody tr{border-bottom:1px solid var(--bd);transition:background .15s}tbody tr:l
 
 <script>
 /* ====== CONSTANTES ====== */
-var STORE_KEY='gestabs_data_v3';
+var STORE_KEY='gestabs_data_v2';
 var RD={'ISUSI S3':'ACHLIKH AICHA|AGOUZOUL MOUNA|ARROUY IKRAM|AZIZ AMINA|BANI NAJMA|BENCHAMA MOHAMED ALI|BOURISSA HAMZA|DENDOUN ISLAM|EBOUR KHAOULA|EL HARRARI OUSSAMA|EL JAOUHARI MALAK|ELMOUDAFFAR WISSAL|ENNAJIH RIHAM|FASSINI CHAIMAA|IMAZZANE MAROUA|LABBIHI KAOUTAR|NAJEH RADWA|RAIS ANAS|SAADI IMANE|TOUIL KELTOUM|ZAKAR CHAIMA','ISUSI S5':'AMARIR MOHAMMED|ARIF KHADIJA|BELLAGCHAIRI HIBA|BERRAMY HIBA|CHAIBI AYA|DAHI ILYAS|EL ACHKAR BOUTAINA|EL HADAR HAJAR|ESSAKHI HASNAE|GAZGAZ SALOUA|HOUSSNI ZAKARIA|KERROUM KHADIJA|LAAZIZ KHADIJA|MACHKOUR SALMA|MIMOUNI ANAS|SBOUITA IBTISSAM|CHOUCRI HICHAM','LABO S3':'AAA IBTIHAL|AIT BOURHIM IMANE|BADI ZINEB|BOUCHRIHA MARYEM|BOUDLIH ILIAS|DAYAB AMAL|EDDARKAOUI AMINA|ELMAKKAOUI SALAH EDDINE|ESSAADI ILYASS|JEBBAD YASMINE|MULENGA MERCY CHIBESA|RAGHIB ANAS|SEKOURI MARYEM|TOYBA IBRAHIM','LABO S5':'ABILI MALIKA|ADDARAL OUMAIMA|BITALJANE OMAIMA|BOUCHIHA HAJAR|CHTIOUI MARYEM|EL BAZ KHADIJA|FAKHRANE WIAME|HAMIMADI ROMAISSA|KHIARE HIBA|MAHIR MOHAMED|SIKLANE HAJAR|TEFNOUTI MALAK|ZEROUALI MARYAM','IAR S3':'AACHCHAKI RANYA|AGJIJE HAJAR|AIT LAHCINE HIBA|AITALEB CHAIMAA|ARAGROUG AYA|AZZAFE RIHAM|BELAAMRY HIBA|BOUNAJAH MARIAM|EL BAKKAL KHADIJA|ELFARNANE CHAIMA|HMOUDOU AYA|MAHRAR MOURAD|MOSAID SAAD|RASSOU BAHIJA|TIBBA KHADIJA|ZIDANE OUMAIMA','IAR S5':'AIT FDIL SALMA|AKMAKH MEHDI|BAQOUS MARYAM|CHNINIF YOUSSEF|EL MANOUZI HAJAR|ELAMIDI SOUHAILA|FADLY CHAIMAA|GRARI ANAS|LAMQISS SAFA|NAIM MOHAMED|TAJEDDINE OUALID|ZEMRAOU ATIK','INP S4':'ABOULKHALEF NOUHA|AHRAYOU SOUKAINA|ANZALI ZINEB|ATTIOUI MERYEM|CHARKAOUI HALIMA|EL BAKILI FATIMA ZAHRA|ELMARHRAOUI HAJAR|ENNASSIRI RIM|LAMIRI HIBA|MOUNIR SOUMIA|REHOUNI MANAL|WAKIBI OUMAIMA','INP S5':'AIT ALI NOUHAILA|AIT BELLA HIBA|AIT GHROURI LATIFA|AIT OUAKRIM MOHAMED|BOUHAFA HAYAT|CHIHEB FATIMA-EZZAHRE|ELHAJI FAIROUZ|FAROUK SOUKAINA|GOUMAHI MERIEM|NAJIM WIAM|OUAZZI SALMA|RAOUNI SALMA|ZIRRI IKRAM','IBO S3':'AABDOUN DOUAA|ADROUNE HOUDA|AGOURRAME KARIMA|AHDA YAHYA|AIT HAMOU BASMA|AMNAINE FATIMA ZAHRA|AROUSSI KHADIJA|ALLA IMAN|BOUGHARASS AYOUB|EL KAHFI ANAS|EL MANOUR NADIRA|ELKHIRAOUI ZAKIA|HOUMMADI MARIAM|KAHWACH BASMA|LAAICHI SAFA|MAADANE MARIYA','IBO S5':'AIT ALI OUAKRIM ILHAM|AGOUZOUL NEZHA|AHBABOU WIAME|ASKOUR SALMA|AGOURRAM YOUSSEF|AMEJAL ABDERRAHMAN|AZZEMAT HAFSA|EL BAGHDADI BOCHRA|ELMOUDEN SAFA|ERRAQI YOUNES|EL BHALLA OMAR|BENFARAJI IKRAM|CHOUKHMANI DOUAE','SF S3':'ABIDALLAH FATIMA EZZAHRAA|ABOURHIM ASMA|AIT AHMED HIBA|AGOURRAME KARIMA|AIT HAMOU BASMA|AHDA YAHYA|ABOULFATH HANANE|AGOURRAM YOUSSEF|AMNAINE FATIMA ZAHRA|EL KAHFI ANAS|EL MANOUR NADIRA|ELKHIRAOUI ZAKIA|ESSAADI RKIA|KAHWACH BASMA|MAADANE MARIYA','SF S5':'EL BHALLA HAFSA|EL HASNAOUI HIBA|EL KARAFLI GHIZLANE|EL HANDAOUI HAJAR|EL HJJAM HIBA|ER-RACHDY HAJAR|EL KHEIR DOUAA|ICHBAD SALMA|EL RHOUL KAOUTAR|FAROUK SALMA|GHELLAB ABDELKERIM|ELMAKKAOUY OUMAIMA|KOSKOUS IMANE|LACHKHAM DOHA|MOURABIT MARWA|REDA ILYAS|SARHANI HAJAR|TOGHRAI HAFSA','SM S3':'AITAYAD NADA|ABBOU IMANE|AAZRI OUMAIMA|AGOUJJIF HAFSA|ALAHMOUM MOHAMED|AYANI RIMA|ABARAGH MERYEM|AMAZOUZ WASSIM|ABOUHANI MAROUA|BELAKZIZ AYA|ABRARAY KHADIJA|ABDELBAKI MERYEM|AIT ALI ASMAA|BADDAZ TOURIA|BENKHALTI NADA|BOURADOUAN MAHDI|BENNANI ZINEB|AIT BARHICH SAAD','SM S5':'ELMENTOURY ANAS|GHLIOUCHATE HIBA|HADDIOUI HAJAR|FATA NARJISE|RAMI DOAA|SAFRAOUI FATIMA ZAHRA|OUHADDOU ILHAM|KHEIAR FATIMA ZAHRA|KORSAN SALMA|JAMIL SARA|KOUB MARIAM|MOHTADI FATIMA EZZAHRA|OUIRDY SAFae|LIQALI MARIA|ZANTANE MARYAM|OUMADI ILHAM|RAMDANE FATIMA|TOUILI FATIMA EZZAHRA|TOUIRI IMANE|ZAYOD HAJAR','ISFSC S3':'EL IDRISSI SAMIRA|EL KAHFI ANAS|GOURIR ISSMAIL|EL BOUINANY TALLAL|EL MALI SARA|BELATTAR AYA|AIDROUS MAROUA|BOUGTAB MALAK|CHARAF IMANE|EL AOUSSE AMINA|AMZIL NAWAL|BENDAOU MOUNIA|EL BIYAD MERIEM|EDDABALI MAJDA','ISFSC S5':'EL OUGKDY HIBA|EL MAGUANA KHAWLA|ESSASSI KAOUTAR|GAZMATE HAFSA|HAKIMI WIDIAN|LAGHFIRI WAFA|MELIANA FATIMA-ZAHRA|MIMOUNI ANAS|NINI SOUAD|TOUIL AHMED AMINE|LIBADA IBTISSAM|ZARDANI FARAH|EL HAFIAN BASSMA|OUIRGHANE ILHAM|ZOUBIRI MANAL|SAIFFI ASSYA|MORTASIM IMANE|NAJI CHAIMA|LABRID SAJID|OULED BENNACEUR MERYEM|ZOUZI AYMAN|YOULI MOHAMED AMINE|MAHFOUD ASMAE|SAYOU FATIMA EZZAHRA|NOUAITI RIM|NEGUIMATE LATIFA|OUAKRIM ABDESSAMAD','IG S4':'BOUDARGA YAHYA|EL AAFIFI SAFA|BIROUK HIBA|AIT DAHAMOU AYA|AMEZGOU MAROUA|BOUSKRI SOUKAYNA|EL ASMAR NADIA|AMZIL NAWAL|BENDAOU MOUNIA|EL BIYAD MERIEM|EDDABALI MAJDA|EL MAHLAOUI IMANE','IG S5':'EZ-ZAYTOUNY YOUSSEF|IMZILEN SALMA|JALAL YASSINE|LAGURIAI SAIDA|ESSASSI KAOUTAR|GAZMATE HAFSA|HAKIMI WIDIAN|MELIANA FATIMA-ZAHRA|QILOUNA KHADIJA|LIBADA IBTISSAM|ZARDANI FARAH|EL HAFIAN BASSMA|ZOUBIRI MANAL|SAIFFI ASSYA|MORTASIM IMANE|NAJI CHAIMA|LABRID SAJID|YOULI MOHAMED AMINE|MAHFOUD ASMAE|SAYOU FATIMA EZZAHRA|NOUAITI RIM|NEGUIMATE LATIFA|OUAKRIM ABDESSAMAD'};
 var MD={'ISUSI S3':"Pathologie medico-chirurgicale d'urgence|Puericulture et maladies transmissibles|Organisation des urgences|Soins infirmiers en medecine et chirurgie d'urgence|Stage1 service d'urgences|Stage 2 Dechoquage",'LABO S3':'Biochimie clinique|Hematologie et Hemobiologie|Immunologie generale|Biochimie clinique analytique TP|Stage d Hematologie|Stage de biochimie','IAR S3':'Deroulement d anesthesie|Pathologies medicales|Pathologies chirurgicales|Pharmacologie Anesthesique|Materiels et appareillage|Anesthesie selon le terrain|Reanimation medicale','INP S4':'Pathologie neonatales 1|Pathologie neonatales 2|Pathologies pediatriques 1|Pathologies pediatriques 2|Stage en pediatrie 1|Stage en pediatrie 2','INP S5':'Physiopathologies de la grossesse|Nutrition neonatale et pediatrique|Pharmacologie pediatrique|Soins infirmiers neonataux|Stage enfant sain 1|Stage enfant sain 2','IBO S3':'Introduction au bloc operatoire|Pathologies medicales|Pathologies chirurgicales|Prevention du risque infectieux|Dispositifs du bloc operatoire|Stage 2 sterilisation','SF S3':'Langues et communication|Profession Sage-femme|Droit et reglementation|Sciences biologiques|Anatomie generale|Pathologies medico-chirurgicales','SM S3':'Demographie et Geographie humaine|Pathologies medicales|Pathologies et soins infirmiers|Sante et environnement|Pediatrie et soins infirmiers|Stage en pediatrie','ISFSC S3':'Pathologies chirurgicales|Approche medicale du vieillissement|Approche sociale du vieillissement|Entomologie medicale|Genie sanitaire II|Genie sanitaire III|Stage d initiation','IG S4':'Genie civile II|Demarches de l assistant social|Domaines d intervention|Les souffrances sociales|Ethique et deontologie','ISUSI S5':'Pharmacologie de l urgence|Materiel et appareillage des urgences|Reanimation|Methodologie de recherche|Stage 3 Reanimation|Stage 4 Bloc Operatoire','LABO S5':'Bacteriologie medicale TP|Bacteriologie medicale et Virologie|Parasitologie et Mycologie|Biostatistique et Epidemiologie|Stage de Bacteriologie|Stage de Parasitologie','IAR S5':'Materiels et appareillage|Anesthesie selon le terrain|Anesthesie selon la chirurgie|Reanimation medicale|Stage 4 Anesthesie generale 2|Stage 5 Reanimation','IBO S5':'Prise en charge de l opere 1|Prise en charge de l opere 2|Techniques d assistance chirurgicale 1|Techniques d assistance chirurgicale 2|Stage 3 circulant|Stage 4 IBO instrumentiste','SF S5':'Gynecologie et obstetrique|Pathologies maternelles|Suivi prenatal|Accouchement|Soins postnatals|Stage maternite','SM S5':'Semiologie psychiatrique|Troubles psychiatriques|Urgences psychiatriques|Stage en medecine|Stage en chirurgie|Stage en psychiatrie','ISFSC S5':'Droit et ethique du soin|Pathologies geriatriques 1|Pathologies geriatriques 2|Communication en geriatrie|Genie sanitaire IV|Hygiene Hospitaliere|Stage en geriatrie','IG S5':'Stage de specialisation 1|Stage de specialisation 2|Rapport de stage|Soutenance|Memoire de fin d etude'};
 var DEF_TYPES=[{id:1,name:'Absence justifiee',color:'#10b981'},{id:2,name:'Absence non justifiee',color:'#ef4444'},{id:3,name:'Retard',color:'#f59e0b'},{id:4,name:'Depart anticipe',color:'#06b6d4'},{id:5,name:'Exclusion temporaire',color:'#ec4899'}];
@@ -392,6 +392,7 @@ function renderDashboard(){
   h+='<div class="kc"><div class="ki" style="background:var(--acs);color:var(--ac);"><i class="fa-solid fa-user-graduate"></i></div><div class="kgw" style="background:var(--ac);"></div><div class="kv">'+students.length+'</div><div class="kl">Etudiants</div><div class="kt" style="color:var(--ac);"><i class="fa-solid fa-layer-group" style="font-size:9px;"></i> '+classes.length+' classes</div></div>';
   h+='<div class="kc"><div class="ki" style="background:rgba(139,92,246,.12);color:var(--vi);"><i class="fa-solid fa-book-open"></i></div><div class="kgw" style="background:var(--vi);"></div><div class="kv">'+modules.length+'</div><div class="kl">Modules</div><div class="kt" style="color:var(--vi);"><i class="fa-solid fa-layer-group" style="font-size:9px;"></i> '+classes.length+' classes</div></div>';
   document.getElementById('KPI').innerHTML=h;
+
   var maxAbs=0;var chartData=[];
   classes.forEach(function(cl){var c=getAbsForClass(cl).length;if(c>maxAbs)maxAbs=c;chartData.push({name:cl,count:c});});
   var cbH='';
@@ -400,6 +401,7 @@ function renderDashboard(){
     cbH+='<div class="cbw"><div class="cbr" style="height:'+ht+'px;background:'+gc(i+1)+';"></div><div class="cbl">'+d.name.replace(' S','<br>S')+'</div></div>';
   });
   document.getElementById('CB').innerHTML=cbH;
+
   var sorted=absences.slice().sort(function(a,b){return new Date(b.startDate)-new Date(a.startDate);});
   var recent=sorted.slice(0,5);
   var drH='';
@@ -427,6 +429,7 @@ function renderAbsences(){
   document.getElementById('PG').innerHTML=pgH;
   updateFilterSelects();
 }
+
 function updateFilterSelects(){
   var classes=getClasses();
   var fcH='<option value="all">Toutes classes</option>';
@@ -461,11 +464,12 @@ function renderCalendar(){
   h+='</div>';
   document.getElementById('CM').innerHTML=h;
 }
+
 function showDayAbsences(day){
   var list=absences.filter(function(a){var d=new Date(a.startDate);return d.getDate()===day&&d.getMonth()===calMonth&&d.getFullYear()===calYear;});
   var h='';
   if(list.length===0){h='<p style="color:var(--fd);font-size:12.5px;text-align:center;padding:18px 0;">Aucune absence ce jour</p>';}
-  else{list.forEach(function(a){var s=getStudent(a.studentId);var m=getModule(a.moduleId);if(!s||!m)return;h+='<div style="padding:10px 0;border-bottom:1px solid var(--bd);"><div style="font-size:13px;font-weight:600;">'+stuName(s)+'</div><div style="font-size:11.5px;color:var(--fm);">'+m.name+'</div><div style="font-size:11px;color:var(--fd);margin-top:3px;">'+formatDate(a.startDate)+'</div></div>';});}
+  else{list.forEach(function(a){var s=getStudent(a.studentId);var m=getModule(a.moduleId);var t=getType(a.typeId);if(!s||!m||!t)return;h+='<div style="padding:10px 0;border-bottom:1px solid var(--bd);"><div style="font-size:13px;font-weight:600;">'+stuName(s)+'</div><div style="font-size:11.5px;color:var(--fm);">'+m.name+'</div><div style="font-size:11px;color:var(--fd);margin-top:3px;"><span class="badge" style="background:'+t.color+'18;color:'+t.color+';font-size:10px;padding:2px 7px;">'+t.name+'</span> '+formatDate(a.startDate)+'</div></div>';});}
   document.getElementById('CDD').innerHTML=h;
 }
 
@@ -483,6 +487,7 @@ function renderStudents(){
   else{filtered.forEach(function(s){var abs=getAbsForStudent(s.id);var total=abs.length;var just=abs.filter(function(a){var t=getType(a.typeId);return t&&t.name.toLowerCase().indexOf('justifiee')>=0;}).length;var nj=total-just;var pct=total>0?Math.round((just/total)*100):100;var pColor=pct>=80?'var(--ac)':pct>=50?'var(--wn)':'var(--dn)';sgH+='<div class="sc" data-name="'+stuName(s)+'" onclick="showStuDetail('+s.id+')"><div class="sct"><div class="sca" style="background:'+gc(s.id)+';">'+stuInitials(s)+'</div><div><div style="font-weight:600;font-size:14px;">'+stuName(s)+'</div><div style="font-size:11.5px;color:var(--fm);">'+s.classe+'</div></div></div><div class="scs"><div class="ss"><div class="ssv">'+total+'</div><div class="ssl">Total</div></div><div class="ss"><div class="ssv" style="color:var(--ac);">'+just+'</div><div class="ssl">Just.</div></div><div class="ss"><div class="ssv" style="color:var(--dn);">'+nj+'</div><div class="ssl">Non just.</div></div></div><div class="lb"><div class="lbb"><div class="lbf" style="width:'+pct+'%;background:'+pColor+';"></div></div><div class="lbt">'+pct+'% just.</div></div></div>';});}
   document.getElementById('SG').innerHTML=sgH;
 }
+
 function showStuDetail(id){
   currentDetailStuId=id;var s=getStudent(id);if(!s)return;
   var abs=getAbsForStudent(id);var total=abs.length;
@@ -516,18 +521,22 @@ function renderModules(){
   else{filtered.forEach(function(m){var abs=getAbsForModule(m.id);var total=abs.length;var stuIds={};abs.forEach(function(a){stuIds[a.studentId]=1;});var uniqueStu=Object.keys(stuIds).length;mgH+='<div class="mgc" data-name="'+m.name+'" onclick="showModDetail('+m.id+')"><div class="mgg" style="background:'+m.color+';"></div><div class="mgnm">'+m.name+'</div><div class="mgtc">'+m.classe+'</div><div class="mgme"><div class="mgmi"><i class="fa-solid fa-calendar-xmark"></i> '+total+' absences</div><div class="mgmi"><i class="fa-solid fa-users"></i> '+uniqueStu+' etudiants</div></div><div style="display:flex;gap:6px;"><button class="ab" onclick="event.stopPropagation();openMM('+m.id+')" title="Modifier"><i class="fa-solid fa-pen"></i></button><button class="ab dg" onclick="event.stopPropagation();deleteM('+m.id+')" title="Supprimer"><i class="fa-solid fa-trash"></i></button></div></div>';});}
   document.getElementById('MG').innerHTML=mgH;
 }
+
 function showModDetail(id){
   currentDetailModId=id;var m=getModule(id);if(!m)return;
   var abs=getAbsForModule(id);var total=abs.length;var stuIds={};abs.forEach(function(a){stuIds[a.studentId]=1;});var uniqueStu=Object.keys(stuIds).length;
+  var typeBreakdown={};abs.forEach(function(a){var t=getType(a.typeId);if(t){if(!typeBreakdown[t.id])typeBreakdown[t.id]={name:t.name,color:t.color,count:0};typeBreakdown[t.id].count++;}});
   document.querySelectorAll('.page').forEach(function(el){el.classList.remove('active');});
   document.getElementById('page-mod-detail').classList.add('active');
   document.querySelectorAll('.ni').forEach(function(el){el.classList.remove('active');});
   var h='<button class="back-btn" onclick="go(\'modules\')"><i class="fa-solid fa-arrow-left"></i> Retour</button>';
   h+='<div class="detail-hero"><div class="detail-hero-glow" style="background:'+m.color+';"></div><div style="display:flex;align-items:center;gap:18px;position:relative;z-index:1;"><div style="width:64px;height:64px;border-radius:14px;background:'+m.color+';display:flex;align-items:center;justify-content:center;font-size:22px;color:#fff;"><i class="fa-solid fa-book-open"></i></div><div><h2 style="font-size:22px;font-weight:700;">'+m.name+'</h2><p style="color:var(--fm);font-size:13px;">'+m.classe+'</p></div><div style="margin-left:auto;display:flex;gap:8px;"><button class="ab" onclick="openMM('+m.id+')" title="Modifier"><i class="fa-solid fa-pen"></i></button><button class="ab dg" onclick="deleteM('+m.id+')" title="Supprimer"><i class="fa-solid fa-trash"></i></button></div></div></div>';
-  h+='<div class="detail-stats"><div class="detail-stat"><div class="detail-stat-val">'+total+'</div><div class="detail-stat-label">Total absences</div></div><div class="detail-stat"><div class="detail-stat-val" style="color:var(--ac);">'+uniqueStu+'</div><div class="detail-stat-label">Etudiants</div></div></div>';
-  h+='<div class="dtw"><div class="dth"><h3>Etudiants absents</h3></div><table><thead><tr><th>Etudiant</th><th>Date & Heure</th><th>Actions</th></tr></thead><tbody>';
-  if(abs.length===0){h+='<tr><td colspan="3" class="empty-state"><i class="fa-solid fa-inbox"></i><p>Aucune absence</p></td></tr>';}
-  else{var sorted=abs.slice().sort(function(a,b){return new Date(b.startDate)-new Date(a.startDate);});sorted.forEach(function(a){var s=getStudent(a.studentId);if(!s)return;h+='<tr><td><div class="ec"><div class="ea" style="background:'+gc(s.id)+';">'+stuInitials(s)+'</div><div><div class="en">'+stuName(s)+'</div><div class="es">'+s.classe+'</div></div></div></td><td style="font-size:12.5px;color:var(--fm);">'+formatDate(a.startDate)+'</td><td><button class="ab" onclick="openAM('+a.id+')" title="Modifier"><i class="fa-solid fa-pen"></i></button><button class="ab dg" onclick="deleteA('+a.id+')" title="Supprimer"><i class="fa-solid fa-trash"></i></button></td></tr>';});}
+  h+='<div class="detail-stats"><div class="detail-stat"><div class="detail-stat-val">'+total+'</div><div class="detail-stat-label">Total absences</div></div><div class="detail-stat"><div class="detail-stat-val" style="color:var(--ac);">'+uniqueStu+'</div><div class="detail-stat-label">Etudiants</div></div>';
+  Object.values(typeBreakdown).forEach(function(tb){h+='<div class="detail-stat"><div class="detail-stat-val" style="color:'+tb.color+';">'+tb.count+'</div><div class="detail-stat-label">'+tb.name+'</div></div>';});
+  h+='</div>';
+  h+='<div class="dtw"><div class="dth"><h3>Etudiants absents</h3></div><table><thead><tr><th>Etudiant</th><th>Type</th><th>Date & Heure</th><th>Actions</th></tr></thead><tbody>';
+  if(abs.length===0){h+='<tr><td colspan="4" class="empty-state"><i class="fa-solid fa-inbox"></i><p>Aucune absence</p></td></tr>';}
+  else{var sorted=abs.slice().sort(function(a,b){return new Date(b.startDate)-new Date(a.startDate);});sorted.forEach(function(a){var s=getStudent(a.studentId);var t=getType(a.typeId);if(!s||!t)return;h+='<tr><td><div class="ec"><div class="ea" style="background:'+gc(s.id)+';">'+stuInitials(s)+'</div><div><div class="en">'+stuName(s)+'</div><div class="es">'+s.classe+'</div></div></div></td><td><span class="badge" style="background:'+t.color+'18;color:'+t.color+';"><i class="fa-solid fa-circle" style="font-size:6px;"></i> '+t.name+'</span></td><td style="font-size:12.5px;color:var(--fm);">'+formatDate(a.startDate)+'</td><td><button class="ab" onclick="openAM('+a.id+')" title="Modifier"><i class="fa-solid fa-pen"></i></button><button class="ab dg" onclick="deleteA('+a.id+')" title="Supprimer"><i class="fa-solid fa-trash"></i></button></td></tr>';});}
   h+='</tbody></table></div>';
   document.getElementById('page-mod-detail').innerHTML=h;
 }
@@ -549,6 +558,7 @@ function openAM(id){
   else{document.getElementById('AMT').textContent='Nouvelle absence';document.getElementById('AID').value='';var now=new Date();var ds=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0')+'T08:00';document.getElementById('ASD').value=ds;document.getElementById('AED').value=ds.replace('08:00','10:00');document.getElementById('ATY').value=types.length>0?types[0].id:1;document.getElementById('ARE').value='';}
   openModal('MAB');
 }
+
 function saveA(){
   var sid=parseInt(document.getElementById('AST').value);var mid=parseInt(document.getElementById('AMO').value);
   var sd=document.getElementById('ASD').value;var ed=document.getElementById('AED').value;
@@ -559,6 +569,7 @@ function saveA(){
   else{absences.push({id:nid++,studentId:sid,moduleId:mid,startDate:sd,endDate:ed,typeId:tid,motif:motif});toast('Absence ajoutee','success');}
   saveToStorage();closeModal('MAB');renderAbsences();renderDashboard();
 }
+
 function deleteA(id){
   showConfirm('Supprimer cette absence','Cette action est irreversible.',1,'Supprimer',function(){
     absences=absences.filter(function(a){return a.id!==id;});saveToStorage();toast('Absence supprimee','success');renderAbsences();renderDashboard();
@@ -573,6 +584,7 @@ function openSM(id){
   else{document.getElementById('SMT2').textContent='Nouvel etudiant';document.getElementById('SID').value='';document.getElementById('SLN').value='';document.getElementById('SFR').value='';}
   openModal('MST');
 }
+
 function saveS(){
   var nom=document.getElementById('SLN').value.trim();var prenom=document.getElementById('SFR').value.trim();var classe=document.getElementById('SCL').value;var editId=document.getElementById('SID').value;
   if(!nom||!prenom||!classe){toast('Veuillez remplir tous les champs','error');return;}
@@ -580,6 +592,7 @@ function saveS(){
   else{students.push({id:nid++,nom:nom,prenom:prenom,classe:classe,email:''});toast('Etudiant ajoute','success');}
   saveToStorage();closeModal('MST');renderStudents();renderDashboard();updateFilterSelects();
 }
+
 function deleteS(id){
   var s=getStudent(id);showConfirm('Supprimer cet etudiant','Toutes les absences de '+stuName(s)+' seront aussi supprimees.',1,'Supprimer',function(){students=students.filter(function(x){return x.id!==id;});absences=absences.filter(function(a){return a.studentId!==id;});saveToStorage();toast('Etudiant supprime','success');renderStudents();renderDashboard();updateFilterSelects();});
 }
@@ -591,6 +604,7 @@ function openMM(id){
   else{document.getElementById('MMT2').textContent='Nouveau module';document.getElementById('MID').value='';document.getElementById('MNM').value='';document.getElementById('MCO').value=COLORS[modules.length%COLORS.length];}
   openModal('MMO');
 }
+
 function saveM(){
   var name=document.getElementById('MNM').value.trim();var classe=document.getElementById('MCL').value;var color=document.getElementById('MCO').value;var editId=document.getElementById('MID').value;
   if(!name||!classe){toast('Veuillez remplir tous les champs','error');return;}
@@ -598,6 +612,7 @@ function saveM(){
   else{modules.push({id:nid++,name:name,classe:classe,color:color});toast('Module ajoute','success');}
   saveToStorage();closeModal('MMO');renderModules();renderDashboard();updateFilterSelects();
 }
+
 function deleteM(id){
   var m=getModule(id);showConfirm('Supprimer ce module','Toutes les absences liees a '+m.name+' seront aussi supprimees.',1,'Supprimer',function(){modules=modules.filter(function(x){return x.id!==id;});absences=absences.filter(function(a){return a.moduleId!==id;});saveToStorage();toast('Module supprime','success');renderModules();renderDashboard();updateFilterSelects();});
 }
@@ -608,6 +623,7 @@ function openTM(id){
   else{document.getElementById('TYT2').textContent='Nouveau type';document.getElementById('TID').value='';document.getElementById('TNM').value='';document.getElementById('TCO').value='#10b981';}
   openModal('MTY');
 }
+
 function saveT(){
   var name=document.getElementById('TNM').value.trim();var color=document.getElementById('TCO').value;var editId=document.getElementById('TID').value;
   if(!name){toast('Veuillez entrer un nom','error');return;}
@@ -615,6 +631,7 @@ function saveT(){
   else{var newId=types.length>0?Math.max.apply(null,types.map(function(t){return t.id;}))+1:1;types.push({id:newId,name:name,color:color});toast('Type ajoute','success');}
   saveToStorage();closeModal('MTY');renderTypes();
 }
+
 function deleteT(id){
   var count=absences.filter(function(a){return a.typeId===id;}).length;
   showConfirm('Supprimer ce type','Ce type est utilise par '+count+' absence(s).',count,'Supprimer',function(){types=types.filter(function(t){return t.id!==id;});saveToStorage();toast('Type supprime','success');renderTypes();});
@@ -622,17 +639,20 @@ function deleteT(id){
 
 /* ====== EXPORTS ====== */
 function downloadFile(content,filename,type){var blob=new Blob([content],{type:type+';charset=utf-8;'});var url=URL.createObjectURL(blob);var a=document.createElement('a');a.href=url;a.download=filename;document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);}
+
 function exportCSV(){
   if(absences.length===0){toast('Aucune absence a exporter','error');return;}
   var csv='Etudiant,Classe,Module,Type,Date Debut,Date Fin,Motif\n';
   absences.forEach(function(a){var s=getStudent(a.studentId);var m=getModule(a.moduleId);var t=getType(a.typeId);if(!s||!m||!t)return;csv+='"'+stuName(s)+'","'+s.classe+'","'+m.name+'","'+t.name+'","'+a.startDate+'","'+a.endDate+'","'+(a.motif||'')+'"\n';});
   downloadFile(csv,'absences_export.csv','text/csv');toast('Export reussi','success');
 }
+
 function exportStudents(){
   if(students.length===0){toast('Aucun etudiant a exporter','error');return;}
   var csv='Nom,Prenom,Classe\n';students.forEach(function(s){csv+='"'+s.nom+'","'+s.prenom+'","'+s.classe+'"\n';});
   downloadFile(csv,'etudiants_export.csv','text/csv');toast('Export reussi','success');
 }
+
 function exportModules(){
   if(modules.length===0){toast('Aucun module a exporter','error');return;}
   var csv='Module,Classe,Couleur\n';modules.forEach(function(m){csv+='"'+m.name+'","'+m.classe+'","'+m.color+'"\n';});
@@ -674,6 +694,7 @@ function openImportModal(mode){
   }
   openModal('MIMP');
 }
+
 function handleImportFile(input){
   var file=input.files[0];if(!file)return;
   var reader=new FileReader();
@@ -689,6 +710,7 @@ function handleImportFile(input){
   };
   reader.readAsArrayBuffer(file);
 }
+
 function validateImport(){
   impState.validCount=0;impState.dupCount=0;impState.errCount=0;
   impState.rows.forEach(function(r){
@@ -705,6 +727,7 @@ function validateImport(){
     }
   });
 }
+
 function showImportPreview(){
   document.getElementById('IMP_STEP1').style.display='none';document.getElementById('IMP_STEP2').style.display='block';
   document.getElementById('IMP_BACK').style.display='inline-flex';document.getElementById('IMP_VALIDATE').style.display='inline-flex';
@@ -717,13 +740,13 @@ function showImportPreview(){
   fields.forEach(function(f,i){mH+='<label>'+labels[i]+'</label><select onchange="impState.colMap[\''+f+'\']=parseInt(this.value);validateImport();showImportPreview();">';impState.headers.forEach(function(hh,j){mH+='<option value="'+j+'" '+(impState.colMap[f]===j?'selected':'')+'>'+hh+'</option>';});mH+='</select>';});
   document.getElementById('IMP_COLMAP').innerHTML=mH;
   document.getElementById('IMP_CHECKS').innerHTML='<label class="import-check"><input type="checkbox" id="IMP_SKIP_DUP" checked> Ignorer les doublons</label><label class="import-check"><input type="checkbox" id="IMP_SKIP_ERR" checked> Ignorer les erreurs</label>';
-  var pH='<table><thead><tr>';
-  impState.headers.forEach(function(hh){pH+='<th>'+hh+'</th>';});
-  pH+='</tr></thead><tbody>';
-  impState.rows.forEach(function(r){var cls=r._impStatus==='err'?'row-err':r._impStatus==='dup'?'row-dup':'row-ok';pH+='<tr class="'+cls+'">';impState.headers.forEach(function(hh,i){pH+='<td>'+(r[i]!==undefined?r[i]:'')+'</td>';});pH+='</tr>';});
+  var pH='<table><thead><tr>';impState.headers.forEach(function(hh){pH+='<th>'+hh+'</th>';});pH+='<th>Statut</th></tr></thead><tbody>';
+  impState.rows.forEach(function(r){var cls=r._impStatus==='err'?'row-err':r._impStatus==='dup'?'row-dup':'row-ok';var st=r._impStatus==='err'?'<span style="color:var(--dn);font-weight:600;">Erreur</span>':r._impStatus==='dup'?'<span style="color:var(--wn);font-weight:600;">Doublon</span>':'<span style="color:var(--ac);font-weight:600;">OK</span>';pH+='<tr class="'+cls+'">';impState.headers.forEach(function(hh,i){pH+='<td>'+(r[i]!==undefined?r[i]:'')+'</td>';});pH+='<td>'+st+'</td></tr>';});
   pH+='</tbody></table>';document.getElementById('IMP_PREVIEW').innerHTML=pH;
 }
+
 function importBack(){document.getElementById('IMP_STEP1').style.display='block';document.getElementById('IMP_STEP2').style.display='none';document.getElementById('IMP_BACK').style.display='none';document.getElementById('IMP_VALIDATE').style.display='none';}
+
 function executeImport(){
   var skipDup=document.getElementById('IMP_SKIP_DUP').checked;var skipErr=document.getElementById('IMP_SKIP_ERR').checked;var count=0;
   impState.rows.forEach(function(r){if(r._impStatus==='err'&&skipErr)return;if(r._impStatus==='dup'&&skipDup)return;if(r._impStatus!=='ok')return;
