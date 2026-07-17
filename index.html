@@ -369,7 +369,7 @@ tbody tr{border-bottom:1px solid var(--bd);transition:background .15s}tbody tr:l
 <div class="mb">
   <div class="imp-info"><p>Format : <code>Nom</code> | <code>Prenom</code> | <code>Classe</code></p><p style="margin-top:4px;font-size:11.5px;color:var(--fd);">Exemple : <code>ISUSI S3</code>, <code>LABO S5</code></p></div>
   <div class="imp-actions">
-    <button class="bs" onclick="dlTpl('Nom,Prenom,Classe\n"nom","prenom","ISUSI S3"\n','modele_etudiants.csv')"><i class="fa-solid fa-file-arrow-down"></i> Modele</button>
+    <button class="bs" onclick="dlTpl('Nom,Prenom,Classe\n\"nom\",\"prenom\",\"ISUSI S3\"\n','modele_etudiants.csv')"><i class="fa-solid fa-file-arrow-down"></i> Modele</button>
     <label class="imp-file-label"><i class="fa-solid fa-file-arrow-up"></i> Choisir fichier <input type="file" accept=".xlsx,.xls,.csv" onchange="handleStudentFile(event)" id="IMP_S_FILE"></label>
   </div>
   <div class="imp-module-field" id="IMP_S_MOD_ROW" style="display:none;"><i class="fa-solid fa-file-excel"></i><span class="imp-module-label">Fichier :</span><span class="imp-module-name" id="IMP_S_MOD_NAME"></span></div>
@@ -381,7 +381,7 @@ tbody tr{border-bottom:1px solid var(--bd);transition:background .15s}tbody tr:l
 <div class="mb">
   <div class="imp-info"><p>Format : <code>Module</code> ou <code>Nom</code> | <code>Classe</code></p></div>
   <div class="imp-actions">
-    <button class="bs" onclick="dlTpl('Module,Classe\n"module","ISUSI S3"\n','modele_modules.csv')"><i class="fa-solid fa-file-arrow-down"></i> Modele</button>
+    <button class="bs" onclick="dlTpl('Module,Classe\n\"module\",\"ISUSI S3\"\n','modele_modules.csv')"><i class="fa-solid fa-file-arrow-down"></i> Modele</button>
     <label class="imp-file-label"><i class="fa-solid fa-file-arrow-up"></i> Choisir fichier <input type="file" accept=".xlsx,.xls,.csv" onchange="handleModuleFile(event)" id="IMP_M_FILE"></label>
   </div>
   <div class="imp-module-field" id="IMP_M_MOD_ROW" style="display:none;"><i class="fa-solid fa-file-excel"></i><span class="imp-module-label">Fichier :</span><span class="imp-module-name" id="IMP_M_MOD_NAME"></span></div>
@@ -395,10 +395,8 @@ var OPT_ICONS={'ISUSI':'fa-truck-medical','LABO':'fa-flask-vial','IAR':'fa-syrin
 var OPT_COLORS={'ISUSI':'#dc2626','LABO':'#0891b2','IAR':'#7c3aed','INP':'#ea580c','IBO':'#059669','SF':'#ec4899','SM':'#6366f1','ISFSC':'#d97706','IG':'#0d9488'};
 var SLOTS=['08H30 - 10H30','10H30 - 12H30','08H30 - 12H30','14H00 - 16H00','16H00 - 18H00','14H00 - 18H00','15H00 - 18H00'];
 
-/* ========== DONNEES PAR DEFAUT ETUDIANTS ========== */
-var RD_DEFAULT={"ISUSI S3":"ACHLIKH AICHA|AGOUZOUL MOUNA|ARROUY IKRAM|AZIZ AMINA|BANI NAJMA|BENCHAMA MOHAMED ALI|BOURISSA HAMZA|DENDOUN ISLAM|EBOUR KHAOULA|EL HARRARI OUSSAMA|EL JAOUHARI MALAK|ELMOUDAFFAR WISSAL|ENNAJIH RIHAM|FASSINI CHAIMAA|HANGOUR HAFSA|IMAZZANE MAROUA|LABBIHI KAOUTAR|LAFHAL BADER|NAJEH RADWA|NAOUAR MBARKA|OUARHOU AMINE|OUILKI JIHAD|OUIS MOHAMED|OUJAA IMANE|OUKOUZAMT HAYATE|OUNASSER ISRAA|RAIS ANAS|SAADI IMANE|SAADOUNI DOUAA|TOUIL KELTOUM|ZAKAR CHAIMA","ISUSI S5":"AMARIR MOHAMMED|ARIF KHADIJA|BELLAGCHAIRI HIBA|BERRAMY HIBA|CHAIBI AYA|CHAKHCH YASSMINE|DAHI ILYAS|EL ACHKAR BOUTAINA|EL HADAR HAJAR|EL MOUDDEN OUISAL|ESSAKHI HASNAE|GAZGAZ SALOUA|HOUSSAYNI IMANE|HOUSSNI ZAKARIA|IBRQI IMANE|IDSASSI ZINEB|KERROUM KHADIJA|KDAIRE NOUHAILA|LAAZIZ KHADIJA|LACH-HEB MERIEM|MACHKOUR SALMA|MIMOUNI ANAS|MIMOUNE WISSALE|SBOUITA IBTISSAM|TADILI FATIMA-EZZAHRA|CHOUCRI HICHAM","LABO S3":"AAA IBTIHAL|AIT BOURHIM IMANE|BADI ZINEB|BELFASSI FATIMA-EZZAHERAE|BOUCHRIHA MARYEM|BOUDLIH ILIAS|BOUSALHI NADA|CHARDAOUI OUISSAL|CHERKAOUI ABDERRAHMANE|DAYAB AMAL|EDDARKAOUI AMINA|ELBAZ MOHAMED AMINE|ELMAKKAOUI SALAH EDDINE|ESSAADI ILYASS|ESSAADI ZOUHAYR|ESSADEK YOUSSEF|HASSANI MBECHEZI ELARIF|JEBBAD YASMINE|MULENGA MERCY CHIBESA|MQAINTAR SAMI|NOUGHOU AYA|RAGHIB ANAS|RAHEL GHIZLANE|SEKOURI MARYEM|SILOMBA TEPWANJI|TOYBA IBRAHIM","LABO S5":"ABILI MALIKA|ADDARAL OUMAIMA|AIT EL HAJ HIBA|BITALJANE OMAIMA|BOUCHIHA HAJAR|CHTIOUI MARYEM|EL ABADILA CHEIKH MAALAININE|EL BAZ KHADIJA|ECH-CHTOUKI ABDELLAH|EL KHOUMANI MARWA|ETTAOUSSI SANAE|FAKHRANE WIAME|FRINDO MUSTAPHA|HAMIMADI ROMAISSA|HAMZAOUI ZOUHAIR|JABELKHAYR ANAS|KHIARE HIBA|MAHIR MOHAMED|OUAJIB NOUHAILA|RADI JAMILA|SI KHOUNA HAFSA|SIKLANE HAJAR|TEFNOUTI MALAK|TOUIR AYOUB|ZEROUALI MARYEM|ZIDANE OUMAIMA","IAR S3":"AACHCHAKI RANYA|AGJIJE HAJAR|AIT LAHCINE HIBA|AITALEB CHAIMAA|ARAGROUG AYA|AZZAFE RIHAM|BELAAMRY HIBA|BEN TALE FATIMA EZZAHRAE|BOUNAJAH MARIAM|EL BAKKAL KHADIJA|ELFARNANE CHAIMA|ENNDA HASSNA|HMOUDOU AYA|IDRISSI OUMNIYA|IQIQ YOUSSEF|MAHRAR MOURAD|MOSAID SAAD|RASSOU BAHIJA|SAADI OUMAIMA|SBAYBI NOUR EL IMANE|TIBBA KHADIJA|TAIB ASMAA|SOUNIB AYA","IAR S5":"AIT FDIL SALMA|AKMAKH MEHDI|BAQOUS MARYAM|CHNINIF YOUSSEF|EL GHADOUINI HIBA|EL MANOUZI HAJAR|ELAMIDI SOUHAILA|ELHAMDAOUI KAHDIJA|ELQADIMI CHAIMAA|FADLY CHAIMAA|GRARI ANAS|KABLAOUI MARWA|LAKHAL SIHAM|LAMQISS SAFA|NAIM MOHAMED|OUMALLOUL FATIMA-EZZAHRA|RAHMOUN OMAR|RHAFIRI HIBA|SBILA NOURELHOUDA|TAJEDDINE OUALID|ZEMRAOU ATIK","INP S4":"ABOULKHALEF NOUHA|AHRAYOU SOUKAINA|ANZALI ZINEB|ANZIME ILYASSE|ATTIOUI MERYEM|AZNAGDE SOUMIA|BAHAKKI AYA|CHARKAOUI HALIMA|EL BAKILI FATIMA ZAHRA|EL HAMMOUI WISSALE|EL-ARBAOUI MERYEME|ELMARHRAOUI HAJAR|ENNASSIRI RIM|FAROUK SOUKAINA|GHINE HASSNA|HSSIKI HIDAYA|LAMIRI HIBA|MOUNIR SOUMIA|NAHED ZAHIRA|OUARCHAN KHAOULA|REHOUNI MANAL|WAKIBI OUMAIMA","INP S5":"AIT ALI NOUHAILA|AIT BELLA HIBA|AIT GHROURI LATIFA|AIT MBARK HAYAT|AIT OUAKRIM MOHAMED|AIT STIMAH IMANE|ALANDARI KHAOULA|BOUHAFA HAYAT|CHIHEB FATIMA-EZZAHRE|ELHAJI FAIROUZ|ELMAJDOUB LEILA|FAROUK SOUKAINA|GOUMAHI MERIEM|NAJIM WIAM|OUALLA RACHIDA|OUAZZI SALMA|RAOUNI SALMA|SAMSAH MANAR|ZIRRI IKRAM","IBO S3":"AABDOUN DOUAA|ADROUNE HOUDA|AGOURRAME KARIMA|AHDA YAHYA|AIT HAMOU BASMA|AMNAINE FATIMA ZAHRA|AROUSSI KHADIJA|ALLA IMAN|BOUGHARASS AYOUB|BOUKDIR SARA|EL KAHFI ANAS|EL MALI SARA|EL MANOUR NADIRA|ELKHIRAOUI ZAKIA|HOUMMADI MARIAM|KAHWACH BASMA|LAAICHI SAFA|MAADANE MARIYA|OUTOULOUNT IMANE","IBO S5":"AIT ALI OUAKRIM ILHAM|AGOUZOUL NEZHA|AHBABOU WIAME|ASKOUR SALMA|AGOURRAM YOUSSEF|AMEJAL ABDERRAHMAN|AZZEMAT HAFSA|EL BAGHDADI BOCHRA|ELMOUDEN SAFA|ERRAQI YOUNES|EL BHALLA OMAR|BENFARAJI IKRAM|CHOUKHMANI DOUAE|EL RHOUL KAOUTAR|GHAOUCH ANAS|MOUGHIT HAMZA|MOUKAFIH JAMILA|HADOUAR MOHAMED","SF S3":"AATIF FATIMA-EZZAHRAE|ABIDALLAH FATIMA EZZAHRAA|ABOURHIM ASMA|AIT ASSOU SALMA|AIT QAJOU TOURIA|AHTTACH IMANE|AIT YOUSS AHLAM|BOUBAKRI SARA|BOUBKISSE HAJAR|EL ALYANY ANISSA|ELGHAZOUANI HIBA|ELHIK FATIMA EZZAHRA|FATA NARJISE|ER-RACHDY HAJAR|KOUB MARIAM|LAMDIRA MERIEM|MOHTADI FATIMA EZZAHRA|NASSARI DOHA|NASSIB AMINA","SF S5":"ABIADOU AYA|AIT ELKADI NAOUAL|BELAFQUIRA IBTIHAL|EL BHALLA HAFSA|EL HASNAOUI HIBA|EL KARAFLI GHIZLANE|EL HANDAOUI HAJAR|EL HJJAM HIBA|ER-RAFIAI FATIM EZZAHRAE|ELAANNOURI HAFSA|ELMENTOURY ANAS|GHLIOUCHATE HIBA|HADDIOUI HAJAR|IMAGHRAK HANANE|KAMAL HAYATE|KORSAN SALMA|OUHADDOU ILHAM|SAFRAOUI FATIMA ZAHRA|TOUIRI IMANE|ZAYOD HAJAR","SM S3":"AITAYAD NADA|ABBOU IMANE|AAZRI OUMAIMA|AGOUJJIF HAFSA|AIT BENMOUSSA SALMA|AIT MOBARAK JAMILA|ABDELBAKI MERYEM|AIT ALI ASMAA|ARAHAL KHADIJA|BADDAZ TOURIA|BENKHALTI NADA|AIT EL CADI FATIMA|AIT BOUCHAIB RAIHANA|AMEZOUAR OUMAIMA|AIDALI KHADIJA|BOURADOUAN MAHDI|BENNANI ZINEB|AIT BARHICH SAAD|ABARAGH MERYEM|AMAZOUZ WASSIM|ABOUHANI MAROUA|BELAKZIZ AYA|ABRARAY KHADIJA|ALAHMOUM MOHAMED|AYANI RIMA|AFOULOUS ASMAE","SM S5":"EL IDRISSI KASSIMI ASMA|ELMENTOURY ANAS|GHLIOUCHATE HIBA|HADDIOUI HAJAR|FATA NARJISE|IMAGHRAK HANANE|KAMAL HAYATE|RAMI DOAA|SAFRAOUI FATIMA ZAHRA|OUHADDOU ILHAM|KHEIAR FATIMA ZAHRA|KORSAN SALMA|JAMIL SARA|KOUB MARIAM|MOHTADI FATIMA EZZAHRA|LIQALI MARIA|ZANTANE MARYAM|OUMADI ILHAM|RAMDANE FATIMA|TOUILI FATIMA|TOUIRI IMANE|ZAYOD HAJAR|MALLASSE HAJAR|LAMDIRA MERIEM|NEDDAOUI BASMA|MANSOURI MARYAM","ISFSC S3":"ACHOUIH OUMAIMA|AIT AHMED HIBA|ABOULAHIA SAAD|AANIBA ANASS|EL IDRISSI SAMIRA|BOUNHALLI SAFAA|EL KAHFI ANAS|GOURIR ISSMAIL|EL BOUINANY TALLAL|HARRAK SIF EDDINE|BELATTAR AYA|AMDJAR HASNA|ABOULMAJD IKRAM|AIT BENALI SAFA|BENJAAFAR RHITA|BADRI KAOUTHAR|CHESTAFIQ RIDA|BENOUADDAH RABAB|AITTEYB FATIMA|AIT BRIK FATIMA|AMGHAR DOHA|AMMARI CHADIA|ELATMANI ABDELHAK|AIT EL KADI JIHAD","ISFSC S5":"BAKASSOU BRAHIM|AIT BENLABCHIR CHIHINAZ|AIT RAMI KARIM|AZNAG ABDELJALIL|BELLAARABI KHADIJA|BOUTGAYOUT OUIAM|BOUTIGHATNE AABLA|DARIF ILYAS|EL KARROUMI MOUNCIF|EL KHOMSSI YOUSRA|FARIKH OUISSAL|JALAL YASSINE|LAGURIAI SAIDA|EL OUGKDY HIBA|EL MAGUANA KHAWLA|DRAI ACHRAF|MESKI MAROUA|BOUZAIR RANYA|EL-HAIDAOUY AICHA|RGHIOUI RIHAB|ELAKHDAR WISSAL|FAILATI BINTI ILIASSA","IG S4":"BOUDARGA YAHYA|EL AAFIFI SAFA|BIROUK HIBA|AIT DAHAMOU AYA|AMEZGOU MAROUA|BOUGTAB MALAK|CHARAF IMANE|EL AOUSSE AMINA|AMZIL NAWAL|BENDAOU MOUNIA|EL BIYAD MERIEM|EDDABALI MAJDA|EL ASMAR NADIA|EL MAHLAOUI IMANE|ELHARRAZ AMALE|ELMANDILI HAJAR|EL MAHFOUDI MARYEM|BELGHANDOUR CHAIMAA|BENFAIDA FATIMA-EZZAHRAE|EL KHATTABY IMAN|EL GARNAOUI KAWTAR|BEN LAHNINE ASMA|COURDADI FATIMA ZAHRA|EL FAHCHOUCH MARWA","IG S5":"EZ-ZAYTOUNY YOUSSEF|IMZILEN SALMA|JALAL YASSINE|LAGURIAI SAIDA|ESSASSI KAOUTAR|GAZMATE HAFSA|HAKIMI WIDIAN|EL OUGKDY HIBA|EL MAGUANA KHAWLA|DRAI ACHRAF|MESKI MAROUA|BOUZAIR RANYA|EL-HAIDAOUY AICHA|RGHIOUI RIHAB|ELAKHDAR WISSAL|FAILATI BINTI ILIASSA"};
-
 /* ========== VARIABLES DYNAMIQUES ========== */
+var RD_DEFAULT={};
 var RD={}, MD={}, ABSENCES=[];
 var TYPES=[{id:1,name:'Absence non justifiee',color:'#dc2626'},{id:2,name:'Absence justifiee',color:'#059669'},{id:3,name:'Retard',color:'#d97706'}];
 var warnThreshold=3, exclThreshold=8;
@@ -437,41 +435,33 @@ function loadData() {
     var raw = localStorage.getItem(LS_KEY);
     if (raw) {
       var d = JSON.parse(raw);
-      /* BUG FIX : avant c'etait "Object.keys(d.rd).length > 0"
-         Ce qui rechargait les defauts quand RD etait vide {} apres suppression.
-         Maintenant on verifie juste que la cle existe dans le JSON. */
-      if (d.rd !== undefined && d.rd !== null) {
-        RD = d.rd;
-      } else {
-        RD = JSON.parse(JSON.stringify(RD_DEFAULT));
-      }
-      /* Meme logique pour les modules */
-      if (d.md !== undefined && d.md !== null) {
-        MD = d.md;
-      } else {
-        MD = {};
-      }
-      /* Absences */
+      /* Charger etudiants (respecte une liste explicitement vide) */
+      RD = (d.rd && typeof d.rd === 'object') ? d.rd : {};
+      /* Charger modules */
+      MD = (d.md && typeof d.md === 'object') ? d.md : {};
+      /* Charger absences */
       ABSENCES = Array.isArray(d.abs) ? d.abs : [];
-      /* Types */
+      /* Charger types */
       if (Array.isArray(d.types) && d.types.length > 0) TYPES = d.types;
-      /* Seuils */
+      /* Charger seuils */
       if (d.warn) warnThreshold = parseInt(d.warn) || 3;
       if (d.excl) exclThreshold = parseInt(d.excl) || 8;
+
       lastSaveTime = new Date();
       updateDataBar();
-      console.log('Donnees chargees :', Object.keys(RD).length, 'classes,', Object.keys(MD).length, 'classes modules,', ABSENCES.length, 'absences');
+      console.log('Donnees chargees depuis localStorage. Etudiants classes:', Object.keys(RD).length, 'Modules:', Object.keys(MD).length, 'Absences:', ABSENCES.length);
       return;
     }
   } catch(e) {
     console.error('ERREUR LOAD:', e);
   }
-  /* Premiere visite uniquement */
-  RD = JSON.parse(JSON.stringify(RD_DEFAULT));
+  /* Premiere visite (aucune donnee en localStorage) : demarrer vide */
+  RD = {};
   MD = {};
   ABSENCES = [];
   saveData();
 }
+
 function updateDataBar() {
   var el = document.getElementById('DATA_STATUS');
   if (!el) return;
@@ -638,7 +628,7 @@ function dlTpl(c,n){dlFile(c,n,'text/csv')}
 
 /* ========== RESET ========== */
 function doReset(){showConfirm('Reinitialiser <strong>toutes les absences</strong> ?<br><small style="color:var(--fd)">Etudiants et modules conserves.</small>',function(){ABSENCES=[];saveData();go('dashboard');toast('Absences reinitialisees','success')})}
-function doFullReset(){showConfirm('<strong style="color:var(--dn)">REINITIALISER TOUT ?</strong><br><small style="color:var(--fd)">Etudiants, modules, absences, types -> tout sera remis a zero.</small>',function(){RD=JSON.parse(JSON.stringify(RD_DEFAULT));MD={};ABSENCES=[];TYPES=[{id:1,name:'Absence non justifiee',color:'#dc2626'},{id:2,name:'Absence justifiee',color:'#059669'},{id:3,name:'Retard',color:'#d97706'}];warnThreshold=3;exclThreshold=8;saveData();go('dashboard');toast('Tout reinitialise','success')})}
+function doFullReset(){showConfirm('<strong style="color:var(--dn)">REINITIALISER TOUT ?</strong><br><small style="color:var(--fd)">Etudiants, modules, absences, types -> tout sera remis a zero.</small>',function(){RD={};MD={};ABSENCES=[];TYPES=[{id:1,name:'Absence non justifiee',color:'#dc2626'},{id:2,name:'Absence justifiee',color:'#059669'},{id:3,name:'Retard',color:'#d97706'}];warnThreshold=3;exclThreshold=8;saveData();go('dashboard');toast('Tout reinitialise','success')})}
 
 /* ========== IMPORTS ========== */
 function openStudentImport(){impStudentData=null;document.getElementById('IMP_S_FILE').value='';document.getElementById('IMP_S_MOD_ROW').style.display='none';document.getElementById('IMP_S_PREVIEW').style.display='none';document.getElementById('IMP_S_BTN').style.display='none';openModal('MIMP_S')}
