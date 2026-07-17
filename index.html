@@ -192,6 +192,8 @@ tbody tr{border-bottom:1px solid var(--bd);transition:background .15s}tbody tr:l
 .mod-card-del{position:absolute;top:10px;right:10px;width:28px;height:28px;border-radius:7px;border:1px solid transparent;background:transparent;color:var(--fd);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:11px;transition:all .2s;opacity:0;z-index:2}
 .mgc:hover .mod-card-del{opacity:1}
 .mod-card-del:hover{border-color:var(--dn);color:var(--dn);background:var(--dns)}
+.save-indicator{position:fixed;bottom:18px;right:18px;z-index:190;padding:8px 16px;border-radius:9px;background:rgba(5,150,105,.12);color:var(--ac);font-size:12px;font-weight:600;display:flex;align-items:center;gap:6px;animation:si .3s ease;pointer-events:none}
+@keyframes si{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 </style>
 </head>
 <body>
@@ -402,29 +404,91 @@ tbody tr{border-bottom:1px solid var(--bd);transition:background .15s}tbody tr:l
 </div><div class="mf"><button class="bs" onclick="closeModal('MIMP_M')">Annuler</button><button class="bp1" id="IMP_M_BTN" onclick="confirmModuleImport()" style="display:none;"><i class="fa-solid fa-check"></i> Importer</button></div></div></div>
 
 <script>
-/* ===== CONFIGURATION ===== */
+/* ===== CONFIGURATION FIXE ===== */
 var OPTIONS={'ISUSI':'ISUSI','LABO':'LABO','IAR':'Anesthesie Reanimation','INP':'Infirmier Pediatre','IBO':'Infirmier Bloc Operatoire','SF':'Sage-Femme','SM':'Sante Mentale','ISFSC':'Infir. Sante Familiale','IG':'Inspecteur Sanitaire'};
 var OPT_ICONS={'ISUSI':'fa-truck-medical','LABO':'fa-flask-vial','IAR':'fa-syringe','INP':'fa-baby','IBO':'fa-scissors','SF':'fa-person-pregnant','SM':'fa-brain','ISFSC':'fa-house-medical','IG':'fa-user-nurse'};
 var OPT_COLORS={'ISUSI':'#dc2626','LABO':'#0891b2','IAR':'#7c3aed','INP':'#ea580c','IBO':'#059669','SF':'#ec4899','SM':'#6366f1','ISFSC':'#d97706','IG':'#0d9488'};
 var SLOTS=['08H30 - 10H30','10H30 - 12H30','08H30 - 12H30','14H00 - 16H00','16H00 - 18H00','14H00 - 18H00','15H00 - 18H00'];
 
-/* ===== ETUDIANTS ===== */
-var RD={'ISUSI S3':'ACHLIKH AICHA|AGOUZOUL MOUNA|ARROUY IKRAM|AZIZ AMINA|BANI NAJMA|BENCHAMA MOHAMED ALI|BOURISSA HAMZA|DENDOUN ISLAM|EBOUR KHAOULA|EL HARRARI OUSSAMA|EL JAOUHARI MALAK|ELMOUDAFFAR WISSAL|ENNAJIH RIHAM|ET.TAGHELATY HANANE|FASSINI CHAIMAA|HANGOUR HAFSA|IMAZZANE MAROUA|LABBIHI KAOUTAR|LAFHAL BADER|NAJEH RADWA|NAOUAR MBARKA|OUARHOU AMINE|OUILKI JIHAD|OUIS MOHAMED|OUJAA IMANE|OUKOUZAMT HAYATE|OUNASSER ISRAA|RAIS ANAS|SAADI IMANE|SAADOUNI DOUAA|TOUIL KELTOUM|ZAKAR CHAIMA|El MIKH SALMA|El ABDELLAOUI FATIMA-EZZAHRA|BOUIDA KATRE-ENNADA','ISUSI S5':'AMARIR MOHAMMED|ARIF KHADIJA|BELLAGCHAIRI HIBA|BERRAMY HIBA|CHAIBI AYA|CHAKHCH YASSMINE|DAHI ILYAS|EL ACHKAR BOUTAINA|EL HADAR HAJAR|EL MOUDDEN OUISAL|ESSAKHI HASNAE|GAZGAZ SALOUA|HOUSSAYNI IMANE|HOUSSNI ZAKARIA|IBRQI IMANE|IDSASSI ZINEB|KERROUM KHADIJA|KDAIRE NOUHAILA|LAAZIZ KHADIJA|LACH-HEB MERIEM|MACHKOUR SALMA|MIMOUNI ANAS|MIMOUNE WISSALE|M\'KIOUASS SALMA|SBOUITA IBTISSAM|TADILI FATIMA-EZZAHRA|CHOUCRI HICHAM','LABO S3':'AAA IBTIHAL|AIT BOURHIM IMANE|BADI ZINEB|BELFASSI FATIMA-EZZAHERAE|BOUCHRIHA MARYEM|BOUDLIH ILIAS|BOUSALHI NADA|CHARDAOUI OUISSAL|CHERKAOUI ABDERRAHMANE|DAU LAM ACHUIL LAM|DAYAB AMAL|EDDARKAOUI AMINA|ELBAZ MOHAMED AMINE|ELMAKKAOUI SALAH EDDINE|ESSAADI ILYASS|ESSAADI ZOUHAYR|ESSADEK YOUSSEF|HASSANI MBECHEZI ELARIF|JEBBAD YASMINE|MULENGA MERCY CHIBESA|MQAINTAR SAMI|NOUGHOU AYA|RAGHIB ANAS|RAHEL GHIZLANE|SEKOURI MARYEM|SILOMBA TEPWANJI|TOYBA IBRAHIM','LABO S5':'ABILI MALIKA|ADDARAL OUMAIMA|AIT EL HAJ HIBA|BITALJANE OMAIMA|BOUCHIHA HAJAR|CHTIOUI MARYEM|EL ABADILA CHEIKH MAALAININE|EL BAZ KHADIJA|ECH-CHTOUKI ABDELLAH|EL KHOUMANI MARWA|ETTAOUSSI SANAE|FAKHRANE WIAME|FRINDO MUSTAPHA|HAMIMADI ROMAISSA|HAMZAOUI ZOUHAIR|JABELKHAYR ANAS|KHIARE HIBA|MAHIR MOHAMED|OUAJIB NOUHAILA|RADI JAMILA|SI KHOUNA HAFSA|SIKLANE HAJAR|TEFNOUTI MALAK|TOUIR AYOUB|ZEROUALI MARYEM|ZIDANE OUMAIMA','IAR S3':'AACHCHAKI RANYA|AGJIJE HAJAR|AIT LAHCINE HIBA|AITALEB CHAIMAA|ARAGROUG AYA|AZZAFE RIHAM|BELAAMRY HIBA|BEN TALE FATIMA EZZAHRAE|BOUNAJAH MARIAM|EL BAKKAL KHADIJA|ELFARNANE CHAIMA|ENNDA HASSNA|HMOUDOU AYA|IDRISSI OUMNIYA|IQIQ YOUSSEF|MAHRAR MOURAD|MOSAID SAAD|RASSOU BAHIJA|SAADI OUMAIMA|SBAYBI NOUR EL IMANE|TIBBA KHADIJA|TAIB ASMAA|SOUNIB AYA','IAR S5':'AIT FDIL SALMA|AKMAKH MEHDI|BAQOUS MARYAM|CHNINIF YOUSSEF|DENAIZI NGUENENDJI CHANCELVIE FLORE|EL GHADOUINI HIBA|EL MANOUZI HAJAR|ELAMIDI SOUHAILA|ELHAMDAOUI KAHDIJA|ELQADIMI CHAIMAA|FADLY CHAIMAA|GRARI ANAS|KABLAOUI MARWA|LAKHAL SIHAM|LAMQISS SAFA|NAIM MOHAMED|OUMALLOUL FATIMA-EZZAHRA|RAHMOUN OMAR|RHAFIRI HIBA|SBILA NOURELHOUDA|TAJEDDINE OUALID|ZEMRAOU ATIK','INP S4':'ABOULKHALEF NOUHA|AHRAYOU SOUKAINA|ANZALI ZINEB|ANZIME ILYASSE|ATTIOUI MERYEM|AZNAGDE SOUMIA|BAHAKKI AYA|CHARKAOUI HALIMA|EL BAKILI FATIMA ZAHRA|EL HAMMOUI WISSALE|EL-ARBAOUI MERYEME|ELMARHRAOUI HAJAR|ENNASSIRI RIM|FAROUK SOUKAINA|GHINE HASSNA|HSSIKI HIDAYA|LAMIRI HIBA|MOUNIR SOUMIA|NAHED ZAHIRA|OUARCHAN KHAOULA|REHOUNI MANAL|WAKIBI OUMAIMA','INP S5':'AIT ALI NOUHAILA|AIT BELLA HIBA|AIT GHROURI LATIFA|AIT MBARK HAYAT|AIT OUAKRIM MOHAMED|AIT STIMAH IMANE|ALANDARI KHAOULA|BOUHAFA HAYAT|CHIHEB FATIMA-EZZAHRE|ELHAJI FAIROUZ|ELMAJDOUB LEILA|FAROUK SOUKAINA|GOUMAHI MERIEM|NAJIM WIAM|OUALLA RACHIDA|OUAZZI SALMA|RAOUNI SALMA|SAMSAH MANAR|ZIRRI IKRAM','IBO S3':'AABDOUN DOUAA|ADROUNE HOUDA|AGOURRAME KARIMA|AHDA YAHYA|AIT HAMOU BASMA|AMNAINE FATIMA ZAHRA|AROUSSI KHADIJA|ALLA IMAN|BOUGHARASS AYOUB|BOUKDIR SARA|EL KAHFI ANAS|EL MALI SARA|EL MANOUR NADIRA|ELKHIRAOUI ZAKIA|HOUMMADI MARIAM|KAHWACH BASMA|LAAICHI SAFA|MAADANE MARIYA|OUTOULOUNT IMANE','IBO S5':'AIT ALI OUAKRIM ILHAM|AGOUZOUL NEZHA|AHBABOU WIAME|ASKOUR SALMA|AGOURRAM YOUSSEF|AMEJAL ABDERRAHMAN|AZZEMAT HAFSA|EL BAGHDADI BOCHRA|ELMOUDEN SAFA|ERRAQI YOUNES|EL BHALLA OMAR|BENFARAJI IKRAM|CHOUKHMANI DOUAE|EL RHOUL KAOUTAR|GHAOUCH ANAS|MOUGHIT HAMZA|MOUKAFIH JAMILA|HADOUAR MOHAMED','SF S3':'AATIF FATIMA-EZZAHRAE|ABIDALLAH FATIMA EZZAHRAA|ABOURHIM ASMA|AIT ASSOU SALMA|AIT QAJOU TOURIA|AHTTACH IMANE|AIT YOUSS AHLAM|BOUBAKRI SARA|BOUBKISSE HAJAR|EL ALYANY ANISSA ANISSA|ELGHAZOUANI HIBA|ELHIK FATIMA EZZAHRA|FATA NARJISE|ER-RACHDY HAJAR|KOUB MARIAM|LAMDIRA MERIEM|MOHTADI FATIMA EZZAHRA|NASSARI DOHA|NASSIB AMINA','SF S5':'ABIADOU AYA|AIT ELKADI NAOUAL|BELAFQUIRA IBTIHAL|EL BHALLA HAFSA|EL HASNAOUI HIBA|EL KARAFLI GHIZLANE|EL HANDAOUI HAJAR|EL HJJAM HIBA|ER-RAFIAI FATIM EZZAHRAE|ELAANNOURI HAFSA|ELMENTOURY ANAS|GHLIOUCHATE HIBA|HADDIOUI HAJAR|IMAGHRAK HANANE|KAMAL HAYATE|KORSAN SALMA|OUHADDOU ILHAM|SAFRAOUI FATIMA ZAHRA|TOUIRI IMANE|ZAYOD HAJAR','SM S3':'AITAYAD NADA|ABBOU IMANE|AAZRI OUMAIMA|AGOUJJIF HAFSA|AIT BENMOUSSA SALMA|AIT MOBARAK JAMILA|ABDELBAKI MERYEM|AIT ALI ASMAA|ARAHAL KHADIJA|BADDAZ TOURIA|BENKHALTI NADA|AIT EL CADI FATIMA|AIT BOUCHAIB RAIHANA|AMEZOUAR OUMAIMA|AIDALI KHADIJA|BOURADOUAN MAHDI|BENNANI ZINEB|AIT BARHICH SAAD|ABARAGH MERYEM|AMAZOUZ WASSIM|ABOUHANI MAROUA|BELAKZIZ AYA|ABRARAY KHADIJA|ALAHMOUM MOHAMED|AYANI RIMA|AFOULOUS ASMAE','SM S5':'EL IDRISSI KASSIMI ASMA|ELMENTOURY ANAS|GHLIOUCHATE HIBA|HADDIOUI HAJAR|FATA NARJISE|IMAGHRAK HANANE|KAMAL HAYATE|RAMI DOAA|SAFRAOUI FATIMA ZAHRA|OUHADDOU ILHAM|KHEIAR FATIMA ZAHRA|KORSAN SALMA|JAMIL SARA|KOUB MARIAM|MOHTADI FATIMA EZZAHRA|LIQALI MARIA|ZANTANE MARYAM|OUMADI ILHAM|RAMDANE FATIMA|TOUILI FATIMA|TOUIRI IMANE|ZAYOD HAJAR|MALLASSE HAJAR|LAMDIRA MERIEM|NEDDAOUI BASMA|MANSOURI MARYAM','ISFSC S3':'ACHOUIH OUMAIMA|AIT AHMED HIBA|ABOULAHIA SAAD|AANIBA ANASS|EL IDRISSI SAMIRA|BOUNHALLI SAFAA|EL KAHFI ANAS|GOURIR ISSMAIL|EL BOUINANY TALLAL|HARRAK SIF EDDINE|BELATTAR AYA|AMDJAR HASNA|ABOULMAJD IKRAM|AIT BENALI SAFA|BENJAAFAR RHITA|BADRI KAOUTHAR|CHESTAFIQ RIDA|BENOUADDAH RABAB|AITTEYB FATIMA|AIT BRIK FATIMA|AMGHAR DOHA|AMMARI CHADIA|ELATMANI ABDELHAK|AIT EL KADI JIHAD','ISFSC S5':'BAKASSOU BRAHIM|AIT BENLABCHIR CHIHINAZ|AIT RAMI KARIM|AZNAG ABDELJALIL|BELLAARABI KHADIJA|BOUTGAYOUT OUIAM|BOUTIGHATNE AABLA|DARIF ILYAS|EL KARROUMI MOUNCIF|EL KHOMSSI YOUSRA|FARIKH OUISSAL|JALAL YASSINE|LAGURIAI SAIDA|EL OUGKDY HIBA|EL MAGUANA KHAWLA|DRAI ACHRAF|MESKI MAROUA|BOUZAIR RANYA|EL-HAIDAOUY AICHA|RGHIOUI RIHAB|ELAKHDAR WISSAL|FAILATI BINTI ILIASSA','IG S4':'BOUDARGA YAHYA|EL AAFIFI SAFA|BIROUK HIBA|AIT DAHAMOU AYA|AMEZGOU MAROUA|BOUGTAB MALAK|CHARAF IMANE|EL AOUSSE AMINA|AMZIL NAWAL|BENDAOU MOUNIA|EL BIYAD MERIEM|EDDABALI MAJDA|EL ASMAR NADIA|EL MAHLAOUI IMANE|ELHARRAZ AMALE|ELMANDILI HAJAR|EL MAHFOUDI MARYEM|BELGHANDOUR CHAIMAA|BENFAIDA FATIMA-EZZAHRAE|EL KHATTABY IMAN|EL GARNAOUI KAWTAR|BEN LAHNINE ASMA|COURDADI FATIMA ZAHRA|EL FAHCHOUCH MARWA','IG S5':'EZ-ZAYTOUNY YOUSSEF|IMZILEN SALMA|JALAL YASSINE|LAGURIAI SAIDA|ESSASSI KAOUTAR|GAZMATE HAFSA|HAKIMI WIDIAN|EL OUGKDY HIBA|EL MAGUANA KHAWLA|DRAI ACHRAF|MESKI MAROUA|BOUZAIR RANYA|EL-HAIDAOUY AICHA|RGHIOUI RIHAB|ELAKHDAR WISSAL|FAILATI BINTI ILIASSA'};
+/* ===== DONNEES PAR DEFAUT (etudiants initiaux) ===== */
+var RD_DEFAULT={'ISUSI S3':'ACHLIKH AICHA|AGOUZOUL MOUNA|ARROUY IKRAM|AZIZ AMINA|BANI NAJMA|BENCHAMA MOHAMED ALI|BOURISSA HAMZA|DENDOUN ISLAM|EBOUR KHAOULA|EL HARRARI OUSSAMA|EL JAOUHARI MALAK|ELMOUDAFFAR WISSAL|ENNAJIH RIHAM|ET.TAGHELATY HANANE|FASSINI CHAIMAA|HANGOUR HAFSA|IMAZZANE MAROUA|LABBIHI KAOUTAR|LAFHAL BADER|NAJEH RADWA|NAOUAR MBARKA|OUARHOU AMINE|OUILKI JIHAD|OUIS MOHAMED|OUJAA IMANE|OUKOUZAMT HAYATE|OUNASSER ISRAA|RAIS ANAS|SAADI IMANE|SAADOUNI DOUAA|TOUIL KELTOUM|ZAKAR CHAIMA|El MIKH SALMA|El ABDELLAOUI FATIMA-EZZAHRA|BOUIDA KATRE-ENNADA','ISUSI S5':'AMARIR MOHAMMED|ARIF KHADIJA|BELLAGCHAIRI HIBA|BERRAMY HIBA|CHAIBI AYA|CHAKHCH YASSMINE|DAHI ILYAS|EL ACHKAR BOUTAINA|EL HADAR HAJAR|EL MOUDDEN OUISAL|ESSAKHI HASNAE|GAZGAZ SALOUA|HOUSSAYNI IMANE|HOUSSNI ZAKARIA|IBRQI IMANE|IDSASSI ZINEB|KERROUM KHADIJA|KDAIRE NOUHAILA|LAAZIZ KHADIJA|LACH-HEB MERIEM|MACHKOUR SALMA|MIMOUNI ANAS|MIMOUNE WISSALE|M\'KIOUASS SALMA|SBOUITA IBTISSAM|TADILI FATIMA-EZZAHRA|CHOUCRI HICHAM','LABO S3':'AAA IBTIHAL|AIT BOURHIM IMANE|BADI ZINEB|BELFASSI FATIMA-EZZAHERAE|BOUCHRIHA MARYEM|BOUDLIH ILIAS|BOUSALHI NADA|CHARDAOUI OUISSAL|CHERKAOUI ABDERRAHMANE|DAU LAM ACHUIL LAM|DAYAB AMAL|EDDARKAOUI AMINA|ELBAZ MOHAMED AMINE|ELMAKKAOUI SALAH EDDINE|ESSAADI ILYASS|ESSAADI ZOUHAYR|ESSADEK YOUSSEF|HASSANI MBECHEZI ELARIF|JEBBAD YASMINE|MULENGA MERCY CHIBESA|MQAINTAR SAMI|NOUGHOU AYA|RAGHIB ANAS|RAHEL GHIZLANE|SEKOURI MARYEM|SILOMBA TEPWANJI|TOYBA IBRAHIM','LABO S5':'ABILI MALIKA|ADDARAL OUMAIMA|AIT EL HAJ HIBA|BITALJANE OMAIMA|BOUCHIHA HAJAR|CHTIOUI MARYEM|EL ABADILA CHEIKH MAALAININE|EL BAZ KHADIJA|ECH-CHTOUKI ABDELLAH|EL KHOUMANI MARWA|ETTAOUSSI SANAE|FAKHRANE WIAME|FRINDO MUSTAPHA|HAMIMADI ROMAISSA|HAMZAOUI ZOUHAIR|JABELKHAYR ANAS|KHIARE HIBA|MAHIR MOHAMED|OUAJIB NOUHAILA|RADI JAMILA|SI KHOUNA HAFSA|SIKLANE HAJAR|TEFNOUTI MALAK|TOUIR AYOUB|ZEROUALI MARYEM|ZIDANE OUMAIMA','IAR S3':'AACHCHAKI RANYA|AGJIJE HAJAR|AIT LAHCINE HIBA|AITALEB CHAIMAA|ARAGROUG AYA|AZZAFE RIHAM|BELAAMRY HIBA|BEN TALE FATIMA EZZAHRAE|BOUNAJAH MARIAM|EL BAKKAL KHADIJA|ELFARNANE CHAIMA|ENNDA HASSNA|HMOUDOU AYA|IDRISSI OUMNIYA|IQIQ YOUSSEF|MAHRAR MOURAD|MOSAID SAAD|RASSOU BAHIJA|SAADI OUMAIMA|SBAYBI NOUR EL IMANE|TIBBA KHADIJA|TAIB ASMAA|SOUNIB AYA','IAR S5':'AIT FDIL SALMA|AKMAKH MEHDI|BAQOUS MARYAM|CHNINIF YOUSSEF|DENAIZI NGUENENDJI CHANCELVIE FLORE|EL GHADOUINI HIBA|EL MANOUZI HAJAR|ELAMIDI SOUHAILA|ELHAMDAOUI KAHDIJA|ELQADIMI CHAIMAA|FADLY CHAIMAA|GRARI ANAS|KABLAOUI MARWA|LAKHAL SIHAM|LAMQISS SAFA|NAIM MOHAMED|OUMALLOUL FATIMA-EZZAHRA|RAHMOUN OMAR|RHAFIRI HIBA|SBILA NOURELHOUDA|TAJEDDINE OUALID|ZEMRAOU ATIK','INP S4':'ABOULKHALEF NOUHA|AHRAYOU SOUKAINA|ANZALI ZINEB|ANZIME ILYASSE|ATTIOUI MERYEM|AZNAGDE SOUMIA|BAHAKKI AYA|CHARKAOUI HALIMA|EL BAKILI FATIMA ZAHRA|EL HAMMOUI WISSALE|EL-ARBAOUI MERYEME|ELMARHRAOUI HAJAR|ENNASSIRI RIM|FAROUK SOUKAINA|GHINE HASSNA|HSSIKI HIDAYA|LAMIRI HIBA|MOUNIR SOUMIA|NAHED ZAHIRA|OUARCHAN KHAOULA|REHOUNI MANAL|WAKIBI OUMAIMA','INP S5':'AIT ALI NOUHAILA|AIT BELLA HIBA|AIT GHROURI LATIFA|AIT MBARK HAYAT|AIT OUAKRIM MOHAMED|AIT STIMAH IMANE|ALANDARI KHAOULA|BOUHAFA HAYAT|CHIHEB FATIMA-EZZAHRE|ELHAJI FAIROUZ|ELMAJDOUB LEILA|FAROUK SOUKAINA|GOUMAHI MERIEM|NAJIM WIAM|OUALLA RACHIDA|OUAZZI SALMA|RAOUNI SALMA|SAMSAH MANAR|ZIRRI IKRAM','IBO S3':'AABDOUN DOUAA|ADROUNE HOUDA|AGOURRAME KARIMA|AHDA YAHYA|AIT HAMOU BASMA|AMNAINE FATIMA ZAHRA|AROUSSI KHADIJA|ALLA IMAN|BOUGHARASS AYOUB|BOUKDIR SARA|EL KAHFI ANAS|EL MALI SARA|EL MANOUR NADIRA|ELKHIRAOUI ZAKIA|HOUMMADI MARIAM|KAHWACH BASMA|LAAICHI SAFA|MAADANE MARIYA|OUTOULOUNT IMANE','IBO S5':'AIT ALI OUAKRIM ILHAM|AGOUZOUL NEZHA|AHBABOU WIAME|ASKOUR SALMA|AGOURRAM YOUSSEF|AMEJAL ABDERRAHMAN|AZZEMAT HAFSA|EL BAGHDADI BOCHRA|ELMOUDEN SAFA|ERRAQI YOUNES|EL BHALLA OMAR|BENFARAJI IKRAM|CHOUKHMANI DOUAE|EL RHOUL KAOUTAR|GHAOUCH ANAS|MOUGHIT HAMZA|MOUKAFIH JAMILA|HADOUAR MOHAMED','SF S3':'AATIF FATIMA-EZZAHRAE|ABIDALLAH FATIMA EZZAHRAA|ABOURHIM ASMA|AIT ASSOU SALMA|AIT QAJOU TOURIA|AHTTACH IMANE|AIT YOUSS AHLAM|BOUBAKRI SARA|BOUBKISSE HAJAR|EL ALYANY ANISSA ANISSA|ELGHAZOUANI HIBA|ELHIK FATIMA EZZAHRA|FATA NARJISE|ER-RACHDY HAJAR|KOUB MARIAM|LAMDIRA MERIEM|MOHTADI FATIMA EZZAHRA|NASSARI DOHA|NASSIB AMINA','SF S5':'ABIADOU AYA|AIT ELKADI NAOUAL|BELAFQUIRA IBTIHAL|EL BHALLA HAFSA|EL HASNAOUI HIBA|EL KARAFLI GHIZLANE|EL HANDAOUI HAJAR|EL HJJAM HIBA|ER-RAFIAI FATIM EZZAHRAE|ELAANNOURI HAFSA|ELMENTOURY ANAS|GHLIOUCHATE HIBA|HADDIOUI HAJAR|IMAGHRAK HANANE|KAMAL HAYATE|KORSAN SALMA|OUHADDOU ILHAM|SAFRAOUI FATIMA ZAHRA|TOUIRI IMANE|ZAYOD HAJAR','SM S3':'AITAYAD NADA|ABBOU IMANE|AAZRI OUMAIMA|AGOUJJIF HAFSA|AIT BENMOUSSA SALMA|AIT MOBARAK JAMILA|ABDELBAKI MERYEM|AIT ALI ASMAA|ARAHAL KHADIJA|BADDAZ TOURIA|BENKHALTI NADA|AIT EL CADI FATIMA|AIT BOUCHAIB RAIHANA|AMEZOUAR OUMAIMA|AIDALI KHADIJA|BOURADOUAN MAHDI|BENNANI ZINEB|AIT BARHICH SAAD|ABARAGH MERYEM|AMAZOUZ WASSIM|ABOUHANI MAROUA|BELAKZIZ AYA|ABRARAY KHADIJA|ALAHMOUM MOHAMED|AYANI RIMA|AFOULOUS ASMAE','SM S5':'EL IDRISSI KASSIMI ASMA|ELMENTOURY ANAS|GHLIOUCHATE HIBA|HADDIOUI HAJAR|FATA NARJISE|IMAGHRAK HANANE|KAMAL HAYATE|RAMI DOAA|SAFRAOUI FATIMA ZAHRA|OUHADDOU ILHAM|KHEIAR FATIMA ZAHRA|KORSAN SALMA|JAMIL SARA|KOUB MARIAM|MOHTADI FATIMA EZZAHRA|LIQALI MARIA|ZANTANE MARYAM|OUMADI ILHAM|RAMDANE FATIMA|TOUILI FATIMA|TOUIRI IMANE|ZAYOD HAJAR|MALLASSE HAJAR|LAMDIRA MERIEM|NEDDAOUI BASMA|MANSOURI MARYAM','ISFSC S3':'ACHOUIH OUMAIMA|AIT AHMED HIBA|ABOULAHIA SAAD|AANIBA ANASS|EL IDRISSI SAMIRA|BOUNHALLI SAFAA|EL KAHFI ANAS|GOURIR ISSMAIL|EL BOUINANY TALLAL|HARRAK SIF EDDINE|BELATTAR AYA|AMDJAR HASNA|ABOULMAJD IKRAM|AIT BENALI SAFA|BENJAAFAR RHITA|BADRI KAOUTHAR|CHESTAFIQ RIDA|BENOUADDAH RABAB|AITTEYB FATIMA|AIT BRIK FATIMA|AMGHAR DOHA|AMMARI CHADIA|ELATMANI ABDELHAK|AIT EL KADI JIHAD','ISFSC S5':'BAKASSOU BRAHIM|AIT BENLABCHIR CHIHINAZ|AIT RAMI KARIM|AZNAG ABDELJALIL|BELLAARABI KHADIJA|BOUTGAYOUT OUIAM|BOUTIGHATNE AABLA|DARIF ILYAS|EL KARROUMI MOUNCIF|EL KHOMSSI YOUSRA|FARIKH OUISSAL|JALAL YASSINE|LAGURIAI SAIDA|EL OUGKDY HIBA|EL MAGUANA KHAWLA|DRAI ACHRAF|MESKI MAROUA|BOUZAIR RANYA|EL-HAIDAOUY AICHA|RGHIOUI RIHAB|ELAKHDAR WISSAL|FAILATI BINTI ILIASSA','IG S4':'BOUDARGA YAHYA|EL AAFIFI SAFA|BIROUK HIBA|AIT DAHAMOU AYA|AMEZGOU MAROUA|BOUGTAB MALAK|CHARAF IMANE|EL AOUSSE AMINA|AMZIL NAWAL|BENDAOU MOUNIA|EL BIYAD MERIEM|EDDABALI MAJDA|EL ASMAR NADIA|EL MAHLAOUI IMANE|ELHARRAZ AMALE|ELMANDILI HAJAR|EL MAHFOUDI MARYEM|BELGHANDOUR CHAIMAA|BENFAIDA FATIMA-EZZAHRAE|EL KHATTABY IMAN|EL GARNAOUI KAWTAR|BEN LAHNINE ASMA|COURDADI FATIMA ZAHRA|EL FAHCHOUCH MARWA','IG S5':'EZ-ZAYTOUNY YOUSSEF|IMZILEN SALMA|JALAL YASSINE|LAGURIAI SAIDA|ESSASSI KAOUTAR|GAZMATE HAFSA|HAKIMI WIDIAN|EL OUGKDY HIBA|EL MAGUANA KHAWLA|DRAI ACHRAF|MESKI MAROUA|BOUZAIR RANYA|EL-HAIDAOUY AICHA|RGHIOUI RIHAB|ELAKHDAR WISSAL|FAILATI BINTI ILIASSA'};
 
-/* ===== MODULES ===== */
+/* ===== DONNEES DYNAMIQUES (chargees depuis localStorage ou defauts) ===== */
+var RD={};
 var MD={};
-
-/* ===== TYPES ===== */
 var TYPES=[{id:1,name:'Absence non justifiee',color:'#dc2626'},{id:2,name:'Absence justifiee',color:'#059669'},{id:3,name:'Retard',color:'#d97706'}];
-
-/* ===== ABSENCES ===== */
 var ABSENCES=[];
-
-/* ===== ETAT ===== */
+var warnThreshold=3,exclThreshold=8;
 var absOption='all',absClass='all',absModule='all',absPage=1;
 var calDate=new Date(),msSelected={},deleteCallback=null,PER_PAGE=12;
 var impStudentData=null,impModuleData=null;
-var warnThreshold=3,exclThreshold=8;
+
+/* ====================================================================
+   PERSISTANCE localStorage — C'EST LA CORRECTION PRINCIPALE
+   ==================================================================== */
+var LS_KEY='gestabs_data_v2';
+
+function saveData(){
+  try {
+    var obj={
+      rd: RD,
+      md: MD,
+      abs: ABSENCES,
+      types: TYPES,
+      warn: warnThreshold,
+      excl: exclThreshold
+    };
+    localStorage.setItem(LS_KEY, JSON.stringify(obj));
+    showSaveIndicator();
+  } catch(e) {
+    console.warn('Erreur sauvegarde localStorage:', e);
+  }
+}
+
+function loadData(){
+  try {
+    var raw = localStorage.getItem(LS_KEY);
+    if (raw) {
+      var obj = JSON.parse(raw);
+      /* Etudiants : si le localStorage a des donnees, les utiliser */
+      if (obj.rd && typeof obj.rd === 'object') {
+        RD = obj.rd;
+      } else {
+        /* Premiere fois : copier les donnees par defaut */
+        RD = JSON.parse(JSON.stringify(RD_DEFAULT));
+        saveData(); /* sauvegarder immediatement */
+      }
+      /* Modules */
+      if (obj.md && typeof obj.md === 'object') MD = obj.md; else MD = {};
+      /* Absences */
+      if (Array.isArray(obj.abs)) ABSENCES = obj.abs; else ABSENCES = [];
+      /* Types */
+      if (Array.isArray(obj.types) && obj.types.length) TYPES = obj.types;
+      /* Seuils */
+      if (obj.warn) warnThreshold = parseInt(obj.warn) || 3;
+      if (obj.excl) exclThreshold = parseInt(obj.excl) || 8;
+      return true;
+    }
+  } catch(e) {
+    console.warn('Erreur chargement localStorage:', e);
+  }
+  /* Premiere visite : utiliser les defauts */
+  RD = JSON.parse(JSON.stringify(RD_DEFAULT));
+  MD = {};
+  ABSENCES = [];
+  return false;
+}
+
+/* Petit indicateur visuel de sauvegarde */
+function showSaveIndicator(){
+  var old = document.querySelector('.save-indicator');
+  if (old) old.parentNode.removeChild(old);
+  var el = document.createElement('div');
+  el.className = 'save-indicator';
+  el.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Sauvegarde automatique';
+  document.body.appendChild(el);
+  setTimeout(function(){ if(el.parentNode) el.parentNode.removeChild(el); }, 1500);
+}
 
 /* ===== UTILITAIRES ===== */
 function gid(){return Date.now().toString(36)+Math.random().toString(36).substr(2,5)}
@@ -433,10 +497,12 @@ function getLvl(c){var p=c.split(' ');return p[1]||''}
 function getClasses(){return Object.keys(RD).sort()}
 function getOpts(){var s=new Set();getClasses().forEach(function(c){s.add(getOpt(c))});return Array.from(s).sort()}
 
-/* ID stable pour un module */
-function modId(name,classe){var s=name.trim().toLowerCase()+':'+classe.trim().toLowerCase();var h=0;for(var i=0;i<s.length;i++){h=((h<<5)-h)+s.charCodeAt(i);h|=0}return 'mod_'+Math.abs(h).toString(36)}
+function modId(name,classe){
+  var s=name.trim().toLowerCase()+':'+classe.trim().toLowerCase();
+  var h=0;for(var i=0;i<s.length;i++){h=((h<<5)-h)+s.charCodeAt(i);h|=0}
+  return 'mod_'+Math.abs(h).toString(36)
+}
 
-/* Tous les modules */
 function getModules(){
   var a=[];
   getClasses().forEach(function(c){
@@ -451,7 +517,6 @@ function getModules(){
 
 function getModuleById(mid){return getModules().find(function(m){return m.id===mid})||null}
 
-/* Tous les etudiants */
 function getStudents(){
   var a=[];
   getClasses().forEach(function(c){
@@ -486,17 +551,11 @@ function toast(msg,type){
 function openModal(id){document.getElementById(id).classList.add('show')}
 function closeModal(id){document.getElementById(id).classList.remove('show')}
 
-/* ===== CONFIRMATION DE SUPPRESSION ===== */
 function showConfirm(msg,cb){
   document.getElementById('MCF_BODY').innerHTML='<i class="fa-solid fa-triangle-exclamation" style="font-size:40px;color:var(--wn);margin-bottom:14px;display:block;"></i><p style="font-size:15px;font-weight:600;margin-bottom:6px;">Confirmer la suppression</p><p style="color:var(--fm);font-size:13px;line-height:1.5;">'+msg+'</p>';
-  deleteCallback=cb;
-  openModal('MCF');
+  deleteCallback=cb;openModal('MCF');
 }
-function execDelete(){
-  if(deleteCallback) deleteCallback();
-  deleteCallback=null;
-  closeModal('MCF');
-}
+function execDelete(){if(deleteCallback) deleteCallback();deleteCallback=null;closeModal('MCF')}
 
 /* ===== NAVIGATION ===== */
 function go(page){
@@ -516,28 +575,17 @@ function go(page){
   else if(page==='settings') loadSettings();
 }
 
-/* ===== RENDU GLOBAL ===== */
-function renderAll(){
-  var cp=document.querySelector('.ni.active');
-  if(cp) go(cp.getAttribute('data-p'));
-}
-
 /* ===== TABLEAU DE BORD ===== */
 function renderDashboard(){
   document.getElementById('CD').textContent=new Date().toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
   var sts=getStudents(),mods=getModules(),abs=ABSENCES;
   var warned=0,excluded=0;
-  sts.forEach(function(s){
-    var cnt=abs.filter(function(a){return a.studentId===s.id}).length;
-    if(cnt>=exclThreshold) excluded++;
-    else if(cnt>=warnThreshold) warned++;
-  });
+  sts.forEach(function(s){var cnt=abs.filter(function(a){return a.studentId===s.id}).length;if(cnt>=exclThreshold) excluded++;else if(cnt>=warnThreshold) warned++});
   document.getElementById('KPI').innerHTML=
-    kpiCard(sts.length,'Etudiants','fa-user-graduate',var_ac(),'Total inscrits')+
+    kpiCard(sts.length,'Etudiants','fa-user-graduate','#059669','rgba(5,150,105,.12)')+
     kpiCard(mods.length,'Modules','fa-book-open','#0891b2','rgba(8,145,178,.12)')+
     kpiCard(abs.length,'Absences','fa-list-check','#dc2626','rgba(220,38,38,.1)')+
-    kpiCard(warned+excluded,'Alertes','fa-bell',var_wn(),'rgba(217,119,6,.1)',warned+' avert., '+excluded+' excl.');
-  /* Dernieres absences */
+    kpiCard(warned+excluded,'Alertes','fa-bell','#d97706','rgba(217,119,6,.1)',warned+' avert., '+excluded+' excl.');
   var sorted=abs.slice().sort(function(a,b){return new Date(b.start)-new Date(a.start)}).slice(0,8);
   var h='';
   sorted.forEach(function(a){
@@ -548,34 +596,23 @@ function renderDashboard(){
   });
   if(!sorted.length) h='<tr><td colspan="4" class="empty-state"><i class="fa-solid fa-inbox"></i><p>Aucune absence enregistree</p></td></tr>';
   document.getElementById('DR').innerHTML=h;
-  /* Graphique par option */
   renderChart();
 }
-function var_ac(){return '#059669'}
-function var_wn(){return '#d97706'}
 function kpiCard(v,l,ic,col,bg,sub){
   return '<div class="kc"><div class="ki" style="background:'+bg+';color:'+col+'"><i class="fa-solid '+ic+'"></i></div><div class="kv">'+v+'</div><div class="kl">'+l+'</div>'+(sub?'<div class="kt" style="color:'+col+'">'+sub+'</div>':'')+'<div class="kgw" style="background:'+col+'"></div></div>';
 }
 function renderChart(){
   var opts=getOpts(),abs=ABSENCES,sts=getStudents();
   var data=opts.map(function(o){return{opt:o,count:0,color:OPT_COLORS[o]||'#64748b'}});
-  sts.forEach(function(s){
-    var cnt=abs.filter(function(a){return a.studentId===s.id}).length;
-    var d=data.find(function(x){return x.opt===s.option});
-    if(d) d.count+=cnt;
-  });
+  sts.forEach(function(s){var cnt=abs.filter(function(a){return a.studentId===s.id}).length;var d=data.find(function(x){return x.opt===s.option});if(d) d.count+=cnt});
   var max=Math.max.apply(null,data.map(function(d){return d.count}))||1;
   var h='';
-  data.forEach(function(d){
-    var pct=Math.round((d.count/max)*100);
-    h+='<div class="cbw"><div class="cbr" style="height:'+Math.max(pct,3)+'%;background:'+d.color+'"></div><div class="cbl">'+d.opt+'</div></div>';
-  });
+  data.forEach(function(d){var pct=Math.round((d.count/max)*100);h+='<div class="cbw"><div class="cbr" style="height:'+Math.max(pct,3)+'%;background:'+d.color+'"></div><div class="cbl">'+d.opt+'</div></div>'});
   document.getElementById('CB').innerHTML=h||'<div class="empty-state" style="width:100%;"><p>Aucune donnee</p></div>';
 }
 
 /* ===== ABSENCES ===== */
 function renderAbsences(){
-  /* Remplir les filtres */
   var fo=document.getElementById('FO'),fc=document.getElementById('FC'),fm=document.getElementById('FM');
   var ov=fo.value,cv=fc.value,mv=fm.value;
   fo.innerHTML='<option value="all">Toutes options</option>';
@@ -584,13 +621,11 @@ function renderAbsences(){
   getOpts().forEach(function(o){fo.innerHTML+='<option value="'+o+'"'+(ov===o?' selected':'')+'>'+o+'</option>'});
   getClasses().forEach(function(c){fc.innerHTML+='<option value="'+c+'"'+(cv===c?' selected':'')+'>'+c+'</option>'});
   getModules().forEach(function(m){fm.innerHTML+='<option value="'+m.id+'"'+(mv===m.id?' selected':'')+'>'+m.name+' ('+m.classe+')</option>'});
-  /* Filtrer */
   var list=ABSENCES.slice();
   if(absOption!=='all') list=list.filter(function(a){var md=getModuleById(a.moduleId);return md&&md.option===absOption});
   if(absClass!=='all') list=list.filter(function(a){var md=getModuleById(a.moduleId);return md&&md.classe===absClass});
   if(absModule!=='all') list=list.filter(function(a){return a.moduleId===absModule});
   list.sort(function(a,b){return new Date(b.start)-new Date(a.start)});
-  /* Pagination */
   var total=list.length,pages=Math.ceil(total/PER_PAGE)||1;
   if(absPage>pages) absPage=pages;
   var start=(absPage-1)*PER_PAGE,page=list.slice(start,start+PER_PAGE);
@@ -603,7 +638,6 @@ function renderAbsences(){
   });
   if(!page.length) h='<tr><td colspan="5" class="empty-state"><i class="fa-solid fa-inbox"></i><p>Aucune absence trouvee</p></td></tr>';
   document.getElementById('AB').innerHTML=h;
-  /* Pagination */
   var ph='';
   if(pages>1){
     ph+='<button class="pb" onclick="absPage=Math.max(1,absPage-1);renderAbsences()" '+(absPage<=1?'disabled':'')+'><i class="fa-solid fa-chevron-left"></i></button>';
@@ -619,7 +653,7 @@ function renderAbsences(){
 function deleteAbsence(id){
   showConfirm('Cette absence sera supprimee definitivement.',function(){
     ABSENCES=ABSENCES.filter(function(a){return a.id!==id});
-    renderAbsences();renderDashboard();
+    saveData();renderAbsences();renderDashboard();
     toast('Absence supprimee','success');
   });
 }
@@ -631,16 +665,12 @@ function openAM(editId){
   document.getElementById('ARE').value='';msSelected={};
   document.getElementById('MS_SEARCH').value='';
   document.getElementById('AMT').textContent='Nouvelle absence';
-  /* Remplir modules */
   var sel=document.getElementById('AMO');sel.innerHTML='<option value="">-- Choisir un module --</option>';
   getModules().forEach(function(m){sel.innerHTML+='<option value="'+m.id+'">'+m.name+' ('+m.classe+')</option>'});
-  /* Remplir types */
   var ts=document.getElementById('ATY');ts.innerHTML='';
   TYPES.forEach(function(t){ts.innerHTML+='<option value="'+t.id+'">'+t.name+'</option>'});
-  /* Creneaux */
   var sl=document.getElementById('ASL');sl.innerHTML='<option value="">-- Selectionner un creneau --</option>';
   SLOTS.forEach(function(s){sl.innerHTML+='<option value="'+s+'">'+s+'</option>'});
-  /* Si edition */
   if(editId){
     var a=ABSENCES.find(function(x){return x.id===editId});
     if(a){
@@ -648,25 +678,20 @@ function openAM(editId){
       sel.value=a.moduleId;onAMModuleChange();
       document.getElementById('ASD').value=toLocalISO(a.start);
       document.getElementById('AED').value=toLocalISO(a.end);
-      ts.value=a.typeId;
-      document.getElementById('ARE').value=a.reason||'';
-      msSelected={};msSelected[a.studentId]=true;
-      renderMSList();
+      ts.value=a.typeId;document.getElementById('ARE').value=a.reason||'';
+      msSelected={};msSelected[a.studentId]=true;renderMSList();
       document.getElementById('AMT').textContent='Modifier l\'absence';
     }
   }
   openModal('MAB');
 }
-function toLocalISO(d){if(!d)return'';var dt=new Date(d);var y=dt.getFullYear(),m=String(dt.getMonth()+1).padStart(2,'0'),dd=String(dt.getDate()).padStart(2,'0'),h=String(dt.getHours()).padStart(2,'0'),mi=String(dt.getMinutes()).padStart(2,'0');return y+'-'+m+'-'+dd+'T'+h+':'+mi}
-function onAMModuleChange(){
-  var mid=document.getElementById('AMO').value;
-  msSelected={};renderMSList();
-}
+function toLocalISO(d){if(!d)return'';var dt=new Date(d);return dt.getFullYear()+'-'+String(dt.getMonth()+1).padStart(2,'0')+'-'+String(dt.getDate()).padStart(2,'0')+'T'+String(dt.getHours()).padStart(2,'0')+':'+String(dt.getMinutes()).padStart(2,'0')}
+function onAMModuleChange(){msSelected={};renderMSList()}
 function applySlot(){
   var v=document.getElementById('ASL').value;if(!v) return;
   var parts=v.split(' - ');
-  var sp=parts[0].replace('H',':').replace('H',':'),ep=parts[1].replace('H',':').replace('H',':');
-  var today=new Date();var ds=toLocalISO(today);var base=ds.substring(0,11);
+  var sp=parts[0].replace(/H/g,':'),ep=parts[1].replace(/H/g,':');
+  var base=toLocalISO(new Date()).substring(0,11);
   document.getElementById('ASD').value=base+sp;document.getElementById('AED').value=base+ep;
 }
 function renderMSList(){
@@ -679,17 +704,11 @@ function renderMSList(){
   if(search) sts=sts.filter(function(s){return s.fullname.toLowerCase().indexOf(search)>=0});
   if(!sts.length){list.innerHTML='<div class="ms-empty"><i class="fa-solid fa-user-slash"></i>Aucun etudiant trouve</div>';updateMSCount();return}
   var h='<div class="ms-grid">';
-  sts.forEach(function(s){
-    var chk=msSelected[s.id]?'checked':'';
-    h+='<label class="ms-item"><input type="checkbox" '+(chk?'checked':'')+' onchange="toggleMS(\''+s.id+'\')"><span class="ms-item-name">'+s.fullname+'</span></label>';
-  });
+  sts.forEach(function(s){h+='<label class="ms-item"><input type="checkbox" '+(msSelected[s.id]?'checked':'')+' onchange="toggleMS(\''+s.id.replace(/'/g,"\\'")+'\')"><span class="ms-item-name">'+s.fullname+'</span></label>'});
   h+='</div>';list.innerHTML=h;updateMSCount();
 }
 function toggleMS(id){if(msSelected[id]) delete msSelected[id];else msSelected[id]=true;updateMSCount()}
-function msSelectAll(){
-  var mid=document.getElementById('AMO').value;var md=getModuleById(mid);if(!md) return;
-  getStudentsByClass(md.classe).forEach(function(s){msSelected[s.id]=true});renderMSList();
-}
+function msSelectAll(){var mid=document.getElementById('AMO').value;var md=getModuleById(mid);if(!md) return;getStudentsByClass(md.classe).forEach(function(s){msSelected[s.id]=true});renderMSList()}
 function msDeselectAll(){msSelected={};renderMSList()}
 function updateMSCount(){var c=Object.keys(msSelected).filter(function(k){return msSelected[k]}).length;document.getElementById('MS_COUNT').textContent=c?'('+c+' selectionne'+(c>1?'s':'')+')':''}
 function saveA(){
@@ -703,14 +722,9 @@ function saveA(){
   if(!sd){toast('Veuillez saisir la date de debut','error');return}
   var selected=Object.keys(msSelected).filter(function(k){return msSelected[k]});
   if(!selected.length){toast('Veuillez selectionner au moins un etudiant','error');return}
-  if(editId){
-    /* Modifier : supprimer l'ancien, recreer */
-    ABSENCES=ABSENCES.filter(function(a){return a.id!==editId});
-  }
-  selected.forEach(function(sid){
-    ABSENCES.push({id:gid(),moduleId:mid,studentId:sid,typeId:parseInt(ty),start:sd,end:ed||sd,reason:reason});
-  });
-  closeModal('MAB');renderAbsences();renderDashboard();
+  if(editId){ABSENCES=ABSENCES.filter(function(a){return a.id!==editId})}
+  selected.forEach(function(sid){ABSENCES.push({id:gid(),moduleId:mid,studentId:sid,typeId:parseInt(ty),start:sd,end:ed||sd,reason:reason})});
+  closeModal('MAB');saveData();renderAbsences();renderDashboard();
   toast(editId?'Absence modifiee':'Absence(s) enregistree(s)','success');
 }
 
@@ -720,30 +734,28 @@ function renderStudents(){
   document.getElementById('SC2').textContent=sts.length;
   document.getElementById('OC2').textContent=getOpts().length;
   var html='';
-  /* Grouper par option puis par niveau */
   var opts=getOpts();
   opts.forEach(function(opt){
     var classes=getClasses().filter(function(c){return getOpt(c)===opt}).sort();
     if(!classes.length) return;
-    var totalStds=0;
-    classes.forEach(function(c){totalStds+=(RD[c]||'').split('|').filter(Boolean).length});
+    var totalStds=0;classes.forEach(function(c){totalStds+=(RD[c]||'').split('|').filter(Boolean).length});
     html+='<div class="grp-section">';
     html+='<div class="grp-hdr" onclick="this.classList.toggle(\'collapsed\')">';
     html+='<div class="grp-hdr-icon" style="background:'+(OPT_COLORS[opt]||'#64748b')+'"><i class="fa-solid '+(OPT_ICONS[opt]||'fa-graduation-cap')+'"></i></div>';
     html+='<div class="grp-hdr-info"><div class="grp-hdr-name">'+(OPTIONS[opt]||opt)+'</div><div class="grp-hdr-sub"><span>'+classes.length+' classe'+(classes.length>1?'s':'')+'</span></div></div>';
     html+='<div class="grp-hdr-count">'+totalStds+'</div>';
-    html+='<div class="grp-hdr-arrow"><i class="fa-solid fa-chevron-down"></i></div>';
-    html+='</div><div class="grp-body">';
+    html+='<div class="grp-hdr-arrow"><i class="fa-solid fa-chevron-down"></i></div></div><div class="grp-body">';
     classes.forEach(function(cl){
       var stds=getStudentsByClass(cl);
       html+='<div class="grp-lvl-hdr"><i class="fa-solid fa-layer-group"></i> '+cl+' <span>('+stds.length+' etudiants)</span></div>';
       html+='<div class="grp-lvl-grid">';
       stds.forEach(function(s){
         var col=OPT_COLORS[s.option]||'#64748b';
-        html+='<div class="stu-card" onclick="goStuDetail(\''+s.id.replace(/'/g,"\\'")+'\')">';
+        var safeId=s.id.replace(/'/g,"\\'");
+        html+='<div class="stu-card" onclick="goStuDetail(\''+safeId+'\')">';
         html+='<div class="sc-init" style="background:'+col+'">'+initials(s.nom,s.prenom)+'</div>';
         html+='<div style="min-width:0;flex:1;"><div class="sc-name" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+s.fullname+'</div><div class="sc-class">'+s.classe+'</div></div>';
-        html+='<button class="sc-del" onclick="event.stopPropagation();deleteStudent(\''+s.id.replace(/'/g,"\\'")+'\')" title="Supprimer"><i class="fa-solid fa-trash-can"></i></button>';
+        html+='<button class="sc-del" onclick="event.stopPropagation();deleteStudent(\''+safeId+'\')" title="Supprimer"><i class="fa-solid fa-trash-can"></i></button>';
         html+='</div>';
       });
       html+='</div>';
@@ -754,43 +766,34 @@ function renderStudents(){
   document.getElementById('SG').innerHTML=html;
 }
 
-/* ===== SUPPRIMER UN ETUDIANT ===== */
 function deleteStudent(sid){
-  var parts=sid.split(':');
-  var classe=parts[0];
-  var name=parts.slice(1).join(':');
+  var parts=sid.split(':');var classe=parts[0];var name=parts.slice(1).join(':');
   var st=getStudents().find(function(s){return s.id===sid});
   var display=st?st.fullname:name;
   showConfirm('Supprimer l\'etudiant <strong>'+display+'</strong> ?<br><span style="font-size:11.5px;color:var(--fd);">Ses absences seront aussi supprimees.</span>',function(){
-    /* Retirer de RD */
     if(RD[classe]){
       var arr=RD[classe].split('|').filter(function(n){return n.trim()!==name.trim()});
-      if(arr.length===0) delete RD[classe];
-      else RD[classe]=arr.join('|');
+      if(arr.length===0) delete RD[classe]; else RD[classe]=arr.join('|');
     }
-    /* Supprimer les absences */
     ABSENCES=ABSENCES.filter(function(a){return a.studentId!==sid});
-    renderStudents();renderDashboard();
+    saveData();renderStudents();renderDashboard();
     toast('Etudiant supprime','success');
   });
 }
 
-/* ===== SUPPRIMER TOUS LES ETUDIANTS ===== */
 function doDeleteAllStudents(){
   var count=getStudents().length;
   if(!count){toast('Aucun etudiant a supprimer','info');return}
   showConfirm('Supprimer <strong>tous les '+count+' etudiants</strong> ?<br><span style="font-size:11.5px;color:var(--fd);">Toutes les absences seront aussi supprimees. Cette action est irreversible.</span>',function(){
-    RD={};
-    ABSENCES=ABSENCES.filter(function(a){return false});
-    renderStudents();renderDashboard();renderAbsences();
+    RD={};ABSENCES=[];
+    saveData();renderStudents();renderDashboard();renderAbsences();
     toast('Tous les etudiants ont ete supprimes','success');
   });
 }
 
 /* ===== MODALE ETUDIANT ===== */
 function openSM(editId){
-  document.getElementById('SID').value='';
-  document.getElementById('SLN').value='';document.getElementById('SFR').value='';
+  document.getElementById('SID').value='';document.getElementById('SLN').value='';document.getElementById('SFR').value='';
   document.getElementById('SMT2').textContent='Nouvel etudiant';
   var sel=document.getElementById('SCL');sel.innerHTML='';
   getClasses().forEach(function(c){sel.innerHTML+='<option value="'+c+'">'+c+'</option>'});
@@ -798,19 +801,14 @@ function openSM(editId){
   if(editId){
     var st=getStudents().find(function(s){return s.id===editId});
     if(st){
-      document.getElementById('SID').value=st.id;
-      document.getElementById('SLN').value=st.nom;
-      document.getElementById('SFR').value=st.prenom;
-      sel.value=st.classe;updateOptDisplay();
+      document.getElementById('SID').value=st.id;document.getElementById('SLN').value=st.nom;
+      document.getElementById('SFR').value=st.prenom;sel.value=st.classe;updateOptDisplay();
       document.getElementById('SMT2').textContent='Modifier l\'etudiant';
     }
   }
   openModal('MST');
 }
-function updateOptDisplay(){
-  var c=document.getElementById('SCL').value;
-  document.getElementById('SOPT').value=OPTIONS[getOpt(c)]||getOpt(c);
-}
+function updateOptDisplay(){var c=document.getElementById('SCL').value;document.getElementById('SOPT').value=OPTIONS[getOpt(c)]||getOpt(c)}
 function saveS(){
   var ln=document.getElementById('SLN').value.trim();
   var fn=document.getElementById('SFR').value.trim();
@@ -819,26 +817,16 @@ function saveS(){
   if(!ln||!fn){toast('Veuillez remplir le nom et le prenom','error');return}
   var fullName=ln+' '+fn;
   if(editId){
-    /* Supprimer l'ancien */
-    var parts=editId.split(':');
-    var oldClasse=parts[0];var oldName=parts.slice(1).join(':');
-    if(RD[oldClasse]){
-      var arr=RD[oldClasse].split('|').filter(function(n){return n.trim()!==oldName.trim()});
-      if(arr.length===0) delete RD[oldClasse];
-      else RD[oldClasse]=arr.join('|');
-    }
-    /* Mettre a jour les absences */
+    var parts=editId.split(':');var oldClasse=parts[0];var oldName=parts.slice(1).join(':');
+    if(RD[oldClasse]){var arr=RD[oldClasse].split('|').filter(function(n){return n.trim()!==oldName.trim()});if(arr.length===0) delete RD[oldClasse];else RD[oldClasse]=arr.join('|')}
     var newId=cl+':'+fullName;
     ABSENCES.forEach(function(a){if(a.studentId===editId) a.studentId=newId});
   } else {
-    /* Verifier doublon */
-    if(RD[cl]&&RD[cl].split('|').some(function(n){return n.trim()===fullName})){
-      toast('Cet etudiant existe deja dans cette classe','error');return;
-    }
+    if(RD[cl]&&RD[cl].split('|').some(function(n){return n.trim()===fullName})){toast('Cet etudiant existe deja dans cette classe','error');return}
   }
   if(!RD[cl]) RD[cl]='';
-  if(RD[cl]) RD[cl]+='|'+fullName; else RD[cl]=fullName;
-  closeModal('MST');renderStudents();renderDashboard();
+  RD[cl]+=(RD[cl]?'|':'')+fullName;
+  closeModal('MST');saveData();renderStudents();renderDashboard();
   toast(editId?'Etudiant modifie':'Etudiant ajoute','success');
 }
 
@@ -846,43 +834,30 @@ function saveS(){
 function goStuDetail(sid){
   var st=getStudents().find(function(s){return s.id===sid});if(!st) return;
   var abs=ABSENCES.filter(function(a){return a.studentId===sid});
-  var mods=getModules();
-  var col=OPT_COLORS[st.option]||'#64748b';
+  var mods=getModules();var col=OPT_COLORS[st.option]||'#64748b';
   var page=document.getElementById('page-stu-detail');
   var h='<button class="back-btn" onclick="go(\'students\')"><i class="fa-solid fa-arrow-left"></i> Retour aux etudiants</button>';
   h+='<div class="detail-hero"><div class="detail-hero-glow" style="background:'+col+'"></div>';
   h+='<div style="display:flex;align-items:center;gap:18px;position:relative;z-index:1;">';
   h+='<div style="width:60px;height:60px;border-radius:14px;background:'+col+';display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700;color:#fff;">'+initials(st.nom,st.prenom)+'</div>';
-  h+='<div><h2 style="font-size:22px;font-weight:700;">'+st.fullname+'</h2><div style="color:var(--fm);font-size:13px;margin-top:3px;">'+st.classe+' &mdash; '+(OPTIONS[st.option]||st.option)+'</div></div>';
-  h+='</div></div>';
-  /* Stats */
+  h+='<div><h2 style="font-size:22px;font-weight:700;">'+st.fullname+'</h2><div style="color:var(--fm);font-size:13px;margin-top:3px;">'+st.classe+' &mdash; '+(OPTIONS[st.option]||st.option)+'</div></div></div></div>';
   var nj=abs.filter(function(a){return getTypeById(a.typeId).name.indexOf('justifiee')>=0}).length;
-  var nnj=abs.length-nj;
-  var badge='';
+  var nnj=abs.length-nj;var badge='';
   if(abs.length>=exclThreshold) badge='<span class="excl-badge"><i class="fa-solid fa-ban"></i> Exclusion</span>';
   else if(abs.length>=warnThreshold) badge='<span class="warn-badge"><i class="fa-solid fa-triangle-exclamation"></i> Avertissement</span>';
-  h+='<div class="detail-stats">';
-  h+=dStat(abs.length,'Total absences',col);
-  h+=dStat(nnj,'Non justifiees','#dc2626');
-  h+=dStat(nj,'Justifiees','#059669');
-  h+='</div>';
+  h+='<div class="detail-stats">'+dStat(abs.length,'Total absences',col)+dStat(nnj,'Non justifiees','#dc2626')+dStat(nj,'Justifiees','#059669')+'</div>';
   if(badge) h+='<div style="margin-bottom:18px;">'+badge+'</div>';
-  /* Liste */
   h+='<div class="dtw"><div class="dth"><h3>Historique des absences ('+abs.length+')</h3></div>';
   if(abs.length){
     h+='<table><thead><tr><th>Module</th><th>Type</th><th>Date</th><th>Motif</th><th>Actions</th></tr></thead><tbody>';
     abs.sort(function(a,b){return new Date(b.start)-new Date(a.start)}).forEach(function(a){
-      var md=mods.find(function(m){return m.id===a.moduleId});
-      var ty=getTypeById(a.typeId);
-      h+='<tr><td>'+(md?md.name:'?')+'</td><td><span class="badge" style="background:'+ty.color+'18;color:'+ty.color+'"><span class="abs-type-dot" style="background:'+ty.color+'"></span>'+ty.name+'</span></td><td>'+fmtDT(a.start)+'</td><td style="color:var(--fm);font-size:12px;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+(a.reason||'-')+'</td><td><button class="ab dg" onclick="deleteAbsence(\''+a.id+'\');goStuDetail(\''+sid.replace(/'/g,"\\'")+'\')"><i class="fa-solid fa-trash-can"></i></button></td></tr>';
+      var md=mods.find(function(m){return m.id===a.moduleId});var ty=getTypeById(a.typeId);
+      var safeSid=sid.replace(/'/g,"\\'");
+      h+='<tr><td>'+(md?md.name:'?')+'</td><td><span class="badge" style="background:'+ty.color+'18;color:'+ty.color+'"><span class="abs-type-dot" style="background:'+ty.color+'"></span>'+ty.name+'</span></td><td>'+fmtDT(a.start)+'</td><td style="color:var(--fm);font-size:12px;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+(a.reason||'-')+'</td><td><button class="ab dg" onclick="deleteAbsence(\''+a.id+'\');goStuDetail(\''+safeSid+'\')"><i class="fa-solid fa-trash-can"></i></button></td></tr>';
     });
     h+='</tbody></table>';
-  } else {
-    h+='<div class="empty-state"><i class="fa-solid fa-check-circle"></i><p>Aucune absence</p></div>';
-  }
-  h+='</div>';
-  page.innerHTML=h;
-  /* Afficher cette page */
+  } else {h+='<div class="empty-state"><i class="fa-solid fa-check-circle"></i><p>Aucune absence</p></div>'}
+  h+='</div>';page.innerHTML=h;
   document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active')});
   document.querySelectorAll('.ni').forEach(function(n){n.classList.remove('active')});
   page.classList.add('active');
@@ -895,13 +870,10 @@ function renderModules(){
   document.getElementById('MC2').textContent=mods.length;
   var optSet=new Set(mods.map(function(m){return m.option}));
   document.getElementById('OMC2').textContent=optSet.size;
-  var html='';
-  var opts=getOpts();
+  var html='';var opts=getOpts();
   opts.forEach(function(opt){
     var classes=getClasses().filter(function(c){return getOpt(c)===opt}).sort();
     if(!classes.length) return;
-    var totalMods=0;
-    classes.forEach(function(c){totalMods+=((MD[c]||'').split('|').filter(Boolean).length)});
     var optMods=mods.filter(function(m){return m.option===opt});
     if(!optMods.length) return;
     html+='<div class="grp-section">';
@@ -909,8 +881,7 @@ function renderModules(){
     html+='<div class="grp-hdr-icon" style="background:'+(OPT_COLORS[opt]||'#64748b')+'"><i class="fa-solid '+(OPT_ICONS[opt]||'fa-book')+'"></i></div>';
     html+='<div class="grp-hdr-info"><div class="grp-hdr-name">'+(OPTIONS[opt]||opt)+'</div><div class="grp-hdr-sub"><span>'+classes.length+' classe'+(classes.length>1?'s':'')+'</span></div></div>';
     html+='<div class="grp-hdr-count">'+optMods.length+'</div>';
-    html+='<div class="grp-hdr-arrow"><i class="fa-solid fa-chevron-down"></i></div>';
-    html+='</div><div class="grp-body">';
+    html+='<div class="grp-hdr-arrow"><i class="fa-solid fa-chevron-down"></i></div></div><div class="grp-body">';
     classes.forEach(function(cl){
       var clMods=optMods.filter(function(m){return m.classe===cl});
       if(!clMods.length) return;
@@ -918,76 +889,62 @@ function renderModules(){
       html+='<div class="grp-mod-grid">';
       clMods.forEach(function(m){
         var absCount=ABSENCES.filter(function(a){return a.moduleId===m.id}).length;
-        html+='<div class="mgc" onclick="goModDetail(\''+m.id+'\')">';
+        var safeMid=m.id;var safeName=m.name.replace(/'/g,"\\'");var safeCl=m.classe.replace(/'/g,"\\'");
+        html+='<div class="mgc" onclick="goModDetail(\''+safeMid+'\')">';
         html+='<div class="mgg" style="background:'+m.color+'"></div>';
-        html+='<button class="mod-card-del" onclick="event.stopPropagation();deleteModule(\''+m.id+'\',\''+m.name.replace(/'/g,"\\'")+'\',\''+m.classe.replace(/'/g,"\\'")+'\')" title="Supprimer"><i class="fa-solid fa-trash-can"></i></button>';
+        html+='<button class="mod-card-del" onclick="event.stopPropagation();deleteModule(\''+safeMid+'\',\''+safeName+'\',\''+safeCl+'\')" title="Supprimer"><i class="fa-solid fa-trash-can"></i></button>';
         html+='<div class="mgnm">'+m.name+'</div>';
         html+='<div class="mgme"><div class="mgmi"><i class="fa-solid fa-users"></i> '+getStudentsByClass(m.classe).length+' etudiants</div>';
-        html+='<div class="mgmi"><i class="fa-solid fa-list-check"></i> '+absCount+' absences</div></div>';
-        html+='</div>';
+        html+='<div class="mgmi"><i class="fa-solid fa-list-check"></i> '+absCount+' absences</div></div></div>';
       });
       html+='</div>';
     });
     html+='</div></div>';
   });
-  if(!html) html='<div class="empty-state"><i class="fa-solid fa-book-open"></i><p>Aucun module. Cliquez sur "Ajouter" pour commencer.</p></div>';
+  if(!html) html='<div class="empty-state"><i class="fa-solid fa-book-open"></i><p>Aucun module. Cliquez sur "Ajouter" ou "Importer Excel" pour commencer.</p></div>';
   document.getElementById('MG').innerHTML=html;
 }
 
-/* ===== SUPPRIMER UN MODULE ===== */
 function deleteModule(mid,mname,mclasse){
   showConfirm('Supprimer le module <strong>'+mname+'</strong> ('+mclasse+') ?<br><span style="font-size:11.5px;color:var(--fd);">Les absences liees seront aussi supprimees.</span>',function(){
-    /* Retirer de MD */
     if(MD[mclasse]){
       var arr=MD[mclasse].split('|').filter(function(n){return modId(n.trim(),mclasse)!==mid});
-      if(arr.length===0) delete MD[mclasse];
-      else MD[mclasse]=arr.join('|');
+      if(arr.length===0) delete MD[mclasse]; else MD[mclasse]=arr.join('|');
     }
-    /* Supprimer les absences liees */
     ABSENCES=ABSENCES.filter(function(a){return a.moduleId!==mid});
-    renderModules();renderDashboard();renderAbsences();
+    saveData();renderModules();renderDashboard();renderAbsences();
     toast('Module supprime','success');
   });
 }
 
-/* ===== SUPPRIMER TOUS LES MODULES ===== */
 function doDeleteAllModules(){
   var count=getModules().length;
   if(!count){toast('Aucun module a supprimer','info');return}
   showConfirm('Supprimer <strong>tous les '+count+' modules</strong> ?<br><span style="font-size:11.5px;color:var(--fd);">Les absences liees seront aussi supprimees. Cette action est irreversible.</span>',function(){
-    MD={};
-    ABSENCES=ABSENCES.filter(function(a){return false});
-    renderModules();renderDashboard();renderAbsences();
+    MD={};ABSENCES=[];
+    saveData();renderModules();renderDashboard();renderAbsences();
     toast('Tous les modules ont ete supprimes','success');
   });
 }
 
 /* ===== MODALE MODULE ===== */
 function openMM(editId){
-  document.getElementById('MID').value='';
-  document.getElementById('MNM').value='';
-  document.getElementById('MCO').value='#7c3aed';
-  document.getElementById('MMT2').textContent='Nouveau module';
+  document.getElementById('MID').value='';document.getElementById('MNM').value='';
+  document.getElementById('MCO').value='#7c3aed';document.getElementById('MMT2').textContent='Nouveau module';
   var sel=document.getElementById('MCL');sel.innerHTML='';
   getClasses().forEach(function(c){sel.innerHTML+='<option value="'+c+'">'+c+'</option>'});
   updateModOptDisplay();
   if(editId){
     var m=getModuleById(editId);
     if(m){
-      document.getElementById('MID').value=m.id;
-      document.getElementById('MNM').value=m.name;
-      document.getElementById('MCL').value=m.classe;
-      document.getElementById('MCO').value=m.color;
-      updateModOptDisplay();
-      document.getElementById('MMT2').textContent='Modifier le module';
+      document.getElementById('MID').value=m.id;document.getElementById('MNM').value=m.name;
+      document.getElementById('MCL').value=m.classe;document.getElementById('MCO').value=m.color;
+      updateModOptDisplay();document.getElementById('MMT2').textContent='Modifier le module';
     }
   }
   openModal('MMO');
 }
-function updateModOptDisplay(){
-  var c=document.getElementById('MCL').value;
-  document.getElementById('MOPT').value=OPTIONS[getOpt(c)]||getOpt(c);
-}
+function updateModOptDisplay(){var c=document.getElementById('MCL').value;document.getElementById('MOPT').value=OPTIONS[getOpt(c)]||getOpt(c)}
 function saveM(){
   var name=document.getElementById('MNM').value.trim();
   var cl=document.getElementById('MCL').value;
@@ -996,24 +953,18 @@ function saveM(){
   if(!name){toast('Veuillez saisir le nom du module','error');return}
   var newId=modId(name,cl);
   if(editId){
-    /* Supprimer l'ancien */
     var old=getModuleById(editId);
     if(old&&MD[old.classe]){
       var arr=MD[old.classe].split('|').filter(function(n){return modId(n.trim(),old.classe)!==editId});
-      if(arr.length===0) delete MD[old.classe];
-      else MD[old.classe]=arr.join('|');
+      if(arr.length===0) delete MD[old.classe]; else MD[old.classe]=arr.join('|');
     }
-    /* Mettre a jour les absences */
     ABSENCES.forEach(function(a){if(a.moduleId===editId) a.moduleId=newId});
   } else {
-    /* Verifier doublon */
-    if(MD[cl]&&MD[cl].split('|').some(function(n){return modId(n.trim(),cl)===newId})){
-      toast('Ce module existe deja dans cette classe','error');return;
-    }
+    if(MD[cl]&&MD[cl].split('|').some(function(n){return modId(n.trim(),cl)===newId})){toast('Ce module existe deja dans cette classe','error');return}
   }
   if(!MD[cl]) MD[cl]='';
   MD[cl]+=(MD[cl]?'|':'')+name;
-  closeModal('MMO');renderModules();renderDashboard();
+  closeModal('MMO');saveData();renderModules();renderDashboard();
   toast(editId?'Module modifie':'Module ajoute','success');
 }
 
@@ -1021,33 +972,24 @@ function saveM(){
 function goModDetail(mid){
   var m=getModuleById(mid);if(!m) return;
   var abs=ABSENCES.filter(function(a){return a.moduleId===mid});
-  var sts=getStudents();
-  var col=m.color;
+  var sts=getStudents();var col=m.color;
   var page=document.getElementById('page-mod-detail');
   var h='<button class="back-btn" onclick="go(\'modules\')"><i class="fa-solid fa-arrow-left"></i> Retour aux modules</button>';
   h+='<div class="detail-hero"><div class="detail-hero-glow" style="background:'+col+'"></div>';
   h+='<div style="position:relative;z-index:1;"><h2 style="font-size:22px;font-weight:700;">'+m.name+'</h2><div style="color:var(--fm);font-size:13px;margin-top:3px;">'+m.classe+' &mdash; '+(OPTIONS[m.option]||m.option)+'</div></div></div>';
   var stCount=getStudentsByClass(m.classe).length;
   var nj=abs.filter(function(a){return getTypeById(a.typeId).name.indexOf('justifiee')>=0}).length;
-  h+='<div class="detail-stats">';
-  h+=dStat(abs.length,'Total absences',col);
-  h+=dStat(stCount,'Etudiants','#0891b2');
-  h+=dStat(nj,'Justifiees','#059669');
-  h+='</div>';
+  h+='<div class="detail-stats">'+dStat(abs.length,'Total absences',col)+dStat(stCount,'Etudiants','#0891b2')+dStat(nj,'Justifiees','#059669')+'</div>';
   h+='<div class="dtw"><div class="dth"><h3>Historique ('+abs.length+')</h3></div>';
   if(abs.length){
     h+='<table><thead><tr><th>Etudiant</th><th>Type</th><th>Date</th><th>Motif</th><th>Actions</th></tr></thead><tbody>';
     abs.sort(function(a,b){return new Date(b.start)-new Date(a.start)}).forEach(function(a){
-      var st=sts.find(function(s){return s.id===a.studentId});
-      var ty=getTypeById(a.typeId);
+      var st=sts.find(function(s){return s.id===a.studentId});var ty=getTypeById(a.typeId);
       h+='<tr><td><div class="ec"><div class="ea" style="background:'+(OPT_COLORS[st?st.option:'']||'#64748b')+'">'+(st?initials(st.nom,st.prenom):'??')+'</div><div><div class="en">'+(st?st.fullname:'Inconnu')+'</div></div></div></td><td><span class="badge" style="background:'+ty.color+'18;color:'+ty.color+'"><span class="abs-type-dot" style="background:'+ty.color+'"></span>'+ty.name+'</span></td><td>'+fmtDT(a.start)+'</td><td style="color:var(--fm);font-size:12px;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+(a.reason||'-')+'</td><td><button class="ab dg" onclick="deleteAbsence(\''+a.id+'\');goModDetail(\''+mid+'\')"><i class="fa-solid fa-trash-can"></i></button></td></tr>';
     });
     h+='</tbody></table>';
-  } else {
-    h+='<div class="empty-state"><i class="fa-solid fa-check-circle"></i><p>Aucune absence pour ce module</p></div>';
-  }
-  h+='</div>';
-  page.innerHTML=h;
+  } else {h+='<div class="empty-state"><i class="fa-solid fa-check-circle"></i><p>Aucune absence pour ce module</p></div>'}
+  h+='</div>';page.innerHTML=h;
   document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active')});
   document.querySelectorAll('.ni').forEach(function(n){n.classList.remove('active')});
   page.classList.add('active');
@@ -1064,42 +1006,23 @@ function renderTypes(){
   document.getElementById('TB').innerHTML=h;
 }
 function openTM(editId){
-  document.getElementById('TID').value='';
-  document.getElementById('TNM').value='';document.getElementById('TCO').value='#059669';
+  document.getElementById('TID').value='';document.getElementById('TNM').value='';document.getElementById('TCO').value='#059669';
   document.getElementById('TYT2').textContent='Nouveau type';
-  if(editId){
-    var t=TYPES.find(function(x){return x.id===editId});
-    if(t){
-      document.getElementById('TID').value=t.id;
-      document.getElementById('TNM').value=t.name;
-      document.getElementById('TCO').value=t.color;
-      document.getElementById('TYT2').textContent='Modifier le type';
-    }
-  }
+  if(editId){var t=TYPES.find(function(x){return x.id===editId});if(t){document.getElementById('TID').value=t.id;document.getElementById('TNM').value=t.name;document.getElementById('TCO').value=t.color;document.getElementById('TYT2').textContent='Modifier le type'}}
   openModal('MTY');
 }
 function saveT(){
-  var name=document.getElementById('TNM').value.trim();
-  var color=document.getElementById('TCO').value;
-  var editId=document.getElementById('TID').value;
+  var name=document.getElementById('TNM').value.trim();var color=document.getElementById('TCO').value;var editId=document.getElementById('TID').value;
   if(!name){toast('Veuillez saisir le nom du type','error');return}
-  if(editId){
-    var t=TYPES.find(function(x){return x.id==editId});
-    if(t){t.name=name;t.color=color}
-  } else {
-    var maxId=0;TYPES.forEach(function(t){if(t.id>maxId)maxId=t.id});
-    TYPES.push({id:maxId+1,name:name,color:color});
-  }
-  closeModal('MTY');renderTypes();renderDashboard();
-  toast(editId?'Type modifie':'Type ajoute','success');
+  if(editId){var t=TYPES.find(function(x){return x.id==editId});if(t){t.name=name;t.color=color}}
+  else{var maxId=0;TYPES.forEach(function(t){if(t.id>maxId)maxId=t.id});TYPES.push({id:maxId+1,name:name,color:color})}
+  closeModal('MTY');saveData();renderTypes();renderDashboard();toast(editId?'Type modifie':'Type ajoute','success');
 }
 function deleteType(id){
   var t=TYPES.find(function(x){return x.id===id});if(!t) return;
   if(TYPES.length<=1){toast('Vous devez garder au moins un type','error');return}
   showConfirm('Supprimer le type <strong>'+t.name+'</strong> ?',function(){
-    TYPES=TYPES.filter(function(x){return x.id!==id});
-    renderTypes();renderDashboard();
-    toast('Type supprime','success');
+    TYPES=TYPES.filter(function(x){return x.id!==id});saveData();renderTypes();renderDashboard();toast('Type supprime','success');
   });
 }
 
@@ -1109,68 +1032,41 @@ function renderCalendar(){
   var months=['Janvier','Fevrier','Mars','Avril','Mai','Juin','Juillet','Aout','Septembre','Octobre','Novembre','Decembre'];
   var days=['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'];
   var h='<div class="ch"><h3 style="font-size:15px;font-weight:600;">'+months[m]+' '+y+'</h3><div class="cn"><button onclick="calDate.setMonth(calDate.getMonth()-1);renderCalendar()"><i class="fa-solid fa-chevron-left"></i></button><button onclick="calDate=new Date();renderCalendar()" style="font-size:10px;width:auto;padding:0 10px;">Auj.</button><button onclick="calDate.setMonth(calDate.getMonth()+1);renderCalendar()"><i class="fa-solid fa-chevron-right"></i></button></div></div>';
-  h+='<div class="cg">';
-  days.forEach(function(d){h+='<div class="cdl">'+d+'</div>'});
-  var first=new Date(y,m,1);var startDay=(first.getDay()+6)%7;
-  var daysInMonth=new Date(y,m+1,0).getDate();
+  h+='<div class="cg>';days.forEach(function(d){h+='<div class="cdl">'+d+'</div>'});
+  var first=new Date(y,m,1);var startDay=(first.getDay()+6)%7;var daysInMonth=new Date(y,m+1,0).getDate();
   var today=new Date();var todayStr=today.getFullYear()+'-'+String(today.getMonth()+1).padStart(2,'0')+'-'+String(today.getDate()).padStart(2,'0');
-  /* Jours du mois precedent */
   var prevDays=new Date(y,m,0).getDate();
-  for(var i=startDay-1;i>=0;i--){
-    h+='<div class="cd om">'+(prevDays-i)+'</div>';
-  }
-  /* Jours du mois */
+  for(var i=startDay-1;i>=0;i--){h+='<div class="cd om">'+(prevDays-i)+'</div>'}
   for(var d=1;d<=daysInMonth;d++){
     var ds=y+'-'+String(m+1).padStart(2,'0')+'-'+String(d).padStart(2,'0');
     var hasAbs=ABSENCES.some(function(a){return a.start&&a.start.substring(0,10)===ds});
     var cls='cd';if(ds===todayStr) cls+=' today';if(hasAbs) cls+=' has-abs';
     h+='<div class="'+cls+'" onclick="showCalDay(\''+ds+'\')">'+d+'</div>';
   }
-  /* Jours du mois suivant */
-  var totalCells=startDay+daysInMonth;
-  var remaining=totalCells%7===0?0:7-(totalCells%7);
+  var totalCells=startDay+daysInMonth;var remaining=totalCells%7===0?0:7-(totalCells%7);
   for(var i=1;i<=remaining;i++){h+='<div class="cd om">'+i+'</div>'}
-  h+='</div>';
-  document.getElementById('CM').innerHTML=h;
-  /* Legende */
-  var lh='';
-  TYPES.forEach(function(t){
-    lh+='<div style="display:flex;align-items:center;gap:8px;font-size:12px;"><span class="abs-type-dot" style="background:'+t.color+'"></span> '+t.name+'</div>';
-  });
+  h+='</div>';document.getElementById('CM').innerHTML=h;
+  var lh='';TYPES.forEach(function(t){lh+='<div style="display:flex;align-items:center;gap:8px;font-size:12px;"><span class="abs-type-dot" style="background:'+t.color+'"></span> '+t.name+'</div>'});
   document.getElementById('CAL_LEGEND').innerHTML=lh;
 }
 function showCalDay(ds){
   var dayAbs=ABSENCES.filter(function(a){return a.start&&a.start.substring(0,10)===ds});
   var sts=getStudents(),mods=getModules();
   if(!dayAbs.length){document.getElementById('CDD').innerHTML='<p style="color:var(--fd);font-size:12.5px;text-align:center;padding:18px 0;">Aucune absence le '+fmtDate(ds)+'</p>';return}
-  var h='';
-  dayAbs.forEach(function(a){
-    var st=sts.find(function(s){return s.id===a.studentId});
-    var md=mods.find(function(m){return m.id===a.moduleId});
-    var ty=getTypeById(a.typeId);
-    h+='<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--bd);">';
-    h+='<span class="abs-type-dot" style="background:'+ty.color+'"></span>';
-    h+='<div style="flex:1;min-width:0;"><div style="font-size:12px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+(st?st.fullname:'?')+'</div><div style="font-size:10.5px;color:var(--fd);">'+(md?md.name:'')+'</div></div>';
-    h+='</div>';
+  var h='';dayAbs.forEach(function(a){
+    var st=sts.find(function(s){return s.id===a.studentId});var md=mods.find(function(m){return m.id===a.moduleId});var ty=getTypeById(a.typeId);
+    h+='<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--bd);"><span class="abs-type-dot" style="background:'+ty.color+'"></span><div style="flex:1;min-width:0;"><div style="font-size:12px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+(st?st.fullname:'?')+'</div><div style="font-size:10.5px;color:var(--fd);">'+(md?md.name:'')+'</div></div></div>';
   });
   document.getElementById('CDD').innerHTML=h;
 }
 
 /* ===== PARAMETRES ===== */
-function loadSettings(){
-  document.getElementById('SET_WARN').value=warnThreshold;
-  document.getElementById('SET_EXCL').value=exclThreshold;
-}
-function saveSettings(){
-  warnThreshold=parseInt(document.getElementById('SET_WARN').value)||3;
-  exclThreshold=parseInt(document.getElementById('SET_EXCL').value)||8;
-  toast('Parametres enregistres','success');
-}
+function loadSettings(){document.getElementById('SET_WARN').value=warnThreshold;document.getElementById('SET_EXCL').value=exclThreshold}
+function saveSettings(){warnThreshold=parseInt(document.getElementById('SET_WARN').value)||3;exclThreshold=parseInt(document.getElementById('SET_EXCL').value)||8;saveData();toast('Parametres enregistres','success')}
 
 /* ===== RECHERCHE GLOBALE ===== */
 function globalSearch(val){
-  if(!val||val.length<2) return;
-  var q=val.toLowerCase();
+  if(!val||val.length<2) return;var q=val.toLowerCase();
   var sts=getStudents().filter(function(s){return s.fullname.toLowerCase().indexOf(q)>=0});
   if(sts.length===1){goStuDetail(sts[0].id);return}
   var mods=getModules().filter(function(m){return m.name.toLowerCase().indexOf(q)>=0});
@@ -1180,185 +1076,124 @@ function globalSearch(val){
 /* ===== EXPORTS ===== */
 function exportCSV(){
   if(!ABSENCES.length){toast('Aucune absence a exporter','info');return}
-  var sts=getStudents(),mods=getModules();
-  var csv='Etudiant,Classe,Module,Type,Date Debut,Date Fin,Motif\n';
-  ABSENCES.forEach(function(a){
-    var st=sts.find(function(s){return s.id===a.studentId});
-    var md=mods.find(function(m){return m.id===a.moduleId});
-    var ty=getTypeById(a.typeId);
-    csv+='"'+(st?st.fullname:'?')+'","'+(st?st.classe:'')+'","'+(md?md.name:'?')+'","'+ty.name+'","'+fmtDT(a.start)+'","'+fmtDT(a.end)+'","'+(a.reason||'')+'"\n';
-  });
-  downloadFile(csv,'absences_'+new Date().toISOString().substring(0,10)+'.csv','text/csv');
-  toast('Export CSV telecharge','success');
+  var sts=getStudents(),mods=getModules();var csv='Etudiant,Classe,Module,Type,Date Debut,Date Fin,Motif\n';
+  ABSENCES.forEach(function(a){var st=sts.find(function(s){return s.id===a.studentId});var md=mods.find(function(m){return m.id===a.moduleId});var ty=getTypeById(a.typeId);csv+='"'+(st?st.fullname:'?')+'","'+(st?st.classe:'')+'","'+(md?md.name:'?')+'","'+ty.name+'","'+fmtDT(a.start)+'","'+fmtDT(a.end)+'","'+(a.reason||'')+'"\n'});
+  downloadFile(csv,'absences_'+new Date().toISOString().substring(0,10)+'.csv','text/csv');toast('Export CSV telecharge','success');
 }
 function exportStudents(){
-  var sts=getStudents();
-  if(!sts.length){toast('Aucun etudiant a exporter','info');return}
-  var csv='Nom,Prenom,Classe,Option\n';
-  sts.forEach(function(s){csv+='"'+s.nom+'","'+s.prenom+'","'+s.classe+'","'+(OPTIONS[s.option]||s.option)+'"\n'});
-  downloadFile(csv,'etudiants_'+new Date().toISOString().substring(0,10)+'.csv','text/csv');
-  toast('Export etudiants telecharge','success');
+  var sts=getStudents();if(!sts.length){toast('Aucun etudiant a exporter','info');return}
+  var csv='Nom,Prenom,Classe,Option\n';sts.forEach(function(s){csv+='"'+s.nom+'","'+s.prenom+'","'+s.classe+'","'+(OPTIONS[s.option]||s.option)+'"\n'});
+  downloadFile(csv,'etudiants_'+new Date().toISOString().substring(0,10)+'.csv','text/csv');toast('Export etudiants telecharge','success');
 }
 function exportModules(){
-  var mods=getModules();
-  if(!mods.length){toast('Aucun module a exporter','info');return}
-  var csv='Module,Classe,Option\n';
-  mods.forEach(function(m){csv+='"'+m.name+'","'+m.classe+'","'+(OPTIONS[m.option]||m.option)+'"\n'});
-  downloadFile(csv,'modules_'+new Date().toISOString().substring(0,10)+'.csv','text/csv');
-  toast('Export modules telecharge','success');
+  var mods=getModules();if(!mods.length){toast('Aucun module a exporter','info');return}
+  var csv='Module,Classe,Option\n';mods.forEach(function(m){csv+='"'+m.name+'","'+m.classe+'","'+(OPTIONS[m.option]||m.option)+'"\n'});
+  downloadFile(csv,'modules_'+new Date().toISOString().substring(0,10)+'.csv','text/csv');toast('Export modules telecharge','success');
 }
-function downloadFile(content,name,type){
-  var blob=new Blob([content],{type:type+';charset=utf-8;'});
-  var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;
-  document.body.appendChild(a);a.click();document.body.removeChild(a);
-}
+function downloadFile(content,name,type){var blob=new Blob([content],{type:type+';charset=utf-8;'});var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();document.body.removeChild(a)}
 
 /* ===== RESET ===== */
 function doReset(){
   showConfirm('Reinitialiser <strong>toutes les absences</strong> ?<br><span style="font-size:11.5px;color:var(--fd);">Les etudiants et modules seront conserves.</span>',function(){
-    ABSENCES=[];renderAll();
-    toast('Toutes les absences ont ete supprimees','success');
+    ABSENCES=[];saveData();renderAll();toast('Toutes les absences ont ete supprimees','success');
   });
 }
 function doFullReset(){
   showConfirm('Reinitialiser <strong>toutes les donnees</strong> ?<br><span style="font-size:11.5px;color:var(--dn);">Etudiants, modules, absences et types seront supprimes. Cette action est irreversible.</span>',function(){
-    RD={};MD={};ABSENCES=[];TYPES=[{id:1,name:'Absence non justifiee',color:'#dc2626'},{id:2,name:'Absence justifiee',color:'#059669'},{id:3,name:'Retard',color:'#d97706'}];
-    renderAll();toast('Toutes les donnees ont ete reinitialisees','success');
+    RD=JSON.parse(JSON.stringify(RD_DEFAULT));MD={};ABSENCES=[];
+    TYPES=[{id:1,name:'Absence non justifiee',color:'#dc2626'},{id:2,name:'Absence justifiee',color:'#059669'},{id:3,name:'Retard',color:'#d97706'}];
+    warnThreshold=3;exclThreshold=8;
+    saveData();renderAll();toast('Toutes les donnees ont ete reinitialisees','success');
   });
 }
+function renderAll(){var cp=document.querySelector('.ni.active');if(cp) go(cp.getAttribute('data-p'))}
 
 /* ===== IMPORT ETUDIANTS ===== */
 function openStudentImport(){
-  impStudentData=null;
-  document.getElementById('IMP_S_FILE').value='';
-  document.getElementById('IMP_S_MOD_ROW').style.display='none';
-  document.getElementById('IMP_S_PREVIEW').style.display='none';
-  document.getElementById('IMP_S_BTN').style.display='none';
-  openModal('MIMP_S');
+  impStudentData=null;document.getElementById('IMP_S_FILE').value='';
+  document.getElementById('IMP_S_MOD_ROW').style.display='none';document.getElementById('IMP_S_PREVIEW').style.display='none';
+  document.getElementById('IMP_S_BTN').style.display='none';openModal('MIMP_S');
 }
-function downloadStudentTemplate(){
-  var csv='Nom,Prenom,Classe\n"exemple nom","exemple prenom","ISUSI S3"\n';
-  downloadFile(csv,'modele_etudiants.csv','text/csv');
-}
+function downloadStudentTemplate(){downloadFile('Nom,Prenom,Classe\n"exemple nom","exemple prenom","ISUSI S3"\n','modele_etudiants.csv','text/csv')}
 function handleStudentFile(e){
   var file=e.target.files[0];if(!file) return;
-  document.getElementById('IMP_S_MOD_ROW').style.display='flex';
-  document.getElementById('IMP_S_MOD_NAME').textContent=file.name;
+  document.getElementById('IMP_S_MOD_ROW').style.display='flex';document.getElementById('IMP_S_MOD_NAME').textContent=file.name;
   var reader=new FileReader();
   reader.onload=function(ev){
     try{
-      var wb=XLSX.read(ev.target.result,{type:'array'});
-      var ws=wb.Sheets[wb.SheetNames[0]];
-      var data=XLSX.utils.sheet_to_json(ws,{defval:''});
+      var wb=XLSX.read(ev.target.result,{type:'array'});var ws=wb.Sheets[wb.SheetNames[0]];var data=XLSX.utils.sheet_to_json(ws,{defval:''});
       if(!data.length){toast('Le fichier est vide','error');return}
-      impStudentData=[];
-      var ok=0,skip=0;
+      impStudentData=[];var ok=0,skip=0;
       data.forEach(function(row){
-        var nom=String(row['Nom']||row['nom']||'').trim();
-        var prenom=String(row['Prenom']||row['prenom']||'').trim();
-        var classe=String(row['Classe']||row['classe']||'').trim();
+        var nom=String(row['Nom']||row['nom']||'').trim();var prenom=String(row['Prenom']||row['prenom']||'').trim();var classe=String(row['Classe']||row['classe']||'').trim();
         if(!nom||!prenom||!classe){impStudentData.push({nom:nom,prenom:prenom,classe:classe,status:'err'});return}
         var fullName=nom+' '+prenom;
         var exists=RD[classe]&&RD[classe].split('|').some(function(n){return n.trim()===fullName});
         if(exists){impStudentData.push({nom:nom,prenom:prenom,classe:classe,status:'skip'});skip++}
         else{impStudentData.push({nom:nom,prenom:prenom,classe:classe,status:'ok'});ok++}
       });
-      /* Afficher apercu */
       document.getElementById('IMP_S_SUMMARY').innerHTML='<div class="imp-summary-item ok"><i class="fa-solid fa-check"></i> '+ok+' a importer</div>'+(skip?'<div class="imp-summary-item skip"><i class="fa-solid fa-forward"></i> '+skip+' doublons ignores</div>':'');
-      var tb='';
-      impStudentData.forEach(function(r){
-        var cls=r.status==='ok'?'':r.status==='skip'?'imp-row-skip':'imp-row-skip';
-        var statusTxt=r.status==='ok'?'A importer':'Doublon ignore';
-        tb+='<tr class="'+cls+'"><td>'+r.nom+'</td><td>'+r.prenom+'</td><td>'+r.classe+'</td><td>'+statusTxt+'</td></tr>';
-      });
-      document.getElementById('IMP_S_TB').innerHTML=tb;
-      document.getElementById('IMP_S_PREVIEW').style.display='block';
+      var tb='';impStudentData.forEach(function(r){var cls=r.status==='ok'?'':'imp-row-skip';tb+='<tr class="'+cls+'"><td>'+r.nom+'</td><td>'+r.prenom+'</td><td>'+r.classe+'</td><td>'+(r.status==='ok'?'A importer':'Doublon ignore')+'</td></tr>'});
+      document.getElementById('IMP_S_TB').innerHTML=tb;document.getElementById('IMP_S_PREVIEW').style.display='block';
       document.getElementById('IMP_S_BTN').style.display=ok?'inline-flex':'none';
     }catch(err){toast('Erreur de lecture du fichier','error')}
-  };
-  reader.readAsArrayBuffer(file);
+  };reader.readAsArrayBuffer(file);
 }
 function confirmStudentImport(){
-  if(!impStudentData) return;
-  var count=0;
+  if(!impStudentData) return;var count=0;
   impStudentData.forEach(function(r){
-    if(r.status!=='ok') return;
-    var fullName=r.nom+' '+r.prenom;
-    if(!RD[r.classe]) RD[r.classe]='';
-    RD[r.classe]+=(RD[r.classe]?'|':'')+fullName;
-    count++;
+    if(r.status!=='ok') return;var fullName=r.nom+' '+r.prenom;
+    if(!RD[r.classe]) RD[r.classe]='';RD[r.classe]+=(RD[r.classe]?'|':'')+fullName;count++;
   });
-  closeModal('MIMP_S');renderStudents();renderDashboard();
-  toast(count+' etudiant'+(count>1?'s':'')+' importe'+(count>1?'s':''),'success');
-  impStudentData=null;
+  closeModal('MIMP_S');saveData();renderStudents();renderDashboard();
+  toast(count+' etudiant'+(count>1?'s':'')+' importe'+(count>1?'s':''),'success');impStudentData=null;
 }
 
 /* ===== IMPORT MODULES ===== */
 function openModuleImport(){
-  impModuleData=null;
-  document.getElementById('IMP_M_FILE').value='';
-  document.getElementById('IMP_M_MOD_ROW').style.display='none';
-  document.getElementById('IMP_M_PREVIEW').style.display='none';
-  document.getElementById('IMP_M_BTN').style.display='none';
-  openModal('MIMP_M');
+  impModuleData=null;document.getElementById('IMP_M_FILE').value='';
+  document.getElementById('IMP_M_MOD_ROW').style.display='none';document.getElementById('IMP_M_PREVIEW').style.display='none';
+  document.getElementById('IMP_M_BTN').style.display='none';openModal('MIMP_M');
 }
-function downloadModuleTemplate(){
-  var csv='Module,Classe\n"Exemple module","ISUSI S3"\n';
-  downloadFile(csv,'modele_modules.csv','text/csv');
-}
+function downloadModuleTemplate(){downloadFile('Module,Classe\n"Exemple module","ISUSI S3"\n','modele_modules.csv','text/csv')}
 function handleModuleFile(e){
   var file=e.target.files[0];if(!file) return;
-  document.getElementById('IMP_M_MOD_ROW').style.display='flex';
-  document.getElementById('IMP_M_MOD_NAME').textContent=file.name;
+  document.getElementById('IMP_M_MOD_ROW').style.display='flex';document.getElementById('IMP_M_MOD_NAME').textContent=file.name;
   var reader=new FileReader();
   reader.onload=function(ev){
     try{
-      var wb=XLSX.read(ev.target.result,{type:'array'});
-      var ws=wb.Sheets[wb.SheetNames[0]];
-      var data=XLSX.utils.sheet_to_json(ws,{defval:''});
+      var wb=XLSX.read(ev.target.result,{type:'array'});var ws=wb.Sheets[wb.SheetNames[0]];var data=XLSX.utils.sheet_to_json(ws,{defval:''});
       if(!data.length){toast('Le fichier est vide','error');return}
       impModuleData=[];var ok=0,skip=0;
       data.forEach(function(row){
-        var name=String(row['Module']||row['Nom']||row['nom']||row['module']||'').trim();
-        var classe=String(row['Classe']||row['classe']||'').trim();
+        var name=String(row['Module']||row['Nom']||row['nom']||row['module']||'').trim();var classe=String(row['Classe']||row['classe']||'').trim();
         if(!name||!classe){impModuleData.push({name:name,classe:classe,status:'err'});return}
         var exists=MD[classe]&&MD[classe].split('|').some(function(n){return n.trim().toLowerCase()===name.toLowerCase()});
         if(exists){impModuleData.push({name:name,classe:classe,status:'skip'});skip++}
         else{impModuleData.push({name:name,classe:classe,status:'ok'});ok++}
       });
       document.getElementById('IMP_M_SUMMARY').innerHTML='<div class="imp-summary-item ok"><i class="fa-solid fa-check"></i> '+ok+' a importer</div>'+(skip?'<div class="imp-summary-item skip"><i class="fa-solid fa-forward"></i> '+skip+' doublons ignores</div>':'');
-      var tb='';
-      impModuleData.forEach(function(r){
-        var cls=r.status==='ok'?'':r.status==='skip'?'imp-row-skip':'imp-row-skip';
-        tb+='<tr class="'+cls+'"><td>'+r.name+'</td><td>'+r.classe+'</td><td>'+(r.status==='ok'?'A importer':'Doublon ignore')+'</td></tr>';
-      });
-      document.getElementById('IMP_M_TB').innerHTML=tb;
-      document.getElementById('IMP_M_PREVIEW').style.display='block';
+      var tb='';impModuleData.forEach(function(r){var cls=r.status==='ok'?'':'imp-row-skip';tb+='<tr class="'+cls+'"><td>'+r.name+'</td><td>'+r.classe+'</td><td>'+(r.status==='ok'?'A importer':'Doublon ignore')+'</td></tr>'});
+      document.getElementById('IMP_M_TB').innerHTML=tb;document.getElementById('IMP_M_PREVIEW').style.display='block';
       document.getElementById('IMP_M_BTN').style.display=ok?'inline-flex':'none';
     }catch(err){toast('Erreur de lecture du fichier','error')}
-  };
-  reader.readAsArrayBuffer(file);
+  };reader.readAsArrayBuffer(file);
 }
 function confirmModuleImport(){
-  if(!impModuleData) return;
-  var count=0;
+  if(!impModuleData) return;var count=0;
   impModuleData.forEach(function(r){
     if(r.status!=='ok') return;
-    if(!MD[r.classe]) MD[r.classe]='';
-    MD[r.classe]+=(MD[r.classe]?'|':'')+r.name;
-    count++;
+    if(!MD[r.classe]) MD[r.classe]='';MD[r.classe]+=(MD[r.classe]?'|':'')+r.name;count++;
   });
-  closeModal('MIMP_M');renderModules();renderDashboard();
-  toast(count+' module'+(count>1?'s':'')+' importe'+(count>1?'s':''),'success');
-  impModuleData=null;
+  closeModal('MIMP_M');saveData();renderModules();renderDashboard();
+  toast(count+' module'+(count>1?'s':'')+' importe'+(count>1?'s':''),'success');impModuleData=null;
 }
 
 /* ===== FERMER MODALES EN CLIQUANT DEHORS ===== */
-document.querySelectorAll('.mo').forEach(function(m){
-  m.addEventListener('click',function(e){if(e.target===m) closeModal(m.id)});
-});
+document.querySelectorAll('.mo').forEach(function(m){m.addEventListener('click',function(e){if(e.target===m) closeModal(m.id)})});
 
 /* ===== INITIALISATION ===== */
+loadData();
 renderDashboard();
 </script>
 </body>
