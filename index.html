@@ -437,37 +437,41 @@ function loadData() {
     var raw = localStorage.getItem(LS_KEY);
     if (raw) {
       var d = JSON.parse(raw);
-      /* Charger etudiants */
-      if (d.rd && typeof d.rd === 'object' && Object.keys(d.rd).length > 0) {
+      /* BUG FIX : avant c'etait "Object.keys(d.rd).length > 0"
+         Ce qui rechargait les defauts quand RD etait vide {} apres suppression.
+         Maintenant on verifie juste que la cle existe dans le JSON. */
+      if (d.rd !== undefined && d.rd !== null) {
         RD = d.rd;
       } else {
         RD = JSON.parse(JSON.stringify(RD_DEFAULT));
       }
-      /* Charger modules */
-      MD = (d.md && typeof d.md === 'object') ? d.md : {};
-      /* Charger absences */
+      /* Meme logique pour les modules */
+      if (d.md !== undefined && d.md !== null) {
+        MD = d.md;
+      } else {
+        MD = {};
+      }
+      /* Absences */
       ABSENCES = Array.isArray(d.abs) ? d.abs : [];
-      /* Charger types */
+      /* Types */
       if (Array.isArray(d.types) && d.types.length > 0) TYPES = d.types;
-      /* Charger seuils */
+      /* Seuils */
       if (d.warn) warnThreshold = parseInt(d.warn) || 3;
       if (d.excl) exclThreshold = parseInt(d.excl) || 8;
-
       lastSaveTime = new Date();
       updateDataBar();
-      console.log('Donnees chargees depuis localStorage. Modules:', Object.keys(MD).length, 'Absences:', ABSENCES.length);
+      console.log('Donnees chargees :', Object.keys(RD).length, 'classes,', Object.keys(MD).length, 'classes modules,', ABSENCES.length, 'absences');
       return;
     }
   } catch(e) {
     console.error('ERREUR LOAD:', e);
   }
-  /* Premiere visite : charger les defauts */
+  /* Premiere visite uniquement */
   RD = JSON.parse(JSON.stringify(RD_DEFAULT));
   MD = {};
   ABSENCES = [];
   saveData();
 }
-
 function updateDataBar() {
   var el = document.getElementById('DATA_STATUS');
   if (!el) return;
