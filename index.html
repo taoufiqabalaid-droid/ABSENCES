@@ -26,7 +26,7 @@
 .ni i{width:18px;text-align:center;font-size:14px}
 .sf{padding:12px 10px;border-top:1px solid var(--bd)}
 .su{display:flex;align-items:center;gap:11px;padding:8px 12px}
-.mc{margin-left:260px;min-height:100vh;position:relative;z-index:1}
+.mc{margin-left:260px;min-height:100vh;position:relative;z-index:1;padding-bottom:36px}
 .th{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.88);backdrop-filter:blur(20px);border-bottom:1px solid var(--bd);padding:13px 28px;display:flex;align-items:center;justify-content:space-between}
 .sb{display:flex;align-items:center;gap:10px;background:var(--bgc);border:1px solid var(--bd);border-radius:9px;padding:8px 14px;width:360px;transition:border-color .2s}
 .sb:focus-within{border-color:var(--ac)}.sb i{color:var(--fd);font-size:13px}
@@ -182,6 +182,7 @@ tbody tr{border-bottom:1px solid var(--bd);transition:background .15s}tbody tr:l
 .imp-summary-item{display:flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600}
 .imp-summary-item.ok{color:var(--ac)}
 .imp-summary-item.skip{color:var(--wn)}
+.imp-summary-item.err{color:var(--dn)}
 .imp-module-field{display:flex;align-items:center;gap:10px;background:var(--bg);border:1px solid var(--bd);border-radius:9px;padding:10px 14px;margin-bottom:14px}
 .imp-module-field i{color:var(--in);font-size:15px}
 .imp-module-field .imp-module-name{flex:1;font-size:13px;font-weight:600;color:var(--fg);word-break:break-all;line-height:1.4}
@@ -190,7 +191,7 @@ tbody tr{border-bottom:1px solid var(--bd);transition:background .15s}tbody tr:l
 .mod-card-del{position:absolute;top:10px;right:10px;width:28px;height:28px;border-radius:7px;border:1px solid transparent;background:transparent;color:var(--fd);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:11px;transition:all .2s;opacity:0;z-index:2}
 .mgc:hover .mod-card-del{opacity:1}
 .mod-card-del:hover{border-color:var(--dn);color:var(--dn);background:var(--dns)}
-.save-indicator{position:fixed;bottom:18px;right:18px;z-index:190;padding:8px 16px;border-radius:9px;background:rgba(5,150,105,.95);color:#fff;font-size:12px;font-weight:600;display:flex;align-items:center;gap:6px;animation:si .3s ease;pointer-events:none}
+.save-indicator{position:fixed;bottom:54px;right:18px;z-index:190;padding:8px 16px;border-radius:9px;background:rgba(5,150,105,.95);color:#fff;font-size:12px;font-weight:600;display:flex;align-items:center;gap:6px;animation:si .3s ease;pointer-events:none}
 @keyframes si{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 .data-bar{position:fixed;bottom:0;left:260px;right:0;background:var(--bg2);border-top:1px solid var(--bd);padding:6px 28px;font-size:11px;color:var(--fd);display:flex;align-items:center;gap:16px;z-index:30}
 @media(max-width:768px){.data-bar{left:0}}
@@ -323,7 +324,6 @@ tbody tr{border-bottom:1px solid var(--bd);transition:background .15s}tbody tr:l
 </section>
 </div>
 
-<!-- Barre de statut donnees -->
 <div class="data-bar" id="DATA_BAR"><i class="fa-solid fa-database"></i> <span id="DATA_STATUS">Chargement...</span></div>
 
 <!-- MODALE ABSENCE -->
@@ -335,7 +335,7 @@ tbody tr{border-bottom:1px solid var(--bd);transition:background .15s}tbody tr:l
   <div class="fg"><label class="fl">Type</label><select class="fs" id="ATY"></select></div>
   <div class="fg"><label class="fl">Motif</label><textarea class="fi" id="ARE" rows="2" placeholder="Raison..." style="resize:vertical;"></textarea></div>
   <div class="fg"><label class="fl">Etudiants absents <span class="ms-count-badge" id="MS_COUNT"></span></label>
-    <div class="ms-panel"><div class="ms-toolbar"><input type="text" class="ms-search-input" placeholder="Rechercher..." id="MS_SEARCH" oninput="renderMSList()"><div class="ms-btns"><button type="button" class="ms-btn" onclick="msSelectAll()">Tout</button><button type="button" class="ms-btn" onclick="msDeselectAll()">Aucun</button></div></div><div class="ms-list" id="MS_LIST"><div class="ms-empty"><i class="fa-solid fa-info-circle"></i>Selectionnez d'abord un module</div></div></div>
+    <div class="ms-panel"><div class="ms-toolbar"><input type="text" class="ms-search-input" placeholder="Rechercher..." id="MS_SEARCH" oninput="renderMSList()"><div class="ms-btns"><button type="button" class="ms-btn" onclick="msSelectAll()">Tout</button><button type="button" class="ms-btn" onclick="msDeselectAll()">Aucun</button></div></div><div class="ms-list" id="MS_LIST"><div class="ms-empty"><i class="fa-solid fa-info-circle"></i>Selectionnez un module</div></div></div>
   </div>
 </div><div class="mf"><button class="bs" onclick="closeModal('MAB')">Annuler</button><button class="bp1" onclick="saveA()"><i class="fa-solid fa-check"></i> Enregistrer</button></div></div></div>
 
@@ -369,118 +369,83 @@ tbody tr{border-bottom:1px solid var(--bd);transition:background .15s}tbody tr:l
 <div class="mb">
   <div class="imp-info"><p>Format : <code>Nom</code> | <code>Prenom</code> | <code>Classe</code></p><p style="margin-top:4px;font-size:11.5px;color:var(--fd);">Exemple : <code>ISUSI S3</code>, <code>LABO S5</code></p></div>
   <div class="imp-actions">
-    <button class="bs" onclick="dlTpl('Nom,Prenom,Classe\n\"nom\",\"prenom\",\"ISUSI S3\"\n','modele_etudiants.csv')"><i class="fa-solid fa-file-arrow-down"></i> Modele</button>
+    <button class="bs" onclick="dlTpl('Nom,Prenom,Classe\nnom,prenom,ISUSI S3\n','modele_etudiants.csv')"><i class="fa-solid fa-file-arrow-down"></i> Modele</button>
     <label class="imp-file-label"><i class="fa-solid fa-file-arrow-up"></i> Choisir fichier <input type="file" accept=".xlsx,.xls,.csv" onchange="handleStudentFile(event)" id="IMP_S_FILE"></label>
   </div>
   <div class="imp-module-field" id="IMP_S_MOD_ROW" style="display:none;"><i class="fa-solid fa-file-excel"></i><span class="imp-module-label">Fichier :</span><span class="imp-module-name" id="IMP_S_MOD_NAME"></span></div>
   <div id="IMP_S_PREVIEW" style="display:none;"><div class="imp-summary" id="IMP_S_SUMMARY"></div><div class="imp-preview"><table><thead><tr><th>Nom</th><th>Prenom</th><th>Classe</th><th>Statut</th></tr></thead><tbody id="IMP_S_TB"></tbody></table></div></div>
-</div><div class="mf"><button class="bs" onclick="closeModal('MIMP_S')">Annuler</button><button class="bp1" id="IMP_S_BTN" onclick="confirmStudentImport()" style="display:none;"><i class="fa-solid fa-check"></i> Importer</button></div></div></div>
+</div><div class="mf" id="IMP_S_MF"><button class="bs" onclick="closeModal('MIMP_S')">Annuler</button><button class="bp1" id="IMP_S_BTN" onclick="confirmStudentImport(false)" style="display:none;"><i class="fa-solid fa-check"></i> Importer</button></div></div></div>
 
 <!-- MODALE IMPORT MODULES -->
 <div class="mo" id="MIMP_M"><div class="md" style="width:720px;"><div class="mh"><h3>Importer des modules</h3><button class="mx" onclick="closeModal('MIMP_M')"><i class="fa-solid fa-xmark"></i></button></div>
 <div class="mb">
   <div class="imp-info"><p>Format : <code>Module</code> ou <code>Nom</code> | <code>Classe</code></p></div>
   <div class="imp-actions">
-    <button class="bs" onclick="dlTpl('Module,Classe\n\"module\",\"ISUSI S3\"\n','modele_modules.csv')"><i class="fa-solid fa-file-arrow-down"></i> Modele</button>
+    <button class="bs" onclick="dlTpl('Module,Classe\nmodule,ISUSI S3\n','modele_modules.csv')"><i class="fa-solid fa-file-arrow-down"></i> Modele</button>
     <label class="imp-file-label"><i class="fa-solid fa-file-arrow-up"></i> Choisir fichier <input type="file" accept=".xlsx,.xls,.csv" onchange="handleModuleFile(event)" id="IMP_M_FILE"></label>
   </div>
   <div class="imp-module-field" id="IMP_M_MOD_ROW" style="display:none;"><i class="fa-solid fa-file-excel"></i><span class="imp-module-label">Fichier :</span><span class="imp-module-name" id="IMP_M_MOD_NAME"></span></div>
   <div id="IMP_M_PREVIEW" style="display:none;"><div class="imp-summary" id="IMP_M_SUMMARY"></div><div class="imp-preview"><table><thead><tr><th>Module</th><th>Classe</th><th>Statut</th></tr></thead><tbody id="IMP_M_TB"></tbody></table></div></div>
-</div><div class="mf"><button class="bs" onclick="closeModal('MIMP_M')">Annuler</button><button class="bp1" id="IMP_M_BTN" onclick="confirmModuleImport()" style="display:none;"><i class="fa-solid fa-check"></i> Importer</button></div></div></div>
+</div><div class="mf" id="IMP_M_MF"><button class="bs" onclick="closeModal('MIMP_M')">Annuler</button><button class="bp1" id="IMP_M_BTN" onclick="confirmModuleImport(false)" style="display:none;"><i class="fa-solid fa-check"></i> Importer</button></div></div></div>
 
 <script>
-/* ========== CONFIG FIXE ========== */
 var OPTIONS={'ISUSI':'ISUSI','LABO':'LABO','IAR':'Anesthesie Reanimation','INP':'Infirmier Pediatre','IBO':'Infirmier Bloc Operatoire','SF':'Sage-Femme','SM':'Sante Mentale','ISFSC':'Infir. Sante Familiale','IG':'Inspecteur Sanitaire'};
 var OPT_ICONS={'ISUSI':'fa-truck-medical','LABO':'fa-flask-vial','IAR':'fa-syringe','INP':'fa-baby','IBO':'fa-scissors','SF':'fa-person-pregnant','SM':'fa-brain','ISFSC':'fa-house-medical','IG':'fa-user-nurse'};
 var OPT_COLORS={'ISUSI':'#dc2626','LABO':'#0891b2','IAR':'#7c3aed','INP':'#ea580c','IBO':'#059669','SF':'#ec4899','SM':'#6366f1','ISFSC':'#d97706','IG':'#0d9488'};
 var SLOTS=['08H30 - 10H30','10H30 - 12H30','08H30 - 12H30','14H00 - 16H00','16H00 - 18H00','14H00 - 18H00','15H00 - 18H00'];
+var RD_DEFAULT={"ISUSI S3":"ACHLIKH AICHA|AGOUZOUL MOUNA|ARROUY IKRAM|AZIZ AMINA|BANI NAJMA|BENCHAMA MOHAMED ALI|BOURISSA HAMZA|DENDOUN ISLAM|EBOUR KHAOULA|EL HARRARI OUSSAMA|EL JAOUHARI MALAK|ELMOUDAFFAR WISSAL|ENNAJIH RIHAM|FASSINI CHAIMAA|HANGOUR HAFSA|IMAZZANE MAROUA|LABBIHI KAOUTAR|LAFHAL BADER|NAJEH RADWA|NAOUAR MBARKA|OUARHOU AMINE|OUILKI JIHAD|OUIS MOHAMED|OUJAA IMANE|OUKOUZAMT HAYATE|OUNASSER ISRAA|RAIS ANAS|SAADI IMANE|SAADOUNI DOUAA|TOUIL KELTOUM|ZAKAR CHAIMA","ISUSI S5":"AMARIR MOHAMMED|ARIF KHADIJA|BELLAGCHAIRI HIBA|BERRAMY HIBA|CHAIBI AYA|CHAKHCH YASSMINE|DAHI ILYAS|EL ACHKAR BOUTAINA|EL HADAR HAJAR|EL MOUDDEN OUISAL|ESSAKHI HASNAE|GAZGAZ SALOUA|HOUSSAYNI IMANE|HOUSSNI ZAKARIA|IBRQI IMANE|IDSASSI ZINEB|KERROUM KHADIJA|KDAIRE NOUHAILA|LAAZIZ KHADIJA|LACH-HEB MERIEM|MACHKOUR SALMA|MIMOUNI ANAS|MIMOUNE WISSALE|SBOUITA IBTISSAM|TADILI FATIMA-EZZAHRA|CHOUCRI HICHAM","LABO S3":"AAA IBTIHAL|AIT BOURHIM IMANE|BADI ZINEB|BELFASSI FATIMA-EZZAHERAE|BOUCHRIHA MARYEM|BOUDLIH ILIAS|BOUSALHI NADA|CHARDAOUI OUISSAL|CHERKAOUI ABDERRAHMANE|DAYAB AMAL|EDDARKAOUI AMINA|ELBAZ MOHAMED AMINE|ELMAKKAOUI SALAH EDDINE|ESSAADI ILYASS|ESSAADI ZOUHAYR|ESSADEK YOUSSEF|HASSANI MBECHEZI ELARIF|JEBBAD YASMINE|MULENGA MERCY CHIBESA|MQAINTAR SAMI|NOUGHOU AYA|RAGHIB ANAS|RAHEL GHIZLANE|SEKOURI MARYEM|SILOMBA TEPWANJI|TOYBA IBRAHIM","LABO S5":"ABILI MALIKA|ADDARAL OUMAIMA|AIT EL HAJ HIBA|BITALJANE OMAIMA|BOUCHIHA HAJAR|CHTIOUI MARYEM|EL ABADILA CHEIKH MAALAININE|EL BAZ KHADIJA|ECH-CHTOUKI ABDELLAH|EL KHOUMANI MARWA|ETTAOUSSI SANAE|FAKHRANE WIAME|FRINDO MUSTAPHA|HAMIMADI ROMAISSA|HAMZAOUI ZOUHAIR|JABELKHAYR ANAS|KHIARE HIBA|MAHIR MOHAMED|OUAJIB NOUHAILA|RADI JAMILA|SI KHOUNA HAFSA|SIKLANE HAJAR|TEFNOUTI MALAK|TOUIR AYOUB|ZEROUALI MARYEM|ZIDANE OUMAIMA","IAR S3":"AACHCHAKI RANYA|AGJIJE HAJAR|AIT LAHCINE HIBA|AITALEB CHAIMAA|ARAGROUG AYA|AZZAFE RIHAM|BELAAMRY HIBA|BEN TALE FATIMA EZZAHRAE|BOUNAJAH MARIAM|EL BAKKAL KHADIJA|ELFARNANE CHAIMA|ENNDA HASSNA|HMOUDOU AYA|IDRISSI OUMNIYA|IQIQ YOUSSEF|MAHRAR MOURAD|MOSAID SAAD|RASSOU BAHIJA|SAADI OUMAIMA|SBAYBI NOUR EL IMANE|TIBBA KHADIJA|TAIB ASMAA|SOUNIB AYA","IAR S5":"AIT FDIL SALMA|AKMAKH MEHDI|BAQOUS MARYAM|CHNINIF YOUSSEF|EL GHADOUINI HIBA|EL MANOUZI HAJAR|ELAMIDI SOUHAILA|ELHAMDAOUI KAHDIJA|ELQADIMI CHAIMAA|FADLY CHAIMAA|GRARI ANAS|KABLAOUI MARWA|LAKHAL SIHAM|LAMQISS SAFA|NAIM MOHAMED|OUMALLOUL FATIMA-EZZAHRA|RAHMOUN OMAR|RHAFIRI HIBA|SBILA NOURELHOUDA|TAJEDDINE OUALID|ZEMRAOU ATIK","INP S4":"ABOULKHALEF NOUHA|AHRAYOU SOUKAINA|ANZALI ZINEB|ANZIME ILYASSE|ATTIOUI MERYEM|AZNAGDE SOUMIA|BAHAKKI AYA|CHARKAOUI HALIMA|EL BAKILI FATIMA ZAHRA|EL HAMMOUI WISSALE|EL-ARBAOUI MERYEME|ELMARHRAOUI HAJAR|ENNASSIRI RIM|FAROUK SOUKAINA|GHINE HASSNA|HSSIKI HIDAYA|LAMIRI HIBA|MOUNIR SOUMIA|NAHED ZAHIRA|OUARCHAN KHAOULA|REHOUNI MANAL|WAKIBI OUMAIMA","INP S5":"AIT ALI NOUHAILA|AIT BELLA HIBA|AIT GHROURI LATIFA|AIT MBARK HAYAT|AIT OUAKRIM MOHAMED|AIT STIMAH IMANE|ALANDARI KHAOULA|BOUHAFA HAYAT|CHIHEB FATIMA-EZZAHRE|ELHAJI FAIROUZ|ELMAJDOUB LEILA|FAROUK SOUKAINA|GOUMAHI MERIEM|NAJIM WIAM|OUALLA RACHIDA|OUAZZI SALMA|RAOUNI SALMA|SAMSAH MANAR|ZIRRI IKRAM","IBO S3":"AABDOUN DOUAA|ADROUNE HOUDA|AGOURRAME KARIMA|AHDA YAHYA|AIT HAMOU BASMA|AMNAINE FATIMA ZAHRA|AROUSSI KHADIJA|ALLA IMAN|BOUGHARASS AYOUB|BOUKDIR SARA|EL KAHFI ANAS|EL MALI SARA|EL MANOUR NADIRA|ELKHIRAOUI ZAKIA|HOUMMADI MARIAM|KAHWACH BASMA|LAAICHI SAFA|MAADANE MARIYA|OUTOULOUNT IMANE","IBO S5":"AIT ALI OUAKRIM ILHAM|AGOUZOUL NEZHA|AHBABOU WIAME|ASKOUR SALMA|AGOURRAM YOUSSEF|AMEJAL ABDERRAHMAN|AZZEMAT HAFSA|EL BAGHDADI BOCHRA|ELMOUDEN SAFA|ERRAQI YOUNES|EL BHALLA OMAR|BENFARAJI IKRAM|CHOUKHMANI DOUAE|EL RHOUL KAOUTAR|GHAOUCH ANAS|MOUGHIT HAMZA|MOUKAFIH JAMILA|HADOUAR MOHAMED","SF S3":"AATIF FATIMA-EZZAHRAE|ABIDALLAH FATIMA EZZAHRAA|ABOURHIM ASMA|AIT ASSOU SALMA|AIT QAJOU TOURIA|AHTTACH IMANE|AIT YOUSS AHLAM|BOUBAKRI SARA|BOUBKISSE HAJAR|EL ALYANY ANISSA|ELGHAZOUANI HIBA|ELHIK FATIMA EZZAHRA|FATA NARJISE|ER-RACHDY HAJAR|KOUB MARIAM|LAMDIRA MERIEM|MOHTADI FATIMA EZZAHRA|NASSARI DOHA|NASSIB AMINA","SF S5":"ABIADOU AYA|AIT ELKADI NAOUAL|BELAFQUIRA IBTIHAL|EL BHALLA HAFSA|EL HASNAOUI HIBA|EL KARAFLI GHIZLANE|EL HANDAOUI HAJAR|EL HJJAM HIBA|ER-RAFIAI FATIM EZZAHRAE|ELAANNOURI HAFSA|ELMENTOURY ANAS|GHLIOUCHATE HIBA|HADDIOUI HAJAR|IMAGHRAK HANANE|KAMAL HAYATE|KORSAN SALMA|OUHADDOU ILHAM|SAFRAOUI FATIMA ZAHRA|TOUIRI IMANE|ZAYOD HAJAR","SM S3":"AITAYAD NADA|ABBOU IMANE|AAZRI OUMAIMA|AGOUJJIF HAFSA|AIT BENMOUSSA SALMA|AIT MOBARAK JAMILA|ABDELBAKI MERYEM|AIT ALI ASMAA|ARAHAL KHADIJA|BADDAZ TOURIA|BENKHALTI NADA|AIT EL CADI FATIMA|AIT BOUCHAIB RAIHANA|AMEZOUAR OUMAIMA|AIDALI KHADIJA|BOURADOUAN MAHDI|BENNANI ZINEB|AIT BARHICH SAAD|ABARAGH MERYEM|AMAZOUZ WASSIM|ABOUHANI MAROUA|BELAKZIZ AYA|ABRARAY KHADIJA|ALAHMOUM MOHAMED|AYANI RIMA|AFOULOUS ASMAE","SM S5":"EL IDRISSI KASSIMI ASMA|ELMENTOURY ANAS|GHLIOUCHATE HIBA|HADDIOUI HAJAR|FATA NARJISE|IMAGHRAK HANANE|KAMAL HAYATE|RAMI DOAA|SAFRAOUI FATIMA ZAHRA|OUHADDOU ILHAM|KHEIAR FATIMA ZAHRA|KORSAN SALMA|JAMIL SARA|KOUB MARIAM|MOHTADI FATIMA EZZAHRA|LIQALI MARIA|ZANTANE MARYAM|OUMADI ILHAM|RAMDANE FATIMA|TOUILI FATIMA|TOUIRI IMANE|ZAYOD HAJAR|MALLASSE HAJAR|LAMDIRA MERIEM|NEDDAOUI BASMA|MANSOURI MARYAM","ISFSC S3":"ACHOUIH OUMAIMA|AIT AHMED HIBA|ABOULAHIA SAAD|AANIBA ANASS|EL IDRISSI SAMIRA|BOUNHALLI SAFAA|EL KAHFI ANAS|GOURIR ISSMAIL|EL BOUINANY TALLAL|HARRAK SIF EDDINE|BELATTAR AYA|AMDJAR HASNA|ABOULMAJD IKRAM|AIT BENALI SAFA|BENJAAFAR RHITA|BADRI KAOUTHAR|CHESTAFIQ RIDA|BENOUADDAH RABAB|AITTEYB FATIMA|AIT BRIK FATIMA|AMGHAR DOHA|AMMARI CHADIA|ELATMANI ABDELHAK|AIT EL KADI JIHAD","ISFSC S5":"BAKASSOU BRAHIM|AIT BENLABCHIR CHIHINAZ|AIT RAMI KARIM|AZNAG ABDELJALIL|BELLAARABI KHADIJA|BOUTGAYOUT OUIAM|BOUTIGHATNE AABLA|DARIF ILYAS|EL KARROUMI MOUNCIF|EL KHOMSSI YOUSRA|FARIKH OUISSAL|JALAL YASSINE|LAGURIAI SAIDA|EL OUGKDY HIBA|EL MAGUANA KHAWLA|DRAI ACHRAF|MESKI MAROUA|BOUZAIR RANYA|EL-HAIDAOUY AICHA|RGHIOUI RIHAB|ELAKHDAR WISSAL|FAILATI BINTI ILIASSA","IG S4":"BOUDARGA YAHYA|EL AAFIFI SAFA|BIROUK HIBA|AIT DAHAMOU AYA|AMEZGOU MAROUA|BOUGTAB MALAK|CHARAF IMANE|EL AOUSSE AMINA|AMZIL NAWAL|BENDAOU MOUNIA|EL BIYAD MERIEM|EDDABALI MAJDA|EL ASMAR NADIA|EL MAHLAOUI IMANE|ELHARRAZ AMALE|ELMANDILI HAJAR|EL MAHFOUDI MARYEM|BELGHANDOUR CHAIMAA|BENFAIDA FATIMA-EZZAHRAE|EL KHATTABY IMAN|EL GARNAOUI KAWTAR|BEN LAHNINE ASMA|COURDADI FATIMA ZAHRA|EL FAHCHOUCH MARWA","IG S5":"EZ-ZAYTOUNY YOUSSEF|IMZILEN SALMA|JALAL YASSINE|LAGURIAI SAIDA|ESSASSI KAOUTAR|GAZMATE HAFSA|HAKIMI WIDIAN|EL OUGKDY HIBA|EL MAGUANA KHAWLA|DRAI ACHRAF|MESKI MAROUA|BOUZAIR RANYA|EL-HAIDAOUY AICHA|RGHIOUI RIHAB|ELAKHDAR WISSAL|FAILATI BINTI ILIASSA"};
 
-/* ========== VARIABLES DYNAMIQUES ========== */
-var RD_DEFAULT={};
 var RD={}, MD={}, ABSENCES=[];
 var TYPES=[{id:1,name:'Absence non justifiee',color:'#dc2626'},{id:2,name:'Absence justifiee',color:'#059669'},{id:3,name:'Retard',color:'#d97706'}];
 var warnThreshold=3, exclThreshold=8;
 var absOption='all',absClass='all',absModule='all',absPage=1;
 var calDate=new Date(), msSelected={}, deleteCallback=null, PER_PAGE=12;
-var impStudentData=null, impModuleData=null;
-var lastSaveTime = null;
+var impStudentData=null, impModuleData=null, lastSaveTime=null;
 
 /* ================================================================
-   SAUVEGARDE / CHARGEMENT localStorage
+   SAUVEGARDE / CHARGEMENT localStorage — CORRIGE
    ================================================================ */
-var LS_KEY = 'gestabs_v3';
+var LS_KEY='gestabs_v4';
 
-function saveData() {
-  try {
-    var data = JSON.stringify({
-      rd: RD,
-      md: MD,
-      abs: ABSENCES,
-      types: TYPES,
-      warn: warnThreshold,
-      excl: exclThreshold
-    });
-    localStorage.setItem(LS_KEY, data);
-    lastSaveTime = new Date();
-    updateDataBar();
-    showSaveIndicator();
-  } catch(e) {
-    console.error('ERREUR SAVE:', e);
-    toast('Erreur de sauvegarde !','error');
-  }
+function saveData(){
+  try{
+    localStorage.setItem(LS_KEY,JSON.stringify({rd:RD,md:MD,abs:ABSENCES,types:TYPES,warn:warnThreshold,excl:exclThreshold}));
+    lastSaveTime=new Date();updateDataBar();showSaveOK();
+  }catch(e){console.error('SAVE ERR:',e);toast('Erreur sauvegarde!','error')}
 }
 
-function loadData() {
-  try {
-    var raw = localStorage.getItem(LS_KEY);
-    if (raw) {
-      var d = JSON.parse(raw);
-      /* Charger etudiants (respecte une liste explicitement vide) */
-      RD = (d.rd && typeof d.rd === 'object') ? d.rd : {};
-      /* Charger modules */
-      MD = (d.md && typeof d.md === 'object') ? d.md : {};
-      /* Charger absences */
-      ABSENCES = Array.isArray(d.abs) ? d.abs : [];
-      /* Charger types */
-      if (Array.isArray(d.types) && d.types.length > 0) TYPES = d.types;
-      /* Charger seuils */
-      if (d.warn) warnThreshold = parseInt(d.warn) || 3;
-      if (d.excl) exclThreshold = parseInt(d.excl) || 8;
-
-      lastSaveTime = new Date();
-      updateDataBar();
-      console.log('Donnees chargees depuis localStorage. Etudiants classes:', Object.keys(RD).length, 'Modules:', Object.keys(MD).length, 'Absences:', ABSENCES.length);
-      return;
+function loadData(){
+  try{
+    var raw=localStorage.getItem(LS_KEY);
+    if(raw){
+      var d=JSON.parse(raw);
+      /* CORRECTION CRITIQUE : on verifie que la cle existe, PAS que l'objet est non-vide.
+         Sinon quand on supprime tout (RD={}), au rechargement il recharge les defauts. */
+      if(d.rd!==undefined&&d.rd!==null) RD=d.rd; else RD=JSON.parse(JSON.stringify(RD_DEFAULT));
+      if(d.md!==undefined&&d.md!==null) MD=d.md; else MD={};
+      ABSENCES=Array.isArray(d.abs)?d.abs:[];
+      if(Array.isArray(d.types)&&d.types.length) TYPES=d.types;
+      if(d.warn) warnThreshold=parseInt(d.warn)||3;
+      if(d.excl) exclThreshold=parseInt(d.excl)||8;
+      lastSaveTime=new Date();updateDataBar();return;
     }
-  } catch(e) {
-    console.error('ERREUR LOAD:', e);
-  }
-  /* Premiere visite (aucune donnee en localStorage) : demarrer vide */
-  RD = {};
-  MD = {};
-  ABSENCES = [];
-  saveData();
+  }catch(e){console.error('LOAD ERR:',e)}
+  RD=JSON.parse(JSON.stringify(RD_DEFAULT));MD={};ABSENCES=[];saveData();
 }
 
-function updateDataBar() {
-  var el = document.getElementById('DATA_STATUS');
-  if (!el) return;
-  var modCount = 0;
-  for (var k in MD) { if (MD[k]) modCount += MD[k].split('|').filter(Boolean).length; }
-  var stuCount = 0;
-  for (var k in RD) { if (RD[k]) stuCount += RD[k].split('|').filter(Boolean).length; }
-  var timeStr = lastSaveTime ? lastSaveTime.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit',second:'2-digit'}) : '--:--:--';
-  el.innerHTML = stuCount + ' etudiants &bull; ' + modCount + ' modules &bull; ' + ABSENCES.length + ' absences &bull; Derniere sauvegarde : ' + timeStr;
+function updateDataBar(){
+  var el=document.getElementById('DATA_STATUS');if(!el)return;
+  var mc=0,sc=0,k;
+  for(k in MD){if(MD[k])mc+=MD[k].split('|').filter(Boolean).length}
+  for(k in RD){if(RD[k])sc+=RD[k].split('|').filter(Boolean).length}
+  var t=lastSaveTime?lastSaveTime.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit',second:'2-digit'}):'--:--:--';
+  el.innerHTML=sc+' etudiants &bull; '+mc+' modules &bull; '+ABSENCES.length+' absences &bull; Sauvegarde : '+t;
 }
 
-function showSaveIndicator() {
-  var old = document.querySelector('.save-indicator');
-  if (old) old.parentNode.removeChild(old);
-  var el = document.createElement('div');
-  el.className = 'save-indicator';
-  el.innerHTML = '<i class="fa-solid fa-check"></i> Sauvegarde OK';
-  document.body.appendChild(el);
-  setTimeout(function(){ if(el.parentNode) el.parentNode.removeChild(el); }, 1500);
+function showSaveOK(){
+  var o=document.querySelector('.save-indicator');if(o)o.parentNode.removeChild(o);
+  var e=document.createElement('div');e.className='save-indicator';e.innerHTML='<i class="fa-solid fa-check"></i> Sauvegarde OK';
+  document.body.appendChild(e);setTimeout(function(){if(e.parentNode)e.parentNode.removeChild(e)},1500);
 }
 
 /* ========== UTILITAIRES ========== */
@@ -522,7 +487,6 @@ function renderDashboard(){
   sorted.forEach(function(a){var st=sts.find(function(s){return s.id===a.studentId}),md=mods.find(function(m){return m.id===a.moduleId}),ty=getTypeById(a.typeId);h+='<tr><td><div class="ec"><div class="ea" style="background:'+(OPT_COLORS[st?st.option:'']||'#64748b')+'">'+(st?initials(st.nom,st.prenom):'??')+'</div><div><div class="en">'+(st?st.fullname:'?')+'</div><div class="es">'+(st?st.classe:'')+'</div></div></div></td><td>'+(md?md.name:'?')+'</td><td>'+fmtDT(a.start)+'</td><td><span class="badge" style="background:'+ty.color+'18;color:'+ty.color+'"><span class="abs-type-dot" style="background:'+ty.color+'"></span>'+ty.name+'</span></td></tr>'});
   if(!sorted.length)h='<tr><td colspan="4" class="empty-state"><i class="fa-solid fa-inbox"></i><p>Aucune absence</p></td></tr>';
   document.getElementById('DR').innerHTML=h;
-  /* Graphique */
   var opts=getOpts(),data=opts.map(function(o){return{opt:o,count:0,color:OPT_COLORS[o]||'#64748b'}});
   sts.forEach(function(s){var c=abs.filter(function(a){return a.studentId===s.id}).length;var d=data.find(function(x){return x.opt===s.option});if(d)d.count+=c});
   var mx=Math.max.apply(null,data.map(function(d){return d.count}))||1,ch='';
@@ -575,13 +539,13 @@ function renderStudents(){
   });
   document.getElementById('SG').innerHTML=html||'<div class="empty-state"><i class="fa-solid fa-user-graduate"></i><p>Aucun etudiant</p></div>';
 }
-function deleteStudent(sid){var p=sid.split(':'),cl=p[0],nm=p.slice(1).join(':'),st=getStudents().find(function(s){return s.id===sid}),dn=st?st.fullname:nm;showConfirm('Supprimer <strong>'+dn+'</strong> ?<br><small style="color:var(--fd)">Ses absences seront aussi supprimees.</small>',function(){if(RD[cl]){var a=RD[cl].split('|').filter(function(n){return n.trim()!==nm.trim()});if(!a.length)delete RD[cl];else RD[cl]=a.join('|')}ABSENCES=ABSENCES.filter(function(a){return a.studentId!==sid});saveData();renderStudents();renderDashboard();toast('Etudiant supprime','success')})}
+function deleteStudent(sid){var p=sid.split(':'),cl=p[0],nm=p.slice(1).join(':'),st=getStudents().find(function(s){return s.id===sid}),dn=st?st.fullname:nm;showConfirm('Supprimer <strong>'+dn+'</strong> ?<br><small style="color:var(--fd)">Ses absences seront aussi supprimees.</small>',function(){if(RD[cl]){var a=RD[cl].split('|').filter(Boolean).filter(function(n){return n.trim()!==nm.trim()});if(!a.length)delete RD[cl];else RD[cl]=a.join('|')}ABSENCES=ABSENCES.filter(function(a){return a.studentId!==sid});saveData();renderStudents();renderDashboard();toast('Etudiant supprime','success')})}
 function doDeleteAllStudents(){var c=getStudents().length;if(!c){toast('Aucun etudiant','info');return}showConfirm('Supprimer <strong>tous les '+c+' etudiants</strong> ?<br><small style="color:var(--fd)">Toutes les absences seront supprimees.</small>',function(){RD={};ABSENCES=[];saveData();renderStudents();renderDashboard();renderAbsences();toast('Tous les etudiants supprimes','success')})}
 
 /* ========== MODALE ETUDIANT ========== */
 function openSM(){document.getElementById('SID').value='';document.getElementById('SLN').value='';document.getElementById('SFR').value='';document.getElementById('SMT2').textContent='Nouvel etudiant';var sel=document.getElementById('SCL');sel.innerHTML='';getClasses().forEach(function(c){sel.innerHTML+='<option value="'+c+'">'+c+'</option>'});updateOptDisplay();openModal('MST')}
 function updateOptDisplay(){document.getElementById('SOPT').value=OPTIONS[getOpt(document.getElementById('SCL').value)]||getOpt(document.getElementById('SCL').value)}
-function saveS(){var ln=document.getElementById('SLN').value.trim(),fn=document.getElementById('SFR').value.trim(),cl=document.getElementById('SCL').value;if(!ln||!fn){toast('Remplissez nom et prenom','error');return}var full=ln+' '+fn;if(RD[cl]&&RD[cl].split('|').some(function(n){return n.trim()===full})){toast('Existe deja','error');return}if(!RD[cl])RD[cl]='';RD[cl]+=(RD[cl]?'|':'')+full;closeModal('MST');saveData();renderStudents();renderDashboard();toast('Etudiant ajoute','success')}
+function saveS(){var ln=document.getElementById('SLN').value.trim(),fn=document.getElementById('SFR').value.trim(),cl=document.getElementById('SCL').value;if(!ln||!fn){toast('Remplissez nom et prenom','error');return}var full=ln+' '+fn;var existing=RD[cl]?RD[cl].split('|').filter(Boolean):[];if(existing.some(function(n){return n.trim()===full})){toast('Existe deja','error');return}if(!RD[cl])RD[cl]='';RD[cl]+=(RD[cl]&&RD[cl].trim()?'|':'')+full;closeModal('MST');saveData();renderStudents();renderDashboard();toast('Etudiant ajoute','success')}
 
 /* ========== DETAIL ETUDIANT ========== */
 function goStuDetail(sid){var st=getStudents().find(function(s){return s.id===sid});if(!st)return;var abs=ABSENCES.filter(function(a){return a.studentId===sid}),mods=getModules(),col=OPT_COLORS[st.option]||'#64748b',pg=document.getElementById('page-stu-detail'),h='<button class="back-btn" onclick="go(\'students\')"><i class="fa-solid fa-arrow-left"></i> Retour</button><div class="detail-hero"><div class="detail-hero-glow" style="background:'+col+'"></div><div style="display:flex;align-items:center;gap:18px;position:relative;z-index:1;"><div style="width:60px;height:60px;border-radius:14px;background:'+col+';display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700;color:#fff;">'+initials(st.nom,st.prenom)+'</div><div><h2 style="font-size:22px;font-weight:700;">'+st.fullname+'</h2><div style="color:var(--fm);font-size:13px;margin-top:3px;">'+st.classe+'</div></div></div></div>';var nj=abs.filter(function(a){return getTypeById(a.typeId).name.indexOf('justifiee')>=0}).length;h+='<div class="detail-stats">'+dStat(abs.length,'Total',col)+dStat(abs.length-nj,'Non justifiees','#dc2626')+dStat(nj,'Justifiees','#059669')+'</div>';if(abs.length>=exclThreshold)h+='<span class="excl-badge" style="margin-bottom:18px;display:inline-flex;"><i class="fa-solid fa-ban"></i> Exclusion</span>';else if(abs.length>=warnThreshold)h+='<span class="warn-badge" style="margin-bottom:18px;display:inline-flex;"><i class="fa-solid fa-triangle-exclamation"></i> Avertissement</span>';h+='<div class="dtw"><div class="dth"><h3>Historique ('+abs.length+')</h3></div>';if(abs.length){h+='<table><thead><tr><th>Module</th><th>Type</th><th>Date</th><th>Actions</th></tr></thead><tbody>';abs.sort(function(a,b){return new Date(b.start)-new Date(a.start)}).forEach(function(a){var md=mods.find(function(m){return m.id===a.moduleId}),ty=getTypeById(a.typeId),ss=sid.replace(/'/g,"\\'");h+='<tr><td>'+(md?md.name:'?')+'</td><td><span class="badge" style="background:'+ty.color+'18;color:'+ty.color+'"><span class="abs-type-dot" style="background:'+ty.color+'"></span>'+ty.name+'</span></td><td>'+fmtDT(a.start)+'</td><td><button class="ab dg" onclick="deleteAbsence(\''+a.id+'\');goStuDetail(\''+ss+'\')"><i class="fa-solid fa-trash-can"></i></button></td></tr>'});h+='</tbody></table>'}else h+='<div class="empty-state"><i class="fa-solid fa-check-circle"></i><p>Aucune absence</p></div>';h+='</div>';pg.innerHTML=h;document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active')});document.querySelectorAll('.ni').forEach(function(n){n.classList.remove('active')});pg.classList.add('active')}
@@ -590,14 +554,14 @@ function dStat(v,l,c){return'<div class="detail-stat"><div class="detail-stat-va
 /* ========== MODULES ========== */
 function renderModules(){var mods=getModules();document.getElementById('MC2').textContent=mods.length;var os=new Set(mods.map(function(m){return m.option}));document.getElementById('OMC2').textContent=os.size;var html='',opts=getOpts();opts.forEach(function(opt){var classes=getClasses().filter(function(c){return getOpt(c)===opt}).sort();if(!classes.length)return;var om=mods.filter(function(m){return m.option===opt});if(!om.length)return;html+='<div class="grp-section"><div class="grp-hdr" onclick="this.classList.toggle(\'collapsed\')"><div class="grp-hdr-icon" style="background:'+(OPT_COLORS[opt]||'#64748b')+'"><i class="fa-solid '+(OPT_ICONS[opt]||'fa-book')+'"></i></div><div class="grp-hdr-info"><div class="grp-hdr-name">'+(OPTIONS[opt]||opt)+'</div><div class="grp-hdr-sub"><span>'+classes.length+' classe'+(classes.length>1?'s':'')+'</span></div></div><div class="grp-hdr-count">'+om.length+'</div><div class="grp-hdr-arrow"><i class="fa-solid fa-chevron-down"></i></div></div><div class="grp-body">';classes.forEach(function(cl){var cm=om.filter(function(m){return m.classe===cl});if(!cm.length)return;html+='<div class="grp-lvl-hdr"><i class="fa-solid fa-layer-group"></i> '+cl+' <span>('+cm.length+')</span></div><div class="grp-mod-grid">';cm.forEach(function(m){var ac=ABSENCES.filter(function(a){return a.moduleId===m.id}).length;html+='<div class="mgc" onclick="goModDetail(\''+m.id+'\')"><div class="mgg" style="background:'+m.color+'"></div><button class="mod-card-del" onclick="event.stopPropagation();deleteModule(\''+m.id+'\',\''+m.name.replace(/'/g,"\\'")+'\',\''+m.classe.replace(/'/g,"\\'")+'\')"><i class="fa-solid fa-trash-can"></i></button><div class="mgnm">'+m.name+'</div><div class="mgme"><div class="mgmi"><i class="fa-solid fa-users"></i> '+getStudentsByClass(m.classe).length+'</div><div class="mgmi"><i class="fa-solid fa-list-check"></i> '+ac+'</div></div></div>'});html+='</div>'});html+='</div></div>'});document.getElementById('MG').innerHTML=html||'<div class="empty-state"><i class="fa-solid fa-book-open"></i><p>Aucun module. Cliquez sur "Ajouter" ou "Importer".</p></div>'}
 
-function deleteModule(mid,mname,mclasse){showConfirm('Supprimer <strong>'+mname+'</strong> ('+mclasse+') ?<br><small style="color:var(--fd)">Les absences liees seront supprimees.</small>',function(){if(MD[mclasse]){var a=MD[mclasse].split('|').filter(function(n){return modId(n.trim(),mclasse)!==mid});if(!a.length)delete MD[mclasse];else MD[mclasse]=a.join('|')}ABSENCES=ABSENCES.filter(function(a){return a.moduleId!==mid});saveData();renderModules();renderDashboard();renderAbsences();toast('Module supprime','success')})}
+function deleteModule(mid,mname,mclasse){showConfirm('Supprimer <strong>'+mname+'</strong> ('+mclasse+') ?<br><small style="color:var(--fd)">Les absences liees seront supprimees.</small>',function(){if(MD[mclasse]){var a=MD[mclasse].split('|').filter(Boolean).filter(function(n){return modId(n.trim(),mclasse)!==mid});if(!a.length)delete MD[mclasse];else MD[mclasse]=a.join('|')}ABSENCES=ABSENCES.filter(function(a){return a.moduleId!==mid});saveData();renderModules();renderDashboard();renderAbsences();toast('Module supprime','success')})}
 
 function doDeleteAllModules(){var c=getModules().length;if(!c){toast('Aucun module','info');return}showConfirm('Supprimer <strong>tous les '+c+' modules</strong> ?<br><small style="color:var(--fd)">Les absences liees seront supprimees.</small>',function(){MD={};ABSENCES=[];saveData();renderModules();renderDashboard();renderAbsences();toast('Tous les modules supprimes','success')})}
 
 /* ========== MODALE MODULE ========== */
 function openMM(){document.getElementById('MID').value='';document.getElementById('MNM').value='';document.getElementById('MCO').value='#7c3aed';document.getElementById('MMT2').textContent='Nouveau module';var sel=document.getElementById('MCL');sel.innerHTML='';getClasses().forEach(function(c){sel.innerHTML+='<option value="'+c+'">'+c+'</option>'});updateModOptDisplay();openModal('MMO')}
 function updateModOptDisplay(){document.getElementById('MOPT').value=OPTIONS[getOpt(document.getElementById('MCL').value)]||getOpt(document.getElementById('MCL').value)}
-function saveM(){var name=document.getElementById('MNM').value.trim(),cl=document.getElementById('MCL').value;if(!name){toast('Saisissez le nom','error');return}var nid=modId(name,cl);if(MD[cl]&&MD[cl].split('|').some(function(n){return modId(n.trim(),cl)===nid})){toast('Existe deja','error');return}if(!MD[cl])MD[cl]='';MD[cl]+=(MD[cl]?'|':'')+name;closeModal('MMO');saveData();renderModules();renderDashboard();toast('Module ajoute','success')}
+function saveM(){var name=document.getElementById('MNM').value.trim(),cl=document.getElementById('MCL').value;if(!name){toast('Saisissez le nom','error');return}var nid=modId(name,cl);var existing=MD[cl]?MD[cl].split('|').filter(Boolean):[];if(existing.some(function(n){return modId(n.trim(),cl)===nid})){toast('Existe deja','error');return}if(!MD[cl])MD[cl]='';MD[cl]+=(MD[cl]&&MD[cl].trim()?'|':'')+name;closeModal('MMO');saveData();renderModules();renderDashboard();toast('Module ajoute','success')}
 
 /* ========== DETAIL MODULE ========== */
 function goModDetail(mid){var m=getModuleById(mid);if(!m)return;var abs=ABSENCES.filter(function(a){return a.moduleId===mid}),sts=getStudents(),col=m.color,pg=document.getElementById('page-mod-detail'),h='<button class="back-btn" onclick="go(\'modules\')"><i class="fa-solid fa-arrow-left"></i> Retour</button><div class="detail-hero"><div class="detail-hero-glow" style="background:'+col+'"></div><div style="position:relative;z-index:1;"><h2 style="font-size:22px;font-weight:700;">'+m.name+'</h2><div style="color:var(--fm);font-size:13px;margin-top:3px;">'+m.classe+'</div></div></div>';var nj=abs.filter(function(a){return getTypeById(a.typeId).name.indexOf('justifiee')>=0}).length;h+='<div class="detail-stats">'+dStat(abs.length,'Total',col)+dStat(getStudentsByClass(m.classe).length,'Etudiants','#0891b2')+dStat(nj,'Justifiees','#059669')+'</div>';h+='<div class="dtw"><div class="dth"><h3>Historique ('+abs.length+')</h3></div>';if(abs.length){h+='<table><thead><tr><th>Etudiant</th><th>Type</th><th>Date</th><th>Actions</th></tr></thead><tbody>';abs.sort(function(a,b){return new Date(b.start)-new Date(a.start)}).forEach(function(a){var st=sts.find(function(s){return s.id===a.studentId}),ty=getTypeById(a.typeId);h+='<tr><td><div class="ec"><div class="ea" style="background:'+(OPT_COLORS[st?st.option:'']||'#64748b')+'">'+(st?initials(st.nom,st.prenom):'??')+'</div><div><div class="en">'+(st?st.fullname:'?')+'</div></div></div></td><td><span class="badge" style="background:'+ty.color+'18;color:'+ty.color+'"><span class="abs-type-dot" style="background:'+ty.color+'"></span>'+ty.name+'</span></td><td>'+fmtDT(a.start)+'</td><td><button class="ab dg" onclick="deleteAbsence(\''+a.id+'\');goModDetail(\''+mid+'\')"><i class="fa-solid fa-trash-can"></i></button></td></tr>'});h+='</tbody></table>'}else h+='<div class="empty-state"><i class="fa-solid fa-check-circle"></i><p>Aucune absence</p></div>';h+='</div>';pg.innerHTML=h;document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active')});document.querySelectorAll('.ni').forEach(function(n){n.classList.remove('active')});pg.classList.add('active')}
@@ -628,16 +592,162 @@ function dlTpl(c,n){dlFile(c,n,'text/csv')}
 
 /* ========== RESET ========== */
 function doReset(){showConfirm('Reinitialiser <strong>toutes les absences</strong> ?<br><small style="color:var(--fd)">Etudiants et modules conserves.</small>',function(){ABSENCES=[];saveData();go('dashboard');toast('Absences reinitialisees','success')})}
-function doFullReset(){showConfirm('<strong style="color:var(--dn)">REINITIALISER TOUT ?</strong><br><small style="color:var(--fd)">Etudiants, modules, absences, types -> tout sera remis a zero.</small>',function(){RD={};MD={};ABSENCES=[];TYPES=[{id:1,name:'Absence non justifiee',color:'#dc2626'},{id:2,name:'Absence justifiee',color:'#059669'},{id:3,name:'Retard',color:'#d97706'}];warnThreshold=3;exclThreshold=8;saveData();go('dashboard');toast('Tout reinitialise','success')})}
+function doFullReset(){showConfirm('<strong style="color:var(--dn)">REINITIALISER TOUT ?</strong><br><small style="color:var(--fd)">Etudiants, modules, absences, types -> tout sera remis a zero.</small>',function(){RD=JSON.parse(JSON.stringify(RD_DEFAULT));MD={};ABSENCES=[];TYPES=[{id:1,name:'Absence non justifiee',color:'#dc2626'},{id:2,name:'Absence justifiee',color:'#059669'},{id:3,name:'Retard',color:'#d97706'}];warnThreshold=3;exclThreshold=8;saveData();go('dashboard');toast('Tout reinitialise','success')})}
 
-/* ========== IMPORTS ========== */
-function openStudentImport(){impStudentData=null;document.getElementById('IMP_S_FILE').value='';document.getElementById('IMP_S_MOD_ROW').style.display='none';document.getElementById('IMP_S_PREVIEW').style.display='none';document.getElementById('IMP_S_BTN').style.display='none';openModal('MIMP_S')}
-function handleStudentFile(e){var f=e.target.files[0];if(!f)return;document.getElementById('IMP_S_MOD_ROW').style.display='flex';document.getElementById('IMP_S_MOD_NAME').textContent=f.name;var r=new FileReader();r.onload=function(ev){try{var wb=XLSX.read(ev.target.result,{type:'array'}),ws=wb.Sheets[wb.SheetNames[0]],d=XLSX.utils.sheet_to_json(ws,{defval:''});if(!d.length){toast('Fichier vide','error');return}impStudentData=[];var ok=0,sk=0;d.forEach(function(row){var nom=String(row['Nom']||row['nom']||'').trim(),pre=String(row['Prenom']||row['prenom']||'').trim(),cla=String(row['Classe']||row['classe']||'').trim();if(!nom||!pre||!cla){impStudentData.push({nom:nom,prenom:pre,classe:cla,status:'err'});return}var fn=nom+' '+pre,ex=RD[cla]&&RD[cla].split('|').some(function(n){return n.trim()===fn});if(ex){impStudentData.push({nom:nom,prenom:pre,classe:cla,status:'skip'});sk++}else{impStudentData.push({nom:nom,prenom:pre,classe:cla,status:'ok'});ok++}});document.getElementById('IMP_S_SUMMARY').innerHTML='<div class="imp-summary-item ok"><i class="fa-solid fa-check"></i> '+ok+' a importer</div>'+(sk?'<div class="imp-summary-item skip"><i class="fa-solid fa-forward"></i> '+sk+' doublons</div>':'');var tb='';impStudentData.forEach(function(r){tb+='<tr class="'+(r.status==='ok'?'':'imp-row-skip')+'"><td>'+r.nom+'</td><td>'+r.prenom+'</td><td>'+r.classe+'</td><td>'+(r.status==='ok'?'A importer':'Doublon')+'</td></tr>'});document.getElementById('IMP_S_TB').innerHTML=tb;document.getElementById('IMP_S_PREVIEW').style.display='block';document.getElementById('IMP_S_BTN').style.display=ok?'inline-flex':'none'}catch(err){toast('Erreur lecture fichier','error')}};r.readAsArrayBuffer(f)}
-function confirmStudentImport(){if(!impStudentData)return;var c=0;impStudentData.forEach(function(r){if(r.status!=='ok')return;var fn=r.nom+' '+r.prenom;if(!RD[r.classe])RD[r.classe]='';RD[r.classe]+=(RD[r.classe]?'|':'')+fn;c++});closeModal('MIMP_S');saveData();renderStudents();renderDashboard();toast(c+' etudiant(s) importe(s)','success');impStudentData=null}
+/* ================================================================
+   IMPORT ETUDIANTS — CORRIGE : filter(Boolean) + auto-colonnes + forcer
+   ================================================================ */
+function openStudentImport(){
+  impStudentData=null;
+  document.getElementById('IMP_S_FILE').value='';
+  document.getElementById('IMP_S_MOD_ROW').style.display='none';
+  document.getElementById('IMP_S_PREVIEW').style.display='none';
+  document.getElementById('IMP_S_BTN').style.display='none';
+  /* Retirer le bouton forcer s'il existe */
+  var fb=document.getElementById('IMP_S_FORCE');if(fb)fb.style.display='none';
+  openModal('MIMP_S');
+}
 
-function openModuleImport(){impModuleData=null;document.getElementById('IMP_M_FILE').value='';document.getElementById('IMP_M_MOD_ROW').style.display='none';document.getElementById('IMP_M_PREVIEW').style.display='none';document.getElementById('IMP_M_BTN').style.display='none';openModal('MIMP_M')}
-function handleModuleFile(e){var f=e.target.files[0];if(!f)return;document.getElementById('IMP_M_MOD_ROW').style.display='flex';document.getElementById('IMP_M_MOD_NAME').textContent=f.name;var r=new FileReader();r.onload=function(ev){try{var wb=XLSX.read(ev.target.result,{type:'array'}),ws=wb.Sheets[wb.SheetNames[0]],d=XLSX.utils.sheet_to_json(ws,{defval:''});if(!d.length){toast('Fichier vide','error');return}impModuleData=[];var ok=0,sk=0;d.forEach(function(row){var name=String(row['Module']||row['Nom']||row['nom']||row['module']||'').trim(),cla=String(row['Classe']||row['classe']||'').trim();if(!name||!cla){impModuleData.push({name:name,classe:cla,status:'err'});return}var ex=MD[cla]&&MD[cla].split('|').some(function(n){return n.trim().toLowerCase()===name.toLowerCase()});if(ex){impModuleData.push({name:name,classe:cla,status:'skip'});sk++}else{impModuleData.push({name:name,classe:cla,status:'ok'});ok++}});document.getElementById('IMP_M_SUMMARY').innerHTML='<div class="imp-summary-item ok"><i class="fa-solid fa-check"></i> '+ok+' a importer</div>'+(sk?'<div class="imp-summary-item skip"><i class="fa-solid fa-forward"></i> '+sk+' doublons</div>':'');var tb='';impModuleData.forEach(function(r){tb+='<tr class="'+(r.status==='ok'?'':'imp-row-skip')+'"><td>'+r.name+'</td><td>'+r.classe+'</td><td>'+(r.status==='ok'?'A importer':'Doublon')+'</td></tr>'});document.getElementById('IMP_M_TB').innerHTML=tb;document.getElementById('IMP_M_PREVIEW').style.display='block';document.getElementById('IMP_M_BTN').style.display=ok?'inline-flex':'none'}catch(err){toast('Erreur lecture fichier','error')}};r.readAsArrayBuffer(f)}
-function confirmModuleImport(){if(!impModuleData)return;var c=0;impModuleData.forEach(function(r){if(r.status!=='ok')return;if(!MD[r.classe])MD[r.classe]='';MD[r.classe]+=(MD[r.classe]?'|':'')+r.name;c++});closeModal('MIMP_M');saveData();renderModules();renderDashboard();toast(c+' module(s) importe(s)','success');impModuleData=null}
+function handleStudentFile(e){
+  var f=e.target.files[0];if(!f)return;
+  document.getElementById('IMP_S_MOD_ROW').style.display='flex';
+  document.getElementById('IMP_S_MOD_NAME').textContent=f.name;
+  var r=new FileReader();
+  r.onload=function(ev){
+    try{
+      var wb=XLSX.read(ev.target.result,{type:'array'});
+      var ws=wb.Sheets[wb.SheetNames[0]];
+      var d=XLSX.utils.sheet_to_json(ws,{defval:''});
+      if(!d.length){toast('Fichier vide','error');return}
+      /* Detecter les colonnes automatiquement */
+      var cols=Object.keys(d[0]),cNom=null,cPre=null,cCla=null;
+      cols.forEach(function(c){var low=c.toLowerCase().trim();if(low==='nom')cNom=c;else if(low==='prenom'||low==='prénom')cPre=c;else if(low==='classe'||low==='class')cCla=c});
+      if(!cNom&&cols.length>=3){cNom=cols[0];cPre=cols[1];cCla=cols[2]}
+      else if(!cNom&&cols.length>=2){cNom=cols[0];cCla=cols[1]}
+      if(!cCla){toast('Colonne "Classe" introuvable','error');return}
+
+      impStudentData=[];var ok=0,sk=0,er=0;
+      d.forEach(function(row){
+        var nom=String(row[cNom]||'').trim();
+        var pre=String(cPre?row[cPre]:'').trim();
+        var cla=String(row[cCla]||'').trim();
+        if(!nom||!cla){impStudentData.push({nom:nom,prenom:pre,classe:cla,status:'err'});er++;return}
+        if(!pre){var parts=nom.split(/\s+/);if(parts.length>1){pre=parts.pop();nom=parts.join(' ')}}
+        var fn=nom+' '+pre;
+        /* CORRECTION : filter(Boolean) elimine les chaines vides */
+        var existing=RD[cla]?RD[cla].split('|').filter(Boolean):[];
+        var isDup=existing.some(function(n){return n.trim()===fn});
+        if(isDup){impStudentData.push({nom:nom,prenom:pre,classe:cla,status:'skip'});sk++}
+        else{impStudentData.push({nom:nom,prenom:pre,classe:cla,status:'ok'});ok++}
+      });
+      document.getElementById('IMP_S_SUMMARY').innerHTML=
+        '<div class="imp-summary-item ok"><i class="fa-solid fa-check"></i> '+ok+' a importer</div>'+
+        (sk?'<div class="imp-summary-item skip"><i class="fa-solid fa-forward"></i> '+sk+' doublons</div>':'')+
+        (er?'<div class="imp-summary-item err"><i class="fa-solid fa-xmark"></i> '+er+' erreurs</div>':'');
+      var tb='';
+      impStudentData.forEach(function(r){
+        var cls=r.status==='ok'?'':r.status==='skip'?'imp-row-skip':'imp-row-skip';
+        var stxt=r.status==='ok'?'A importer':r.status==='skip'?'Doublon ignore':'Erreur';
+        tb+='<tr class="'+cls+'"><td>'+r.nom+'</td><td>'+r.prenom+'</td><td>'+r.classe+'</td><td>'+stxt+'</td></tr>';
+      });
+      document.getElementById('IMP_S_TB').innerHTML=tb;
+      document.getElementById('IMP_S_PREVIEW').style.display='block';
+      document.getElementById('IMP_S_BTN').style.display=ok?'inline-flex':'none';
+      /* Bouton forcer */
+      var fb=document.getElementById('IMP_S_FORCE');
+      if(!fb){fb=document.createElement('button');fb.id='IMP_S_FORCE';fb.className='bs';fb.style.cssText='border-color:var(--wn);color:var(--wn);';fb.innerHTML='<i class="fa-solid fa-bolt"></i> Forcer l\'import';fb.onclick=function(){confirmStudentImport(true)};document.getElementById('IMP_S_MF').insertBefore(fb,document.getElementById('IMP_S_BTN'))}
+      fb.style.display=(ok+sk>0&&!ok)?'inline-flex':'none';
+    }catch(err){toast('Erreur lecture: '+err.message,'error');console.error(err)}
+  };
+  r.readAsArrayBuffer(f);
+}
+
+function confirmStudentImport(force){
+  if(!impStudentData)return;var c=0;
+  impStudentData.forEach(function(r){
+    if(r.status!=='ok'&&!force)return;
+    if(r.status==='err')return;
+    var fn=r.nom+' '+r.prenom;
+    if(!RD[r.classe])RD[r.classe]='';
+    var existing=RD[r.classe]?RD[r.classe].split('|').filter(Boolean):[];
+    if(!existing.some(function(n){return n.trim()===fn})){
+      RD[r.classe]+=(RD[r.classe]&&RD[r.classe].trim()?'|':'')+fn;c++;
+    }
+  });
+  closeModal('MIMP_S');saveData();renderStudents();renderDashboard();
+  toast(c+' etudiant(s) importe(s)','success');impStudentData=null;
+}
+
+/* ================================================================
+   IMPORT MODULES — CORRIGE : filter(Boolean) + auto-colonnes + forcer
+   ================================================================ */
+function openModuleImport(){
+  impModuleData=null;
+  document.getElementById('IMP_M_FILE').value='';
+  document.getElementById('IMP_M_MOD_ROW').style.display='none';
+  document.getElementById('IMP_M_PREVIEW').style.display='none';
+  document.getElementById('IMP_M_BTN').style.display='none';
+  var fb=document.getElementById('IMP_M_FORCE');if(fb)fb.style.display='none';
+  openModal('MIMP_M');
+}
+
+function handleModuleFile(e){
+  var f=e.target.files[0];if(!f)return;
+  document.getElementById('IMP_M_MOD_ROW').style.display='flex';
+  document.getElementById('IMP_M_MOD_NAME').textContent=f.name;
+  var r=new FileReader();
+  r.onload=function(ev){
+    try{
+      var wb=XLSX.read(ev.target.result,{type:'array'});
+      var ws=wb.Sheets[wb.SheetNames[0]];
+      var d=XLSX.utils.sheet_to_json(ws,{defval:''});
+      if(!d.length){toast('Fichier vide','error');return}
+      var cols=Object.keys(d[0]),cMod=null,cCla=null;
+      cols.forEach(function(c){var low=c.toLowerCase().trim();if(low==='module'||low==='nom')cMod=c;else if(low==='classe'||low==='class')cCla=c});
+      if(!cMod&&cols.length>=2){cMod=cols[0];cCla=cols[1]}
+      if(!cCla){toast('Colonne "Classe" introuvable','error');return}
+
+      impModuleData=[];var ok=0,sk=0;
+      d.forEach(function(row){
+        var name=String(row[cMod]||'').trim();
+        var cla=String(row[cCla]||'').trim();
+        if(!name||!cla){impModuleData.push({name:name,classe:cla,status:'err'});return}
+        /* CORRECTION : filter(Boolean) */
+        var existing=MD[cla]?MD[cla].split('|').filter(Boolean):[];
+        var isDup=existing.some(function(n){return n.trim().toLowerCase()===name.toLowerCase()});
+        if(isDup){impModuleData.push({name:name,classe:cla,status:'skip'});sk++}
+        else{impModuleData.push({name:name,classe:cla,status:'ok'});ok++}
+      });
+      document.getElementById('IMP_M_SUMMARY').innerHTML=
+        '<div class="imp-summary-item ok"><i class="fa-solid fa-check"></i> '+ok+' a importer</div>'+
+        (sk?'<div class="imp-summary-item skip"><i class="fa-solid fa-forward"></i> '+sk+' doublons</div>':'');
+      var tb='';
+      impModuleData.forEach(function(r){tb+='<tr class="'+(r.status==='ok'?'':'imp-row-skip')+'"><td>'+r.name+'</td><td>'+r.classe+'</td><td>'+(r.status==='ok'?'A importer':'Doublon')+'</td></tr>'});
+      document.getElementById('IMP_M_TB').innerHTML=tb;
+      document.getElementById('IMP_M_PREVIEW').style.display='block';
+      document.getElementById('IMP_M_BTN').style.display=ok?'inline-flex':'none';
+      var fb=document.getElementById('IMP_M_FORCE');
+      if(!fb){fb=document.createElement('button');fb.id='IMP_M_FORCE';fb.className='bs';fb.style.cssText='border-color:var(--wn);color:var(--wn);';fb.innerHTML='<i class="fa-solid fa-bolt"></i> Forcer l\'import';fb.onclick=function(){confirmModuleImport(true)};document.getElementById('IMP_M_MF').insertBefore(fb,document.getElementById('IMP_M_BTN'))}
+      fb.style.display=(ok+sk>0&&!ok)?'inline-flex':'none';
+    }catch(err){toast('Erreur lecture: '+err.message,'error');console.error(err)}
+  };
+  r.readAsArrayBuffer(f);
+}
+
+function confirmModuleImport(force){
+  if(!impModuleData)return;var c=0;
+  impModuleData.forEach(function(r){
+    if(r.status!=='ok'&&!force)return;
+    if(r.status==='err')return;
+    if(!MD[r.classe])MD[r.classe]='';
+    var existing=MD[r.classe]?MD[r.classe].split('|').filter(Boolean):[];
+    if(!existing.some(function(n){return n.trim().toLowerCase()===r.name.toLowerCase()})){
+      MD[r.classe]+=(MD[r.classe]&&MD[r.classe].trim()?'|':'')+r.name;c++;
+    }
+  });
+  closeModal('MIMP_M');saveData();renderModules();renderDashboard();
+  toast(c+' module(s) importe(s)','success');impModuleData=null;
+}
 
 /* ========== FERMER MODALES CLIQUANT DEHORS ========== */
 document.querySelectorAll('.mo').forEach(function(m){m.addEventListener('click',function(e){if(e.target===m)closeModal(m.id)})});
