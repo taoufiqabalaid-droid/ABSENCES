@@ -422,72 +422,105 @@ function hashStr(s){var h=0;for(var i=0;i<s.length;i++){h=((h<<5)-h)+s.charCodeA
 function initials(name){var p=name.split(' ');return(p[0]||'').charAt(0)+(p.length>1?(p[1]||'').charAt(0):'')}
 function fmtDate(d){if(!d)return'--';var dt=new Date(d);return dt.toLocaleDateString('fr-FR',{day:'2-digit',month:'short',year:'numeric'})}
 function fmtDateTime(d){if(!d)return'--';var dt=new Date(d);return dt.toLocaleDateString('fr-FR',{day:'2-digit',month:'short'})+' '+dt.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'})}
-function colorForName(n){var c=['#dc2626','#0891b2','#7c3aed','#ea580c','#059669','#ec4899','#6366f1','#d97706','#0d9488','#4f46e5'];return c[hashStr(n)%c.length]}
+function toLocalISO(d){var dt=new Date(d);var y=dt.getFullYear();var m=String(dt.getMonth()+1).padStart(2,'0');var day=String(dt.getDate()).padStart(2,'0');var h=String(dt.getHours()).padStart(2,'0');var min=String(dt.getMinutes()).padStart(2,'0');return y+'-'+m+'-'+day+'T'+h+':'+min}
+function parseSlot(slot){if(!slot)return{h:8,m:30};var parts=slot.split(' - ')[0].split('H');return{h:parseInt(parts[0])||8,m:parseInt(parts[1])||30}}
+function getTotalStudents(){var c=0;for(var k in RD){if(RD[k])c+=(RD[k]+'').split('|').filter(Boolean).length}return c}
+function getModColor(modName,cls){var mods=getModulesOfClass(cls);var idx=mods.indexOf(modName);if(idx<0)idx=hashStr(modName)%8;var palette=['#059669','#0891b2','#7c3aed','#ea580c','#dc2626','#ec4899','#6366f1','#d97706'];return palette[idx%palette.length]}
 
-/* ===== SAUVEGARDE / CHARGEMENT ===== */
+/* ======================================================
+   ===== SAUVEGARDE / CHARGEMENT — LE COEUR DU FIX =====
+   ====================================================== */
+
+// Sauvegarde TOUTES les donnees dans localStorage
 function saveData(){
   try{
-    localStorage.setItem(LS_KEY,JSON.stringify({rd:RD,md:MD,abs:ABSENCES,types:TYPES,warn:warnThreshold,excl:exclThreshold}));
-    lastSaveTime=new Date();updateDataBar();showSaveOK();
-  }catch(e){console.error('SAVE ERR:',e);toast('Erreur de sauvegarde','error')}
+    var data={
+      RD:RD,
+      MD:MD,
+      ABSENCES:ABSENCES,
+      TYPES:TYPES,
+      warnThreshold:warnThreshold,
+      exclThreshold:exclThreshold
+    };
+    localStorage.setItem(LS_KEY, JSON.stringify(data));
+    lastSaveTime=new Date();
+    updateDataBar();
+    showSaveIndicator();
+  }catch(e){
+    console.error('Erreur sauvegarde:',e);
+  }
 }
 
+// Charge les donnees depuis localStorage (ou RD_DEFAULT si vide)
 function loadData(){
   try{
     var raw=localStorage.getItem(LS_KEY);
     if(raw){
-      var d=JSON.parse(raw);
-      if(d.rd!==undefined&&d.rd!==null) RD=d.rd; else RD=JSON.parse(JSON.stringify(RD_DEFAULT));
-      if(d.md!==undefined&&d.md!==null) MD=d.md; else MD={};
-      ABSENCES=Array.isArray(d.abs)?d.abs:[];
-      if(Array.isArray(d.types)&&d.types.length) TYPES=d.types;
-      if(d.warn) warnThreshold=parseInt(d.warn)||3;
-      if(d.excl) exclThreshold=parseInt(d.excl)||8;
-      lastSaveTime=new Date();updateDataBar();return;
+      var data=JSON.parse(raw);
+      RD=data.RD||{};
+      MD=data.MD||{};
+      ABSENCES=data.ABSENCES||[];
+      TYPES=data.TYPES||TYPES;
+      warnThreshold=data.warnThreshold||3;
+      exclThreshold=data.exclThreshold||8;
+      lastSaveTime=new Date();
+    }else{
+      // Premiere visite : initialiser depuis RD_DEFAULT
+      RD=JSON.parse(JSON.stringify(RD_DEFAULT));
+      MD={};
+      ABSENCES=[];
+      TYPES=[{id:1,name:'Absence non justifiee',color:'#dc2626'},{id:2,name:'Absence justifiee',color:'#059669'},{id:3,name:'Retard',color:'#d97706'}];
+      warnThreshold=3;
+      exclThreshold=8;
+      saveData(); // Sauvegarder l'etat initial
     }
-  }catch(e){console.error('LOAD ERR:',e)}
-  RD=JSON.parse(JSON.stringify(RD_DEFAULT));MD={};ABSENCES=[];saveData();
+  }catch(e){
+    console.error('Erreur chargement:',e);
+    // En cas d'erreur, repartir de zero
+    RD=JSON.parse(JSON.stringify(RD_DEFAULT));
+    MD={};
+    ABSENCES=[];
+    saveData();
+  }
 }
 
 function updateDataBar(){
-  var el=document.getElementById('DATA_STATUS');if(!el)return;
-  var mc=0,sc=0,k;
-  for(k in MD){if(MD[k])mc+=MD[k].split('|').filter(Boolean).length}
-  for(k in RD){if(RD[k])sc+=RD[k].split('|').filter(Boolean).length}
-  var t=lastSaveTime?lastSaveTime.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit',second:'2-digit'}):'--:--:--';
-  el.innerHTML=sc+' etudiants &bull; '+mc+' modules &bull; '+ABSENCES.length+' absences &bull; Sauvegarde : '+t;
+  var el=document.getElementById('DATA_STATUS');
+  if(!el)return;
+  var ts=lastSaveTime?lastSaveTime.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit',second:'2-digit'}):'--';
+  var absCount=0;
+  ABSENCES.forEach(function(a){absCount+=(a.students?a.students.length:0)});
+  el.textContent=ts+' | '+getTotalStudents()+' etudiants | '+getAllModules().length+' modules | '+absCount+' absences';
 }
 
-function showSaveOK(){
-  var old=document.querySelector('.save-indicator');if(old)old.parentNode.removeChild(old);
-  var d=document.createElement('div');d.className='save-indicator';d.innerHTML='<i class="fa-solid fa-check"></i> Sauvegarde OK';
-  document.body.appendChild(d);
-  setTimeout(function(){if(d.parentNode)d.parentNode.removeChild(d)},2000);
+function showSaveIndicator(){
+  var el=document.createElement('div');
+  el.className='save-indicator';
+  el.innerHTML='<i class="fa-solid fa-check"></i> Sauvegarde reussie';
+  document.body.appendChild(el);
+  setTimeout(function(){el.remove()},1500);
 }
 
 /* ===== TOAST ===== */
 function toast(msg,type){
-  var c=document.getElementById('TC');if(!c)return;
+  var tc=document.getElementById('TC');
   var t=document.createElement('div');
   t.className='toast '+(type==='error'?'te':type==='info'?'tn':'ts');
-  var ic=type==='error'?'fa-circle-exclamation':type==='info'?'fa-circle-info':'fa-circle-check';
-  t.innerHTML='<i class="fa-solid '+ic+'"></i> '+esc(msg);
-  c.appendChild(t);
-  setTimeout(function(){t.classList.add('toast-exit');setTimeout(function(){if(t.parentNode)t.parentNode.removeChild(t)},300)},3500);
+  t.innerHTML='<i class="fa-solid '+(type==='error'?'fa-circle-xmark':type==='info'?'fa-circle-info':'fa-circle-check')+'"></i> '+esc(msg);
+  tc.appendChild(t);
+  setTimeout(function(){t.classList.add('toast-exit');setTimeout(function(){t.remove()},300)},3000);
 }
-
-/* ===== MODALES ===== */
-function openModal(id){document.getElementById(id).classList.add('show')}
-function closeModal(id){document.getElementById(id).classList.remove('show')}
 
 /* ===== NAVIGATION ===== */
 function go(page){
   document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active')});
   document.querySelectorAll('.ni').forEach(function(n){n.classList.remove('active')});
-  var el=document.getElementById('page-'+page);if(el)el.classList.add('active');
-  var nav=document.querySelector('.ni[data-p="'+page+'"]');if(nav)nav.classList.add('active');
+  var el=document.getElementById('page-'+page);
+  if(el)el.classList.add('active');
+  var nav=document.querySelector('.ni[data-p="'+page+'"]');
+  if(nav)nav.classList.add('active');
   document.getElementById('SB').classList.remove('open');
-  /* Rafraichir la page active */
+  // Rafraichir la page
   if(page==='dashboard')renderDashboard();
   else if(page==='absences')renderAbsences();
   else if(page==='calendar')renderCalendar();
@@ -497,209 +530,232 @@ function go(page){
   else if(page==='settings'){document.getElementById('SET_WARN').value=warnThreshold;document.getElementById('SET_EXCL').value=exclThreshold}
 }
 
-function globalSearch(q){
-  if(!q||!q.trim())return;
-  q=q.trim().toLowerCase();
-  /* Chercher dans les etudiants */
-  for(var cls in RD){
-    var sts=(RD[cls]||'').split('|').filter(Boolean);
-    for(var i=0;i<sts.length;i++){
-      if(sts[i].toLowerCase().indexOf(q)!==-1){
-        go('students');return;
-      }
-    }
-  }
-  /* Chercher dans les modules */
-  for(var cls2 in MD){
-    var mods=(MD[cls2]||'').split('|').filter(Boolean);
-    for(var j=0;j<mods.length;j++){
-      if(mods[j].toLowerCase().indexOf(q)!==-1){
-        go('modules');return;
-      }
-    }
-  }
-  go('absences');
-}
-
-/* ===== TABLEAU DE BORD ===== */
+/* ===== DASHBOARD ===== */
 function renderDashboard(){
   document.getElementById('CD').textContent=new Date().toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
-  var totalStu=0,totalMod=0,totalAbs=ABSENCES.length,todayAbs=0;
-  for(var k in RD)totalStu+=RD[k].split('|').filter(Boolean).length;
-  for(var k2 in MD)totalMod+=MD[k2].split('|').filter(Boolean).length;
-  var td=new Date().toISOString().slice(0,10);
-  ABSENCES.forEach(function(a){if(a.date&&a.date.slice(0,10)===td)todayAbs++});
-  var warnStu=0,exclStu=0;
-  var stuAbsMap={};
-  ABSENCES.forEach(function(a){if(a.students)a.students.forEach(function(s){stuAbsMap[s]=(stuAbsMap[s]||0)+1})});
-  Object.keys(stuAbsMap).forEach(function(s){if(stuAbsMap[s]>=exclThreshold)exclStu++;else if(stuAbsMap[s]>=warnThreshold)warnStu++});
+  var totalStu=getTotalStudents();
+  var totalAbs=0;
+  ABSENCES.forEach(function(a){totalAbs+=(a.students?a.students.length:0)});
+  var today=new Date().toDateString();
+  var todayAbs=ABSENCES.filter(function(a){return a.startDate&&new Date(a.startDate).toDateString()===today});
+  var todayCount=0;
+  todayAbs.forEach(function(a){todayCount+=(a.students?a.students.length:0)});
+  var njCount=ABSENCES.filter(function(a){return a.typeId===1}).length;
 
-  document.getElementById('KPI').innerHTML=
-    kpiCard('fa-user-graduate','var(--ac)','var(--acs)',totalStu,'Etudiants','Toutes options confondues')+
-    kpiCard('fa-book-open','var(--in)','var(--ins)',totalMod,'Modules','Actifs')+
-    kpiCard('fa-calendar-xmark','var(--dn)','var(--dns)',totalAbs,'Absences','Total enregistrees',todayAbs>0?'+'+todayAbs+' aujourd\'hui':'')+
-    kpiCard('fa-triangle-exclamation','var(--wn)','var(--wns)',warnStu+exclStu,'Alertes',exclStu>0?exclStu+' exclusion(s)':'');
+  var kpi=document.getElementById('KPI');
+  kpi.innerHTML='<div class="kc"><div class="ki" style="background:var(--acs);color:var(--ac);"><i class="fa-solid fa-user-graduate"></i></div><div class="kv">'+totalStu+'</div><div class="kl">Etudiants</div><div class="kt" style="color:var(--ac);"><i class="fa-solid fa-building-columns"></i> '+getAllClasses().length+' classes</div><div class="kgw" style="background:var(--ac);"></div></div>'
+  +'<div class="kc"><div class="ki" style="background:var(--dns);color:var(--dn);"><i class="fa-solid fa-xmark"></i></div><div class="kv">'+totalAbs+'</div><div class="kl">Absences totales</div><div class="kt" style="color:var(--dn);"><i class="fa-solid fa-triangle-exclamation"></i> '+njCount+' non justifiees</div><div class="kgw" style="background:var(--dn);"></div></div>'
+  +'<div class="kc"><div class="ki" style="background:var(--wns);color:var(--wn);"><i class="fa-solid fa-calendar-day"></i></div><div class="kv">'+todayCount+'</div><div class="kl">Absences aujourd\'hui</div><div class="kt" style="color:var(--wn);"><i class="fa-solid fa-clock"></i> '+todayAbs.length+' seances</div><div class="kgw" style="background:var(--wn);"></div></div>'
+  +'<div class="kc"><div class="ki" style="background:var(--ins);color:var(--in);"><i class="fa-solid fa-book-open"></i></div><div class="kv">'+getAllModules().length+'</div><div class="kl">Modules</div><div class="kt" style="color:var(--in);"><i class="fa-solid fa-layer-group"></i> '+getAllOpts().length+' options</div><div class="kgw" style="background:var(--in);"></div></div>';
 
-  /* Graphique par option */
-  var opts=getAllOpts();var optAbs={};
-  opts.forEach(function(o){optAbs[o]=0});
-  ABSENCES.forEach(function(a){
-    if(a.moduleClass){var o=getOpt(a.moduleClass);if(o&&optAbs[o]!==undefined)optAbs[o]++}
+  // Graphique par option
+  var opts=getAllOpts();
+  var cb=document.getElementById('CB');
+  var maxVal=1;
+  var optCounts=[];
+  opts.forEach(function(o){
+    var classes=getClassesOfOpt(o);
+    var count=0;
+    ABSENCES.forEach(function(a){
+      if(classes.indexOf(a.moduleClass)!==-1)count+=(a.students?a.students.length:0);
+    });
+    optCounts.push({opt:o,count:count});
+    if(count>maxVal)maxVal=count;
   });
-  var maxAbs=1;opts.forEach(function(o){if(optAbs[o]>maxAbs)maxAbs=optAbs[o]});
-  var bars='';opts.forEach(function(o){
-    var h=Math.max(3,(optAbs[o]/maxAbs)*130);
-    bars+='<div class="cbw"><div class="cbr" style="height:'+h+'px;background:'+OPT_COLORS[o]+'"></div><div class="cbl">'+o+'</div></div>';
+  var bars='';
+  optCounts.forEach(function(oc){
+    var h=Math.max(3,(oc.count/maxVal)*140);
+    var col=OPT_COLORS[oc.opt]||'#64748b';
+    bars+='<div class="cbw"><div class="cbr" style="height:'+h+'px;background:'+col+';"></div><div class="cbl">'+oc.opt+'</div></div>';
   });
-  document.getElementById('CB').innerHTML=bars||'<div style="text-align:center;color:var(--fd);padding:40px 0;font-size:13px;">Aucune donnee</div>';
+  cb.innerHTML=bars||'<p style="color:var(--fd);font-size:12px;text-align:center;width:100%;">Aucune donnee</p>';
 
-  /* Dernieres absences */
-  var sorted=ABSENCES.slice().sort(function(a,b){return(b.date||'').localeCompare(a.date||'')});
-  var rows='';var cnt=0;
+  // Dernieres absences
+  var dr=document.getElementById('DR');
+  var sorted=ABSENCES.slice().sort(function(a,b){return new Date(b.startDate)-new Date(a.startDate)}).slice(0,6);
+  if(!sorted.length){dr.innerHTML='<tr><td colspan="4" class="empty-state"><i class="fa-solid fa-inbox"></i><p>Aucune absence enregistree</p></td></tr>';return}
+  var html='';
   sorted.forEach(function(a){
-    if(cnt>=8)return;
-    var stuNames=(a.students||[]).slice(0,2).join(', ');if((a.students||[]).length>2)stuNames+=' +'+(a.students.length-2);
     var ty=getTypeById(a.typeId);
-    rows+='<tr><td><div class="en">'+esc(stuNames||'--')+'</div></td><td>'+esc(a.moduleName||'--')+'</td><td>'+fmtDate(a.date)+'</td><td><span class="badge" style="background:'+ty.color+'15;color:'+ty.color+'"><span class="abs-type-dot" style="background:'+ty.color+'"></span>'+esc(ty.name)+'</span></td></tr>';
-    cnt++;
+    var names=(a.students||[]).slice(0,2).join(', ');
+    if((a.students||[]).length>2)names+=' +'+((a.students.length)-2);
+    html+='<tr><td><div class="ec"><div class="ea" style="background:'+ty.color+';">'+initials(names)+'</div><div><div class="en">'+esc(names)+'</div><div class="es">'+esc(a.moduleClass||'')+'</div></div></div></td><td>'+esc(a.moduleName||'')+'</td><td>'+fmtDate(a.startDate)+'</td><td><span class="badge" style="background:'+ty.color+'18;color:'+ty.color+';"><span class="abs-type-dot" style="background:'+ty.color+';"></span>'+esc(ty.name)+'</span></td></tr>';
   });
-  document.getElementById('DR').innerHTML=rows||'<tr><td colspan="4" style="text-align:center;color:var(--fd);padding:30px;">Aucune absence</td></tr>';
-}
-
-function kpiCard(icon,color,bg,val,label,sub,trend){
-  return '<div class="kc"><div class="ki" style="background:'+bg+';color:'+color+'"><i class="fa-solid '+icon+'"></i></div><div class="kv">'+val+'</div><div class="kl">'+label+'</div>'+(trend?'<div class="kt" style="color:'+color+'"><i class="fa-solid fa-arrow-trend-up"></i> '+trend+'</div>':'')+'<div class="kgw" style="background:'+color+'"></div></div>';
+  dr.innerHTML=html;
 }
 
 /* ===== ABSENCES ===== */
 function renderAbsences(){
-  /* Remplir les filtres */
-  var fo=document.getElementById('FO'),fc=document.getElementById('FC'),fm=document.getElementById('FM');
-  var opts=getAllOpts(),cls=getAllClasses(),mods=getAllModules();
-  var foVal=fo.value,fcVal=fc.value,fmVal=fm.value;
-  fo.innerHTML='<option value="all">Toutes options</option>';opts.forEach(function(o){fo.innerHTML+='<option value="'+o+'"'+(o===foVal?' selected':'')+'>'+o+'</option>'});
-  fc.innerHTML='<option value="all">Toutes classes</option>';cls.forEach(function(c){fc.innerHTML+='<option value="'+c+'"'+(c===fcVal?' selected':'')+'>'+c+'</option>'});
-  fm.innerHTML='<option value="all">Tous modules</option>';mods.forEach(function(m){fm.innerHTML+='<option value="'+m.name+'"'+(m.name===fmVal?' selected':'')+'>'+esc(m.name)+'</option>'});
+  // Remplir les filtres
+  var fo=document.getElementById('FO');
+  var fc=document.getElementById('FC');
+  var fm=document.getElementById('FM');
+  var curOpt=fo.value,curCls=fc.value,curMod=fm.value;
+  var optsHtml='<option value="all">Toutes options</option>';
+  getAllOpts().forEach(function(o){optsHtml+='<option value="'+o+'"'+(absOption===o?' selected':'')+'>'+o+'</option>'});
+  fo.innerHTML=optsHtml;
+  var clsHtml='<option value="all">Toutes classes</option>';
+  getAllClasses().forEach(function(c){clsHtml+='<option value="'+c+'"'+(absClass===c?' selected':'')+'>'+c+'</option>'});
+  fc.innerHTML=clsHtml;
+  var modHtml='<option value="all">Tous modules</option>';
+  getAllModules().forEach(function(m){modHtml+='<option value="'+m.name+'"'+(absModule===m.name?' selected':'')+'>'+esc(m.name)+' ('+m.class+')</option>'});
+  fm.innerHTML=modHtml;
 
-  /* Filtrer */
-  var filtered=ABSENCES.slice().sort(function(a,b){return(b.date||'').localeCompare(a.date||'')});
+  // Filtrer
+  var filtered=ABSENCES.slice().sort(function(a,b){return new Date(b.startDate)-new Date(a.startDate)});
   if(absOption!=='all')filtered=filtered.filter(function(a){return getOpt(a.moduleClass)===absOption});
   if(absClass!=='all')filtered=filtered.filter(function(a){return a.moduleClass===absClass});
   if(absModule!=='all')filtered=filtered.filter(function(a){return a.moduleName===absModule});
 
-  var totalPages=Math.max(1,Math.ceil(filtered.length/PER_PAGE));
+  // Pagination
+  var total=filtered.length;
+  var totalPages=Math.ceil(total/PER_PAGE)||1;
   if(absPage>totalPages)absPage=totalPages;
-  var start=(absPage-1)*PER_PAGE,end=start+PER_PAGE;
-  var page=filtered.slice(start,end);
+  var start=(absPage-1)*PER_PAGE;
+  var pageItems=filtered.slice(start,start+PER_PAGE);
 
-  var rows='';
-  page.forEach(function(a){
-    var stuNames=(a.students||[]).slice(0,3).join(', ');if((a.students||[]).length>3)stuNames+=' +'+(a.students.length-3);
-    var ty=getTypeById(a.typeId);
-    rows+='<tr><td><div class="en">'+esc(stuNames||'--')+'</div><div class="es">'+esc(a.moduleClass||'')+'</div></td><td>'+esc(a.moduleName||'--')+'</td><td><span class="badge" style="background:'+ty.color+'15;color:'+ty.color+'"><span class="abs-type-dot" style="background:'+ty.color+'"></span>'+esc(ty.name)+'</span></td><td>'+fmtDateTime(a.date)+'<br><span style="font-size:11px;color:var(--fd)">'+esc(a.endTime?fmtDateTime(a.endTime):'')+'</span></td><td><button class="ab dg" onclick="deleteAbs('+a.id+')" title="Supprimer"><i class="fa-solid fa-trash-can"></i></button></td></tr>';
-  });
-  document.getElementById('AB').innerHTML=rows||'<tr><td colspan="5" style="text-align:center;color:var(--fd);padding:30px;">Aucune absence trouvee</td></tr>';
-
-  /* Pagination */
-  var pg='';
-  if(totalPages>1){
-    pg+='<button class="pb" onclick="absPage=1;renderAbsences()"'+(absPage===1?' disabled':'')+'><i class="fa-solid fa-angles-left"></i></button>';
-    pg+='<button class="pb" onclick="if(absPage>1){absPage--;renderAbsences()}"'+(absPage===1?' disabled':'')+'><i class="fa-solid fa-angle-left"></i></button>';
-    var s=Math.max(1,absPage-2),e=Math.min(totalPages,absPage+2);
-    for(var i=s;i<=e;i++)pg+='<button class="pb'+(i===absPage?' active':'')+'" onclick="absPage='+i+';renderAbsences()">'+i+'</button>';
-    pg+='<button class="pb" onclick="if(absPage<'+totalPages+'){absPage++;renderAbsences()}"'+(absPage===totalPages?' disabled':'')+'><i class="fa-solid fa-angle-right"></i></button>';
-    pg+='<button class="pb" onclick="absPage='+totalPages+';renderAbsences()"'+(absPage===totalPages?' disabled':'')+'><i class="fa-solid fa-angles-right"></i></button>';
+  var ab=document.getElementById('AB');
+  if(!pageItems.length){ab.innerHTML='<tr><td colspan="5" class="empty-state"><i class="fa-solid fa-inbox"></i><p>Aucune absence trouvee</p></td></tr>';
+  }else{
+    var html='';
+    pageItems.forEach(function(a){
+      var ty=getTypeById(a.typeId);
+      var names=(a.students||[]).slice(0,3).join(', ');
+      if((a.students||[]).length>3)names+=' +'+((a.students.length)-3);
+      html+='<tr><td><div class="ec"><div class="ea" style="background:'+ty.color+';">'+initials(names)+'</div><div><div class="en">'+esc(names)+'</div><div class="es">'+(a.students||[]).length+' etudiant(s) — '+esc(a.moduleClass||'')+'</div></div></div></td><td>'+esc(a.moduleName||'')+'</td><td><span class="badge" style="background:'+ty.color+'18;color:'+ty.color+';"><span class="abs-type-dot" style="background:'+ty.color+';"></span>'+esc(ty.name)+'</span></td><td>'+fmtDateTime(a.startDate)+'</td><td><button class="ab dg" onclick="confirmDeleteAbsence('+a.id+')" title="Supprimer"><i class="fa-solid fa-trash-can"></i></button></td></tr>';
+    });
+    ab.innerHTML=html;
   }
-  document.getElementById('PG').innerHTML=pg;
+
+  // Pagination
+  var pg=document.getElementById('PG');
+  if(totalPages<=1){pg.innerHTML='';return}
+  var pgHtml='';
+  if(absPage>1)pgHtml+='<button class="pb" onclick="absPage--;renderAbsences()"><i class="fa-solid fa-chevron-left"></i></button>';
+  for(var i=1;i<=totalPages;i++){
+    if(totalPages>7&&i>2&&i<totalPages-1&&Math.abs(i-absPage)>1){if(i===3||i===totalPages-2)pgHtml+='<span style="color:var(--fd);padding:0 4px;">...</span>';continue}
+    pgHtml+='<button class="pb'+(i===absPage?' active':'')+'" onclick="absPage='+i+';renderAbsences()">'+i+'</button>';
+  }
+  if(absPage<totalPages)pgHtml+='<button class="pb" onclick="absPage++;renderAbsences()"><i class="fa-solid fa-chevron-right"></i></button>';
+  pg.innerHTML=pgHtml;
 }
 
-function deleteAbs(id){
-  deleteCallback=function(){ABSENCES=ABSENCES.filter(function(a){return a.id!==id});saveData();renderAbsences();renderDashboard();toast('Absence supprimee','success')};
-  document.getElementById('MCF_BODY').innerHTML='<i class="fa-solid fa-triangle-exclamation" style="font-size:36px;color:var(--wn);margin-bottom:12px;display:block;"></i><h3 style="margin-bottom:6px;">Supprimer cette absence ?</h3><p style="color:var(--fm);font-size:13px;">Cette action est irreversible.</p>';
-  openModal('MCF');
+function confirmDeleteAbsence(id){
+  showConfirm('Supprimer cette absence ? Elle sera definitivement supprimee et la sauvegarde sera mise a jour.',function(){
+    ABSENCES=ABSENCES.filter(function(a){return a.id!==id});
+    saveData(); // *** CORRECTION : sauvegarder apres suppression ***
+    renderAbsences();
+    toast('Absence supprimee','success');
+  });
 }
-
-function execDelete(){if(deleteCallback){deleteCallback();deleteCallback=null}closeModal('MCF')}
 
 /* ===== MODALE ABSENCE ===== */
 function openAM(){
   document.getElementById('AMT').textContent='Nouvelle absence';
   document.getElementById('AID').value='';
-  document.getElementById('ASD').value='';document.getElementById('AED').value='';
-  document.getElementById('ARE').value='';msSelected={};
-  /* Remplir modules */
-  var sel=document.getElementById('AMO');sel.innerHTML='<option value="">-- Selectionner --</option>';
-  var mods=getAllModules();mods.forEach(function(m){sel.innerHTML+='<option value="'+m.class+'|'+esc(m.name)+'">'+esc(m.name)+' ('+m.class+')</option>'});
-  /* Types */
-  var ty=document.getElementById('ATY');ty.innerHTML='';
-  TYPES.forEach(function(t){ty.innerHTML+='<option value="'+t.id+'">'+esc(t.name)+'</option>'});
-  /* Slots */
-  var sl=document.getElementById('ASL');sl.innerHTML='<option value="">-- Selectionner --</option>';
-  SLOTS.forEach(function(s,i){sl.innerHTML+='<option value="'+i+'">'+s+'</option>'});
-  document.getElementById('MS_LIST').innerHTML='<div class="ms-empty"><i class="fa-solid fa-info-circle"></i>Selectionnez un module</div>';
+  document.getElementById('ASD').value='';
+  document.getElementById('AED').value='';
+  document.getElementById('ARE').value='';
+  msSelected={};
+  // Remplir modules
+  var sel=document.getElementById('AMO');
+  var html='<option value="">-- Selectionner --</option>';
+  getAllModules().forEach(function(m){html+='<option value="'+esc(m.name)+'|'+esc(m.class)+'">'+esc(m.name)+' ('+m.class+')</option>'});
+  sel.innerHTML=html;
+  // Remplir types
+  var tySel=document.getElementById('ATY');
+  var tyHtml='';
+  TYPES.forEach(function(t){tyHtml+='<option value="'+t.id+'">'+esc(t.name)+'</option>'});
+  tySel.innerHTML=tyHtml;
+  // Remplir creneaux
+  var slSel=document.getElementById('ASL');
+  var slHtml='<option value="">-- Selectionner --</option>';
+  SLOTS.forEach(function(s){slHtml+='<option value="'+s+'">'+s+'</option>'});
+  slSel.innerHTML=slHtml;
   document.getElementById('MS_COUNT').textContent='';
+  renderMSList();
   openModal('MAB');
 }
 
 function onAMModuleChange(){
-  var v=document.getElementById('AMO').value;if(!v)return;
-  var parts=v.split('|');var cls=parts[0],modName=parts.slice(1).join('|');
-  msSelected={};renderMSList();
+  msSelected={};
+  renderMSList();
+  // Pre-remplir la date du jour
+  var now=new Date();
+  document.getElementById('ASD').value=toLocalISO(now);
 }
 
 function applySlot(){
-  var v=parseInt(document.getElementById('ASL').value);if(isNaN(v))return;
-  var slot=SLOTS[v];if(!slot)return;
-  var parts=slot.split(' - ');
-  var d=document.getElementById('ASD').value;
-  if(!d){d=new Date().toISOString().slice(0,10)+'T';document.getElementById('ASD').value=d+parts[0].replace('H',':')}
-  else{document.getElementById('ASD').value=d.slice(0,11)+parts[0].replace('H',':')}
-  document.getElementById('AED').value=d.slice(0,11)+parts[1].replace('H',':');
+  var slot=document.getElementById('ASL').value;
+  if(!slot)return;
+  var today=new Date();
+  var sp=parseSlot(slot);
+  var start=new Date(today.getFullYear(),today.getMonth(),today.getDate(),sp.h,sp.m);
+  var parts=slot.split(' - ')[1].split('H');
+  var end=new Date(today.getFullYear(),today.getMonth(),today.getDate(),parseInt(parts[0])||18,parseInt(parts[1])||0);
+  document.getElementById('ASD').value=toLocalISO(start);
+  document.getElementById('AED').value=toLocalISO(end);
 }
 
 function renderMSList(){
-  var v=document.getElementById('AMO').value;if(!v){document.getElementById('MS_LIST').innerHTML='<div class="ms-empty"><i class="fa-solid fa-info-circle"></i>Selectionnez un module</div>';document.getElementById('MS_COUNT').textContent='';return}
-  var parts=v.split('|');var cls=parts[0];
+  var val=document.getElementById('AMO').value;
+  if(!val){document.getElementById('MS_LIST').innerHTML='<div class="ms-empty"><i class="fa-solid fa-info-circle"></i>Selectionnez un module</div>';document.getElementById('MS_COUNT').textContent='';return}
+  var parts=val.split('|');
+  var modName=parts[0],cls=parts[1];
   var students=getStudentsOfClass(cls);
-  var q=(document.getElementById('MS_SEARCH').value||'').toLowerCase();
-  if(q)students=students.filter(function(s){return s.toLowerCase().indexOf(q)!==-1});
-  if(!students.length){document.getElementById('MS_LIST').innerHTML='<div class="ms-empty"><i class="fa-solid fa-user-slash"></i>Aucun etudiant</div>';document.getElementById('MS_COUNT').textContent='';return}
+  var search=(document.getElementById('MS_SEARCH').value||'').toLowerCase();
+  var filtered=students.filter(function(s){return s.toLowerCase().indexOf(search)!==-1});
+  if(!filtered.length){document.getElementById('MS_LIST').innerHTML='<div class="ms-empty"><i class="fa-solid fa-search"></i>Aucun etudiant trouve</div>';return}
   var html='<div class="ms-grid">';
-  students.forEach(function(s){
-    var chk=msSelected[s]?'checked':'';
-    html+='<label class="ms-item"><input type="checkbox" '+(chk?'checked':'')+' onchange="toggleMS(\''+esc(s).replace(/'/g,"\\'")+'\')"><span class="ms-item-name">'+esc(s)+'</span></label>';
+  filtered.forEach(function(s){
+    var checked=msSelected[s]?'checked':'';
+    html+='<label class="ms-item"><input type="checkbox" '+checked+' onchange="toggleMS(\''+esc(s).replace(/'/g,"\\'")+'\')"><span class="ms-item-name">'+esc(s)+'</span></label>';
   });
   html+='</div>';
   document.getElementById('MS_LIST').innerHTML=html;
-  var cnt=Object.keys(msSelected).filter(function(k){return msSelected[k]}).length;
-  document.getElementById('MS_COUNT').textContent=cnt>0?'('+cnt+' selectionne'+(cnt>1?'s':'')+')':'';
+  var count=Object.keys(msSelected).length;
+  document.getElementById('MS_COUNT').textContent=count?'('+count+' selectionne'+(count>1?'s':'')+')':'';
 }
 
-function toggleMS(name){msSelected[name]=!msSelected[name];renderMSList()}
+function toggleMS(name){
+  if(msSelected[name])delete msSelected[name];else msSelected[name]=true;
+  renderMSList();
+}
 function msSelectAll(){
-  var v=document.getElementById('AMO').value;if(!v)return;
-  var cls=v.split('|')[0];getStudentsOfClass(cls).forEach(function(s){msSelected[s]=true});renderMSList();
+  var val=document.getElementById('AMO').value;
+  if(!val)return;
+  var cls=val.split('|')[1];
+  getStudentsOfClass(cls).forEach(function(s){msSelected[s]=true});
+  renderMSList();
 }
 function msDeselectAll(){msSelected={};renderMSList()}
 
 function saveA(){
-  var v=document.getElementById('AMO').value;if(!v){toast('Selectionnez un module','error');return}
-  var parts=v.split('|');var cls=parts[0],modName=parts.slice(1).join('|');
-  var sd=document.getElementById('ASD').value;if(!sd){toast('Indiquez le debut','error');return}
-  var sel=Object.keys(msSelected).filter(function(k){return msSelected[k]});
-  if(!sel.length){toast('Selectionnez au moins un etudiant','error');return}
-  var abs={
-    id:nextId(ABSENCES),
-    moduleId:cls+'|'+modName,
-    moduleName:modName,
-    moduleClass:cls,
-    date:sd,
-    endTime:document.getElementById('AED').value||'',
-    typeId:parseInt(document.getElementById('ATY').value)||1,
-    reason:document.getElementById('ARE').value,
-    students:sel
-  };
-  ABSENCES.push(abs);saveData();closeModal('MAB');
-  toast(sel.length+' absence(s) enregistree(s)','success');renderAbsences();renderDashboard();
+  var val=document.getElementById('AMO').value;
+  if(!val){toast('Selectionnez un module','error');return}
+  var parts=val.split('|');
+  var modName=parts[0],cls=parts[1];
+  var startDate=document.getElementById('ASD').value;
+  if(!startDate){toast('Renseignez la date de debut','error');return}
+  var endDate=document.getElementById('AED').value||startDate;
+  var typeId=parseInt(document.getElementById('ATY').value)||1;
+  var remark=document.getElementById('ARE').value;
+  var students=Object.keys(msSelected);
+  if(!students.length){toast('Selectionnez au moins un etudiant','error');return}
+  var id=parseInt(document.getElementById('AID').value);
+  if(id){
+    // Modification
+    var abs=ABSENCES.find(function(a){return a.id===id});
+    if(abs){abs.moduleName=modName;abs.moduleClass=cls;abs.startDate=startDate;abs.endDate=endDate;abs.typeId=typeId;abs.remark=remark;abs.students=students}
+    toast('Absence modifiee','success');
+  }else{
+    ABSENCES.push({id:nextId(ABSENCES),moduleName:modName,moduleClass:cls,startDate:startDate,endDate:endDate,typeId:typeId,remark:remark,students:students});
+    toast('Absence enregistree ('+students.length+' etudiants)','success');
+  }
+  saveData(); // *** CORRECTION : sauvegarder apres ajout/modification ***
+  closeModal('MAB');
+  renderAbsences();
+  renderDashboard();
 }
 
 /* ===== CALENDRIER ===== */
@@ -707,132 +763,275 @@ function renderCalendar(){
   var y=calDate.getFullYear(),m=calDate.getMonth();
   var months=['Janvier','Fevrier','Mars','Avril','Mai','Juin','Juillet','Aout','Septembre','Octobre','Novembre','Decembre'];
   var days=['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'];
-  var first=new Date(y,m,1);var lastDay=new Date(y,m+1,0).getDate();
-  var startDay=(first.getDay()+6)%7;
-  var today=new Date();var todayStr=today.toISOString().slice(0,10);
+  var firstDay=new Date(y,m,1);
+  var lastDay=new Date(y,m+1,0);
+  var startDow=(firstDay.getDay()+6)%7;
+  var todayStr=new Date().toDateString();
 
-  /* Compter absences par jour */
+  // Compter absences par jour
   var absByDay={};
-  ABSENCES.forEach(function(a){if(a.date){var ds=a.date.slice(0,10);absByDay[ds]=(absByDay[ds]||0)+1}});
+  ABSENCES.forEach(function(a){
+    if(!a.startDate)return;
+    var ds=new Date(a.startDate).toDateString();
+    if(!absByDay[ds])absByDay[ds]=[];
+    absByDay[ds].push(a);
+  });
 
-  var html='<div class="ch"><h3 style="font-size:17px;font-weight:700;">'+months[m]+' '+y+'</h3><div class="cn"><button onclick="calDate.setMonth(calDate.getMonth()-1);renderCalendar()"><i class="fa-solid fa-chevron-left"></i></button><button onclick="calDate=new Date();renderCalendar()" style="font-size:11px;width:auto;padding:0 12px;">Auj.</button><button onclick="calDate.setMonth(calDate.getMonth()+1);renderCalendar()"><i class="fa-solid fa-chevron-right"></i></button></div></div>';
+  // Legende
+  var leg=document.getElementById('CAL_LEGEND');
+  var legHtml='';
+  TYPES.forEach(function(t){legHtml+='<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:12px;"><span class="abs-type-dot" style="background:'+t.color+';width:10px;height:10px;"></span>'+esc(t.name)+'</div>'});
+  leg.innerHTML=legHtml;
+
+  var html='<div class="ch"><h3 style="font-size:15px;font-weight:600;">'+months[m]+' '+y+'</h3><div class="cn"><button onclick="calDate.setMonth(calDate.getMonth()-1);renderCalendar()"><i class="fa-solid fa-chevron-left"></i></button><button onclick="calDate=new Date();renderCalendar()" style="font-size:10px;width:auto;padding:0 10px;">Auj.</button><button onclick="calDate.setMonth(calDate.getMonth()+1);renderCalendar()"><i class="fa-solid fa-chevron-right"></i></button></div></div>';
   html+='<div class="cg">';
   days.forEach(function(d){html+='<div class="cdl">'+d+'</div>'});
-  for(var i=0;i<startDay;i++)html+='<div class="cd om"></div>';
-  for(var d=1;d<=lastDay;d++){
-    var ds=y+'-'+String(m+1).padStart(2,'0')+'-'+String(d).padStart(2,'0');
-    var isToday=ds===todayStr?' today':'';
-    var hasAbs=absByDay[ds]?' has-abs':'';
-    html+='<div class="cd'+isToday+hasAbs+'" onclick="showCalDay(\''+ds+'\')">'+d+'</div>';
+  for(var i=0;i<startDow;i++){
+    var prev=new Date(y,m,1-startDow+i);
+    html+='<div class="cd om">'+prev.getDate()+'</div>';
   }
+  for(var d=1;d<=lastDay.getDate();d++){
+    var dt=new Date(y,m,d);
+    var ds=dt.toDateString();
+    var isToday=ds===todayStr;
+    var hasAbs=absByDay[ds]&&absByDay[ds].length;
+    html+='<div class="cd'+(isToday?' today':'')+(hasAbs?' has-abs':'')+'" onclick="showDayAbs(\''+ds+'\')">'+d+'</div>';
+  }
+  var rem=7-((startDow+lastDay.getDate())%7);
+  if(rem<7){for(var i=1;i<=rem;i++)html+='<div class="cd om">'+i+'</div>'}
   html+='</div>';
   document.getElementById('CM').innerHTML=html;
-
-  /* Legende */
-  var lg='';
-  TYPES.forEach(function(t){lg+='<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:12px;"><span class="abs-type-dot" style="background:'+t.color+'"></span>'+esc(t.name)+'</div>'});
-  document.getElementById('CAL_LEGEND').innerHTML=lg;
 }
 
-function showCalDay(ds){
-  var dayAbs=ABSENCES.filter(function(a){return a.date&&a.date.slice(0,10)===ds});
-  if(!dayAbs.length){document.getElementById('CDD').innerHTML='<p style="color:var(--fd);font-size:12.5px;text-align:center;padding:18px 0;">Aucune absence le '+fmtDate(ds)+'</p>';return}
+function showDayAbs(ds){
+  var abs=ABSENCES.filter(function(a){return a.startDate&&new Date(a.startDate).toDateString()===ds});
+  var el=document.getElementById('CDD');
+  if(!abs.length){el.innerHTML='<p style="color:var(--fd);font-size:12.5px;text-align:center;padding:18px 0;">Aucune absence ce jour</p>';return}
   var html='';
-  dayAbs.forEach(function(a){
+  abs.forEach(function(a){
     var ty=getTypeById(a.typeId);
-    var names=(a.students||[]).join(', ');
-    html+='<div style="padding:8px 0;border-bottom:1px solid var(--bd);font-size:12px;"><div style="font-weight:600;margin-bottom:2px;">'+esc(a.moduleName||'--')+'</div><div style="color:var(--fm);">'+esc(names)+'</div><span class="badge" style="background:'+ty.color+'15;color:'+ty.color+';margin-top:4px;font-size:10px;"><span class="abs-type-dot" style="background:'+ty.color+'"></span>'+esc(ty.name)+'</span></div>';
+    html+='<div style="padding:8px 0;border-bottom:1px solid var(--bd);font-size:12px;"><div style="font-weight:600;margin-bottom:3px;">'+esc(a.moduleName||'')+'</div><div style="color:var(--fm);">'+(a.students||[]).join(', ')+'</div><div style="margin-top:3px;"><span class="badge" style="background:'+ty.color+'18;color:'+ty.color+';font-size:10px;"><span class="abs-type-dot" style="background:'+ty.color+';"></span>'+esc(ty.name)+'</span></div></div>';
   });
-  document.getElementById('CDD').innerHTML=html;
+  el.innerHTML=html;
 }
 
 /* ===== ETUDIANTS ===== */
 function renderStudents(){
-  var opts=getAllOpts();var totalStu=0;
+  var opts=getAllOpts();
+  var totalStu=getTotalStudents();
+  document.getElementById('SC2').textContent=totalStu;
+  document.getElementById('OC2').textContent=opts.length;
+
+  var sg=document.getElementById('SG');
+  if(!opts.length){sg.innerHTML='<div class="empty-state"><i class="fa-solid fa-users"></i><p>Aucun etudiant</p></div>';return}
   var html='';
   opts.forEach(function(opt){
-    var classes=getClassesOfOpt(opt);if(!classes.length)return;
+    var classes=getClassesOfOpt(opt);
+    if(!classes.length)return;
     var optStuCount=0;
     classes.forEach(function(c){optStuCount+=getStudentsOfClass(c).length});
-    totalStu+=optStuCount;
-    html+='<div class="grp-section">';
-    html+='<div class="grp-hdr" onclick="this.classList.toggle(\'collapsed\')">';
-    html+='<div class="grp-hdr-icon" style="background:'+OPT_COLORS[opt]+'"><i class="fa-solid '+(OPT_ICONS[opt]||'fa-book')+'"></i></div>';
-    html+='<div class="grp-hdr-info"><div class="grp-hdr-name">'+esc(OPTIONS[opt]||opt)+'</div><div class="grp-hdr-sub">'+classes.length+' classe(s)</div></div>';
-    html+='<div class="grp-hdr-count">'+optStuCount+' etudiants</div>';
-    html+='<div class="grp-hdr-arrow"><i class="fa-solid fa-chevron-down"></i></div></div>';
-    html+='<div class="grp-body">';
+    var col=OPT_COLORS[opt]||'#64748b';
+    var icon=OPT_ICONS[opt]||'fa-graduation-cap';
+    html+='<div class="grp-section"><div class="grp-hdr" onclick="this.classList.toggle(\'collapsed\')"><div class="grp-hdr-icon" style="background:'+col+';"><i class="fa-solid '+icon+'"></i></div><div class="grp-hdr-info"><div class="grp-hdr-name">'+esc(opt)+'</div><div class="grp-hdr-sub"><span>'+classes.length+' classe(s)</span><span>'+optStuCount+' etudiants</span></div></div><div class="grp-hdr-count">'+optStuCount+'</div><div class="grp-hdr-arrow"><i class="fa-solid fa-chevron-down"></i></div></div><div class="grp-body">';
     classes.forEach(function(cls){
-      var sts=getStudentsOfClass(cls);
-      html+='<div class="grp-lvl-hdr"><i class="fa-solid fa-users"></i> '+esc(cls)+' <span>'+sts.length+' etudiants</span></div>';
+      var students=getStudentsOfClass(cls);
+      html+='<div class="grp-lvl-hdr"><i class="fa-solid fa-users"></i> '+esc(cls)+' <span>('+students.length+')</span></div>';
       html+='<div class="grp-lvl-grid">';
-      sts.forEach(function(s){
-        html+='<div class="stu-card" onclick="openStuDetail(\''+esc(cls).replace(/'/g,"\\'")+'\',\''+esc(s).replace(/'/g,"\\'")+'\')">';
-        html+='<div class="sc-init" style="background:'+colorForName(s)+'">'+initials(s)+'</div>';
-        html+='<div><div class="sc-name">'+esc(s)+'</div><div class="sc-class">'+esc(cls)+'</div></div>';
-        html+='<button class="sc-del" onclick="event.stopPropagation();deleteStu(\''+esc(cls).replace(/'/g,"\\'")+'\',\''+esc(s).replace(/'/g,"\\'")+'\')"><i class="fa-solid fa-xmark"></i></button>';
-        html+='</div>';
+      students.forEach(function(s){
+        var h=hashStr(s);
+        var col2=OPT_COLORS[getOpt(cls)]||'#64748b';
+        html+='<div class="stu-card" onclick="showStuDetail(\''+esc(s).replace(/'/g,"\\'")+'\',\''+esc(cls).replace(/'/g,"\\'")+'\')"><div class="sc-init" style="background:'+col2+';">'+initials(s)+'</div><div><div class="sc-name">'+esc(s)+'</div><div class="sc-class">'+esc(cls)+'</div></div><button class="sc-del" onclick="event.stopPropagation();confirmDeleteStudent(\''+esc(s).replace(/'/g,"\\'")+'\',\''+esc(cls).replace(/'/g,"\\'")+'\')" title="Supprimer"><i class="fa-solid fa-xmark"></i></button></div>';
       });
       html+='</div>';
     });
     html+='</div></div>';
   });
-  document.getElementById('SG').innerHTML=html||'<div class="empty-state"><i class="fa-solid fa-user-graduate"></i><p>Aucun etudiant</p></div>';
-  document.getElementById('SC2').textContent=totalStu;
-  document.getElementById('OC2').textContent=opts.length;
+  sg.innerHTML=html;
 }
 
-function deleteStu(cls,name){
-  deleteCallback=function(){
-    var sts=getStudentsOfClass(cls).filter(function(s){return s!==name});
-    RD[cls]=sts.join('|');if(!RD[cls])delete RD[cls];
-    saveData();renderStudents();toast('Etudiant supprime','success');
-  };
-  document.getElementById('MCF_BODY').innerHTML='<i class="fa-solid fa-triangle-exclamation" style="font-size:36px;color:var(--wn);margin-bottom:12px;display:block;"></i><h3 style="margin-bottom:6px;">Supprimer cet etudiant ?</h3><p style="color:var(--fm);font-size:13px;">'+esc(name)+' sera retire de '+esc(cls)+'</p>';
-  openModal('MCF');
+function confirmDeleteStudent(name,cls){
+  showConfirm('Supprimer l\'etudiant <strong>'+esc(name)+'</strong> de '+esc(cls)+' ? Les absences associees seront aussi supprimees.',function(){
+    // Retirer l'etudiant de RD
+    var students=getStudentsOfClass(cls);
+    students=students.filter(function(s){return s!==name});
+    if(students.length)RD[cls]=students.join('|');
+    else delete RD[cls];
+    // Supprimer l'etudiant des absences
+    ABSENCES.forEach(function(a){
+      if(a.students)a.students=a.students.filter(function(s){return s!==name});
+    });
+    // Supprimer les absences vides
+    ABSENCES=ABSENCES.filter(function(a){return a.students&&a.students.length>0});
+    saveData(); // *** CORRECTION : sauvegarder apres suppression ***
+    renderStudents();
+    toast('Etudiant supprime','success');
+  });
 }
 
 function doDeleteAllStudents(){
-  deleteCallback=function(){RD={};saveData();renderStudents();toast('Tous les etudiants supprimes','success')};
-  document.getElementById('MCF_BODY').innerHTML='<i class="fa-solid fa-triangle-exclamation" style="font-size:36px;color:var(--dn);margin-bottom:12px;display:block;"></i><h3 style="margin-bottom:6px;">Tout supprimer ?</h3><p style="color:var(--fm);font-size:13px;">Tous les etudiants seront supprimes definitivement.</p>';
-  openModal('MCF');
+  showConfirm('Supprimer TOUS les etudiants et toutes les absences ? Cette action est irreversible.',function(){
+    RD={};
+    MD={};
+    ABSENCES=[];
+    saveData(); // *** CORRECTION ***
+    renderStudents();
+    toast('Tous les etudiants supprimes','success');
+  });
 }
 
 /* ===== DETAIL ETUDIANT ===== */
-function openStuDetail(cls,name){
-  var abs=ABSENCES.filter(function(a){return a.students&&a.students.indexOf(name)!==-1});
-  var totalAbs=abs.length;
-  var col=colorForName(name);
+function showStuDetail(name,cls){
+  var page=document.getElementById('page-stu-detail');
+  var col=OPT_COLORS[getOpt(cls)]||'#64748b';
+  var totalAbs=ABSENCES.filter(function(a){return a.students&&a.students.indexOf(name)!==-1}).length;
+  var njAbs=ABSENCES.filter(function(a){return a.students&&a.students.indexOf(name)!==-1&&a.typeId===1}).length;
+  var jAbs=ABSENCES.filter(function(a){return a.students&&a.students.indexOf(name)!==-1&&a.typeId===2}).length;
+  var rAbs=ABSENCES.filter(function(a){return a.students&&a.students.indexOf(name)!==-1&&a.typeId===3}).length;
+
+  var status='';
+  if(totalAbs>=exclThreshold)status='<span class="excl-badge">EXCLUSION</span>';
+  else if(totalAbs>=warnThreshold)status='<span class="warn-badge">AVERTISSEMENT</span>';
+
   var html='<button class="back-btn" onclick="go(\'students\')"><i class="fa-solid fa-arrow-left"></i> Retour</button>';
-  html+='<div class="detail-hero"><div class="detail-hero-glow" style="background:'+col+'"></div>';
-  html+='<div style="display:flex;align-items:center;gap:18px;margin-bottom:16px;"><div style="width:56px;height:56px;border-radius:14px;background:'+col+';display:flex;align-items:center;justify-content:center;font-weight:700;font-size:20px;color:#fff;">'+initials(name)+'</div><div><h2 style="font-size:22px;font-weight:700;">'+esc(name)+'</h2><p style="color:var(--fm);font-size:13px;">'+esc(cls)+' &bull; '+esc(OPTIONS[getOpt(cls)]||getOpt(cls))+'</p></div></div></div>';
+  html+='<div class="detail-hero"><div class="detail-hero-glow" style="background:'+col+';"></div><div style="display:flex;align-items:center;gap:16px;position:relative;z-index:1;"><div class="ea" style="width:56px;height:56px;border-radius:14px;font-size:20px;background:'+col+';">'+initials(name)+'</div><div><h2 style="font-size:22px;font-weight:700;">'+esc(name)+'</h2><div style="color:var(--fm);font-size:13px;margin-top:2px;">'+esc(cls)+' — '+esc(OPTIONS[getOpt(cls)]||getOpt(cls))+' '+status+'</div></div></div></div>';
 
-  html+='<div class="detail-stats">';
-  html+='<div class="detail-stat"><div class="detail-stat-val" style="color:var(--dn)">'+totalAbs+'</div><div class="detail-stat-label">Absences</div></div>';
-  html+='<div class="detail-stat"><div class="detail-stat-val" style="color:'+(totalAbs>=exclThreshold?'var(--dn)':totalAbs>=warnThreshold?'var(--wn)':'var(--ac)')+'">'+(totalAbs>=exclThreshold?'EXCLUSION':totalAbs>=warnThreshold?'ATTENTION':'OK')+'</div><div class="detail-stat-label">Statut</div></div>';
-  html+='<div class="detail-stat"><div class="detail-stat-val" style="color:var(--fg)">'+(exclThreshold-totalAbs)+'</div><div class="detail-stat-label">Reste avant exclusion</div></div>';
-  html+='</div>';
+  html+='<div class="detail-stats"><div class="detail-stat"><div class="detail-stat-val" style="color:var(--dn);">'+totalAbs+'</div><div class="detail-stat-label">Total absences</div></div><div class="detail-stat"><div class="detail-stat-val" style="color:var(--dn);">'+njAbs+'</div><div class="detail-stat-label">Non justifiees</div></div><div class="detail-stat"><div class="detail-stat-val" style="color:var(--ac);">'+jAbs+'</div><div class="detail-stat-label">Justifiees</div></div><div class="detail-stat"><div class="detail-stat-val" style="color:var(--wn);">'+rAbs+'</div><div class="detail-stat-label">Retards</div></div></div>';
 
-  if(abs.length){
-    html+='<div class="dtw"><div class="dth"><h3>Historique des absences</h3></div><table><thead><tr><th>Module</th><th>Date</th><th>Type</th></tr></thead><tbody>';
-    abs.sort(function(a,b){return(b.date||'').localeCompare(a.date||'')});
-    abs.forEach(function(a){
+  // Liste des absences
+  var absList=ABSENCES.filter(function(a){return a.students&&a.students.indexOf(name)!==-1}).sort(function(a,b){return new Date(b.startDate)-new Date(a.startDate)});
+  if(absList.length){
+    html+='<div class="dtw"><div class="dth"><h3>Historique des absences</h3></div><table><thead><tr><th>Module</th><th>Type</th><th>Date</th><th>Motif</th></tr></thead><tbody>';
+    absList.forEach(function(a){
       var ty=getTypeById(a.typeId);
-      html+='<tr><td>'+esc(a.moduleName||'--')+'</td><td>'+fmtDateTime(a.date)+'</td><td><span class="badge" style="background:'+ty.color+'15;color:'+ty.color+'"><span class="abs-type-dot" style="background:'+ty.color+'"></span>'+esc(ty.name)+'</span></td></tr>';
+      html+='<tr><td>'+esc(a.moduleName||'')+'</td><td><span class="badge" style="background:'+ty.color+'18;color:'+ty.color+';"><span class="abs-type-dot" style="background:'+ty.color+';"></span>'+esc(ty.name)+'</span></td><td>'+fmtDateTime(a.startDate)+'</td><td style="color:var(--fm);font-size:12px;">'+esc(a.remark||'—')+'</td></tr>';
     });
     html+='</tbody></table></div>';
   }
-  var pg=document.getElementById('page-stu-detail');pg.innerHTML=html;pg.classList.add('active');
+
+  page.innerHTML=html;
+  document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active')});
   document.querySelectorAll('.ni').forEach(function(n){n.classList.remove('active')});
+  page.classList.add('active');
+}
+
+/* ===== MODULES ===== */
+function renderModules(){
+  var opts=getAllOpts();
+  var allMods=getAllModules();
+  document.getElementById('MC2').textContent=allMods.length;
+  document.getElementById('OMC2').textContent=opts.length;
+
+  var mg=document.getElementById('MG');
+  if(!allMods.length){mg.innerHTML='<div class="empty-state"><i class="fa-solid fa-book-open"></i><p>Aucun module</p></div>';return}
+  var html='';
+  opts.forEach(function(opt){
+    var classes=getClassesOfOpt(opt);
+    var hasMod=false;
+    classes.forEach(function(c){if(getModulesOfClass(c).length)hasMod=true});
+    if(!hasMod)return;
+    var optModCount=0;
+    classes.forEach(function(c){optModCount+=getModulesOfClass(c).length});
+    var col=OPT_COLORS[opt]||'#64748b';
+    var icon=OPT_ICONS[opt]||'fa-graduation-cap';
+    html+='<div class="grp-section"><div class="grp-hdr" onclick="this.classList.toggle(\'collapsed\')"><div class="grp-hdr-icon" style="background:'+col+';"><i class="fa-solid '+icon+'"></i></div><div class="grp-hdr-info"><div class="grp-hdr-name">'+esc(opt)+'</div><div class="grp-hdr-sub"><span>'+classes.length+' classe(s)</span><span>'+optModCount+' module(s)</span></div></div><div class="grp-hdr-count">'+optModCount+'</div><div class="grp-hdr-arrow"><i class="fa-solid fa-chevron-down"></i></div></div><div class="grp-body">';
+    classes.forEach(function(cls){
+      var mods=getModulesOfClass(cls);
+      if(!mods.length)return;
+      html+='<div class="grp-lvl-hdr"><i class="fa-solid fa-book"></i> '+esc(cls)+' <span>('+mods.length+')</span></div>';
+      html+='<div class="grp-mod-grid">';
+      mods.forEach(function(mod){
+        var mcol=getModColor(mod,cls);
+        var absCount=ABSENCES.filter(function(a){return a.moduleName===mod&&a.moduleClass===cls}).length;
+        var stuCount=getStudentsOfClass(cls).length;
+        html+='<div class="mgc" onclick="showModDetail(\''+esc(mod).replace(/'/g,"\\'")+'\',\''+esc(cls).replace(/'/g,"\\'")+'\')"><div class="mgg" style="background:'+mcol+';"></div><button class="mod-card-del" onclick="event.stopPropagation();confirmDeleteModule(\''+esc(mod).replace(/'/g,"\\'")+'\',\''+esc(cls).replace(/'/g,"\\'")+'\')" title="Supprimer"><i class="fa-solid fa-xmark"></i></button><div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;"><span class="mod-color-dot" style="background:'+mcol+';"></span><div class="mgnm">'+esc(mod)+'</div></div><div class="mgme"><div class="mgmi"><i class="fa-solid fa-users"></i> '+stuCount+' etudiants</div><div class="mgmi"><i class="fa-solid fa-xmark"></i> '+absCount+' absences</div></div></div>';
+      });
+      html+='</div>';
+    });
+    html+='</div></div>';
+  });
+  mg.innerHTML=html;
+}
+
+function confirmDeleteModule(name,cls){
+  showConfirm('Supprimer le module <strong>'+esc(name)+'</strong> de '+esc(cls)+' ? Les absences associees seront aussi supprimees.',function(){
+    var mods=getModulesOfClass(cls);
+    mods=mods.filter(function(m){return m!==name});
+    if(mods.length)MD[cls]=mods.join('|');
+    else delete MD[cls];
+    ABSENCES=ABSENCES.filter(function(a){return !(a.moduleName===name&&a.moduleClass===cls)});
+    saveData(); // *** CORRECTION : sauvegarder apres suppression ***
+    renderModules();
+    toast('Module supprime','success');
+  });
+}
+
+function doDeleteAllModules(){
+  showConfirm('Supprimer TOUS les modules et les absences associees ?',function(){
+    MD={};
+    ABSENCES=[];
+    saveData(); // *** CORRECTION ***
+    renderModules();
+    toast('Tous les modules supprimes','success');
+  });
+}
+
+/* ===== DETAIL MODULE ===== */
+function showModDetail(name,cls){
+  var page=document.getElementById('page-mod-detail');
+  var col=getModColor(name,cls);
+  var students=getStudentsOfClass(cls);
+  var modAbs=ABSENCES.filter(function(a){return a.moduleName===name&&a.moduleClass===cls}).sort(function(a,b){return new Date(b.startDate)-new Date(a.startDate)});
+  var totalAbs=0;
+  modAbs.forEach(function(a){totalAbs+=(a.students?a.students.length:0)});
+
+  var html='<button class="back-btn" onclick="go(\'modules\')"><i class="fa-solid fa-arrow-left"></i> Retour</button>';
+  html+='<div class="detail-hero"><div class="detail-hero-glow" style="background:'+col+';"></div><div style="display:flex;align-items:center;gap:16px;position:relative;z-index:1;"><div style="width:56px;height:56px;border-radius:14px;background:'+col+';display:flex;align-items:center;justify-content:center;color:#fff;font-size:20px;"><i class="fa-solid fa-book-open"></i></div><div><h2 style="font-size:22px;font-weight:700;">'+esc(name)+'</h2><div style="color:var(--fm);font-size:13px;margin-top:2px;">'+esc(cls)+' — '+esc(OPTIONS[getOpt(cls)]||getOpt(cls))+'</div></div></div></div>';
+
+  html+='<div class="detail-stats"><div class="detail-stat"><div class="detail-stat-val" style="color:var(--in);">'+students.length+'</div><div class="detail-stat-label">Etudiants</div></div><div class="detail-stat"><div class="detail-stat-val" style="color:var(--dn);">'+totalAbs+'</div><div class="detail-stat-label">Absences totales</div></div><div class="detail-stat"><div class="detail-stat-val" style="color:var(--wn);">'+modAbs.length+'</div><div class="detail-stat-label">Seances</div></div></div>';
+
+  // Etudiants avec leur nombre d'absences dans ce module
+  var modId=name+'|'+cls;
+  html+='<div class="dtw" style="margin-bottom:18px;"><div class="dth"><h3>Etudiants</h3></div><table><thead><tr><th>Etudiant</th><th>Absences</th><th>Statut</th></tr></thead><tbody>';
+  students.forEach(function(s){
+    var cnt=getStudentAbsCount(s,cls,name);
+    var status='';
+    if(cnt>=exclThreshold)status='<span class="excl-badge">EXCLUSION</span>';
+    else if(cnt>=warnThreshold)status='<span class="warn-badge">AVERTISSEMENT</span>';
+    else if(cnt===0)status='<span style="color:var(--ac);font-size:11px;">Aucune absence</span>';
+    var col2=OPT_COLORS[getOpt(cls)]||'#64748b';
+    html+='<tr><td><div class="ec"><div class="ea" style="background:'+col2+';">'+initials(s)+'</div><div class="en">'+esc(s)+'</div></div></td><td style="font-weight:700;color:'+(cnt>=warnThreshold?'var(--dn)':'var(--fg)')+';">'+cnt+'</td><td>'+status+'</td></tr>';
+  });
+  html+='</tbody></table></div>';
+
+  // Historique
+  if(modAbs.length){
+    html+='<div class="dtw"><div class="dth"><h3>Historique</h3></div><table><thead><tr><th>Date</th><th>Type</th><th>Etudiants absents</th></tr></thead><tbody>';
+    modAbs.forEach(function(a){
+      var ty=getTypeById(a.typeId);
+      html+='<tr><td>'+fmtDateTime(a.startDate)+'</td><td><span class="badge" style="background:'+ty.color+'18;color:'+ty.color+';"><span class="abs-type-dot" style="background:'+ty.color+';"></span>'+esc(ty.name)+'</span></td><td style="font-size:12px;color:var(--fm);">'+(a.students||[]).join(', ')+'</td></tr>';
+    });
+    html+='</tbody></table></div>';
+  }
+
+  page.innerHTML=html;
+  document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active')});
+  document.querySelectorAll('.ni').forEach(function(n){n.classList.remove('active')});
+  page.classList.add('active');
 }
 
 /* ===== MODALE ETUDIANT ===== */
 function openSM(){
   document.getElementById('SMT2').textContent='Nouvel etudiant';
-  document.getElementById('SID').value='';document.getElementById('SLN').value='';document.getElementById('SFR').value='';
-  var sel=document.getElementById('SCL');sel.innerHTML='';
-  getAllClasses().forEach(function(c){sel.innerHTML+='<option value="'+c+'">'+c+'</option>'});
-  updateOptDisplay();openModal('MST');
+  document.getElementById('SID').value='';
+  document.getElementById('SLN').value='';
+  document.getElementById('SFR').value='';
+  var sel=document.getElementById('SCL');
+  var html='';
+  getAllClasses().forEach(function(c){html+='<option value="'+c+'">'+c+'</option>'});
+  if(!html)html='<option value="">-- Aucune classe --</option>';
+  sel.innerHTML=html;
+  updateOptDisplay();
+  openModal('MST');
 }
 
 function updateOptDisplay(){
@@ -841,18 +1040,171 @@ function updateOptDisplay(){
 }
 
 function saveS(){
-  var nom=document.getElementById('SLN').value.trim();var pre=document.getElementById('SFR').value.trim();
+  var nom=document.getElementById('SLN').value.trim().toUpperCase();
+  var prenom=document.getElementById('SFR').value.trim().toUpperCase();
   var cls=document.getElementById('SCL').value;
-  if(!nom||!pre){toast('Remplissez nom et prenom','error');return}
+  if(!nom||!prenom){toast('Renseignez le nom et le prenom','error');return}
   if(!cls){toast('Selectionnez une classe','error');return}
-  var fullName=nom.toUpperCase()+' '+pre.toUpperCase();
-  var sts=getStudentsOfClass(cls);
-  if(sts.indexOf(fullName)!==-1){toast('Cet etudiant existe deja','error');return}
-  sts.push(fullName);RD[cls]=sts.join('|');
-  saveData();closeModal('MST');toast(fullName+' ajoute','success');renderStudents();
+  var fullName=nom+' '+prenom;
+  var students=getStudentsOfClass(cls);
+  if(students.indexOf(fullName)!==-1){toast('Cet etudiant existe deja','error');return}
+  students.push(fullName);
+  RD[cls]=students.join('|');
+  saveData(); // *** CORRECTION ***
+  closeModal('MST');
+  renderStudents();
+  toast('Etudiant ajoute','success');
 }
 
-/* ===== IMPORT ETUDIANTS ===== */
+/* ===== MODALE MODULE ===== */
+function openMM(){
+  document.getElementById('MMT2').textContent='Nouveau module';
+  document.getElementById('MID').value='';
+  document.getElementById('MNM').value='';
+  document.getElementById('MCO').value='#7c3aed';
+  var sel=document.getElementById('MCL');
+  var html='';
+  getAllClasses().forEach(function(c){html+='<option value="'+c+'">'+c+'</option>'});
+  if(!html)html='<option value="">-- Aucune classe --</option>';
+  sel.innerHTML=html;
+  updateModOptDisplay();
+  openModal('MMO');
+}
+
+function updateModOptDisplay(){
+  var cls=document.getElementById('MCL').value;
+  document.getElementById('MOPT').value=OPTIONS[getOpt(cls)]||getOpt(cls)||'';
+}
+
+function saveM(){
+  var name=document.getElementById('MNM').value.trim();
+  var cls=document.getElementById('MCL').value;
+  if(!name){toast('Renseignez le nom du module','error');return}
+  if(!cls){toast('Selectionnez une classe','error');return}
+  var mods=getModulesOfClass(cls);
+  if(mods.indexOf(name)!==-1){toast('Ce module existe deja','error');return}
+  mods.push(name);
+  MD[cls]=mods.join('|');
+  saveData(); // *** CORRECTION ***
+  closeModal('MMO');
+  renderModules();
+  toast('Module ajoute','success');
+}
+
+/* ===== TYPES ===== */
+function renderTypes(){
+  var tb=document.getElementById('TB');
+  if(!TYPES.length){tb.innerHTML='<tr><td colspan="4" class="empty-state"><i class="fa-solid fa-tags"></i><p>Aucun type</p></td></tr>';return}
+  var html='';
+  TYPES.forEach(function(t){
+    var count=ABSENCES.filter(function(a){return a.typeId===t.id}).length;
+    html+='<tr><td style="font-weight:600;">'+esc(t.name)+'</td><td><span class="abs-type-dot" style="background:'+t.color+';width:14px;height:14px;border-radius:4px;"></span> <code style="font-size:11px;color:var(--fm);">'+t.color+'</code></td><td>'+count+'</td><td><button class="ab dg" onclick="confirmDeleteType('+t.id+')" title="Supprimer"><i class="fa-solid fa-trash-can"></i></button></td></tr>';
+  });
+  tb.innerHTML=html;
+}
+
+function openTM(){
+  document.getElementById('TYT2').textContent='Nouveau type';
+  document.getElementById('TID').value='';
+  document.getElementById('TNM').value='';
+  document.getElementById('TCO').value='#059669';
+  openModal('MTY');
+}
+
+function saveT(){
+  var name=document.getElementById('TNM').value.trim();
+  var color=document.getElementById('TCO').value;
+  if(!name){toast('Renseignez le nom du type','error');return}
+  TYPES.push({id:nextId(TYPES),name:name,color:color});
+  saveData(); // *** CORRECTION ***
+  closeModal('MTY');
+  renderTypes();
+  toast('Type ajoute','success');
+}
+
+function confirmDeleteType(id){
+  showConfirm('Supprimer ce type d\'absence ? Les absences de ce type ne seront pas supprimees.',function(){
+    TYPES=TYPES.filter(function(t){return t.id!==id});
+    saveData(); // *** CORRECTION : sauvegarder apres suppression ***
+    renderTypes();
+    toast('Type supprime','success');
+  });
+}
+
+/* ===== MODALES ===== */
+function openModal(id){document.getElementById(id).classList.add('show')}
+function closeModal(id){document.getElementById(id).classList.remove('show')}
+
+function showConfirm(msg,cb){
+  document.getElementById('MCF_BODY').innerHTML='<i class="fa-solid fa-triangle-exclamation" style="font-size:36px;color:var(--wn);margin-bottom:14px;"></i><p style="font-size:14px;line-height:1.6;">'+msg+'</p>';
+  deleteCallback=cb;
+  openModal('MCF');
+}
+
+function execDelete(){
+  closeModal('MCF');
+  if(deleteCallback){deleteCallback();deleteCallback=null}
+}
+
+/* ===== RECHERCHE GLOBALE ===== */
+function globalSearch(q){
+  if(!q||q.length<2)return;
+  q=q.toLowerCase();
+  // Chercher dans les etudiants
+  for(var cls in RD){
+    var students=getStudentsOfClass(cls);
+    var found=students.find(function(s){return s.toLowerCase().indexOf(q)!==-1});
+    if(found){showStuDetail(found,cls);return}
+  }
+  // Chercher dans les modules
+  var allMods=getAllModules();
+  var modFound=allMods.find(function(m){return m.name.toLowerCase().indexOf(q)!==-1});
+  if(modFound){showModDetail(modFound.name,modFound.class);return}
+}
+
+/* ===== EXPORTS ===== */
+function exportCSV(){
+  if(!ABSENCES.length){toast('Aucune absence a exporter','error');return}
+  var csv='Etudiant,Module,Classe,Type,Date Debut,Date Fin,Motif\n';
+  ABSENCES.forEach(function(a){
+    var ty=getTypeById(a.typeId);
+    (a.students||[]).forEach(function(s){
+      csv+='"'+s+'","'+(a.moduleName||'')+'","'+(a.moduleClass||'')+'","'+ty.name+'","'+(a.startDate||'')+'","'+(a.endDate||'')+'","'+(a.remark||'').replace(/"/g,'""')+'"\n';
+    });
+  });
+  dlTpl(csv,'absences_'+new Date().toISOString().slice(0,10)+'.csv');
+  toast('Export CSV telecharge','success');
+}
+
+function exportStudents(){
+  var csv='Nom,Prenom,Classe\n';
+  for(var cls in RD){
+    getStudentsOfClass(cls).forEach(function(s){
+      var p=s.split(' ');
+      csv+='"'+(p[0]||'')+'","'+(p.slice(1).join(' ')||'')+'","'+cls+'"\n';
+    });
+  }
+  dlTpl(csv,'etudiants_'+new Date().toISOString().slice(0,10)+'.csv');
+  toast('Export etudiants telecharge','success');
+}
+
+function exportModules(){
+  var csv='Module,Classe\n';
+  getAllModules().forEach(function(m){csv+='"'+m.name+'","'+m.class+'"\n'});
+  dlTpl(csv,'modules_'+new Date().toISOString().slice(0,10)+'.csv');
+  toast('Export modules telecharge','success');
+}
+
+function dlTpl(content,filename){
+  var blob=new Blob(['\ufeff'+content],{type:'text/csv;charset=utf-8;'});
+  var link=document.createElement('a');
+  link.href=URL.createObjectURL(blob);
+  link.download=filename;
+  link.click();
+  URL.revokeObjectURL(link.href);
+}
+
+/* ===== IMPORTS ===== */
 function openStudentImport(){
   impStudentData=null;
   document.getElementById('IMP_S_FILE').value='';
@@ -862,176 +1214,65 @@ function openStudentImport(){
   openModal('MIMP_S');
 }
 
-function handleStudentFile(event){
-  var file=event.target.files[0];if(!file)return;
+function handleStudentFile(e){
+  var file=e.target.files[0];
+  if(!file)return;
   document.getElementById('IMP_S_MOD_ROW').style.display='flex';
   document.getElementById('IMP_S_MOD_NAME').textContent=file.name;
   var reader=new FileReader();
-  reader.onload=function(e){
+  reader.onload=function(ev){
     try{
-      var data=new Uint8Array(e.target.result);
+      var data=new Uint8Array(ev.target.result);
       var wb=XLSX.read(data,{type:'array'});
       var ws=wb.Sheets[wb.SheetNames[0]];
-      var json=XLSX.utils.sheet_to_json(ws,{header:1});
-      impStudentData=[];var ok=0,skip=0,err=0;
-      var tbody=document.getElementById('IMP_S_TB');tbody.innerHTML='';
-      for(var i=0;i<json.length;i++){
-        var row=json[i];if(!row||!row.length)continue;
-        if(i===0&&String(row[0]||'').toLowerCase().match(/nom|name/i))continue;
-        var nom=String(row[0]||'').trim();var pre=String(row[1]||'').trim();var cls=String(row[2]||'').trim();
-        if(!nom){err++;continue}
-        if(!cls){err++;continue}
-        var fullName=nom.toUpperCase()+(pre?' '+pre.toUpperCase():'');
-        var status='ok';
-        if(RD[cls]&&RD[cls].split('|').filter(Boolean).indexOf(fullName)!==-1){status='skip';skip++}
-        else ok++;
-        impStudentData.push({nom:fullName,class:cls,status:status});
-        var tr=document.createElement('tr');if(status==='skip')tr.className='imp-row-skip';
-        tr.innerHTML='<td>'+esc(fullName)+'</td><td>'+(pre?esc(pre):'--')+'</td><td>'+esc(cls)+'</td><td>'+(status==='ok'?'<span style="color:var(--ac)"><i class="fa-solid fa-check"></i> Nouveau</span>':'<span><i class="fa-solid fa-copy"></i> Existant</span>')+'</td>';
-        tbody.appendChild(tr);
-      }
-      document.getElementById('IMP_S_SUMMARY').innerHTML='<div class="imp-summary-item ok"><i class="fa-solid fa-check-circle"></i> '+ok+' nouveaux</div>'+(skip?'<div class="imp-summary-item skip"><i class="fa-solid fa-copy"></i> '+skip+' existants</div>':'')+(err?'<div class="imp-summary-item err"><i class="fa-solid fa-times-circle"></i> '+err+' erreurs</div>':'');
+      var rows=XLSX.utils.sheet_to_json(ws,{header:1});
+      impStudentData=[];
+      var ok=0,skip=0;
+      rows.forEach(function(r,i){
+        if(i===0)return; // en-tete
+        var nom=String(r[0]||'').trim().toUpperCase();
+        var prenom=String(r[1]||'').trim().toUpperCase();
+        var cls=String(r[2]||'').trim();
+        if(!nom||!cls){skip++;impStudentData.push({nom:nom,prenom:prenom,cls:cls,status:'skip'});return}
+        ok++;
+        impStudentData.push({nom:nom,prenom:prenom,cls:cls,status:'ok'});
+      });
+      // Afficher preview
+      document.getElementById('IMP_S_SUMMARY').innerHTML='<div class="imp-summary-item ok"><i class="fa-solid fa-check-circle"></i> '+ok+' valide(s)</div>'+(skip?'<div class="imp-summary-item skip"><i class="fa-solid fa-exclamation-circle"></i> '+skip+' ignore(s)</div>':'');
+      var tbHtml='';
+      impStudentData.forEach(function(r){
+        var fullName=r.nom+' '+r.prenom;
+        if(r.status==='skip')tbHtml+='<tr class="imp-row-skip"><td>'+esc(r.nom)+'</td><td>'+esc(r.prenom)+'</td><td>'+esc(r.cls)+'</td><td>Incomplet</td></tr>';
+        else tbHtml+='<tr><td>'+esc(r.nom)+'</td><td>'+esc(r.prenom)+'</td><td>'+esc(r.cls)+'</td><td style="color:var(--ac);">OK</td></tr>';
+      });
+      document.getElementById('IMP_S_TB').innerHTML=tbHtml;
       document.getElementById('IMP_S_PREVIEW').style.display='block';
-      document.getElementById('IMP_S_BTN').style.display=ok?'inline-flex':'none';
-    }catch(ex){toast('Erreur lecture fichier: '+ex.message,'error')}
+      if(ok)document.getElementById('IMP_S_BTN').style.display='inline-flex';
+    }catch(err){toast('Erreur de lecture du fichier','error');console.error(err)}
   };
   reader.readAsArrayBuffer(file);
 }
 
 function confirmStudentImport(){
-  if(!impStudentData||!impStudentData.length)return;
+  if(!impStudentData)return;
   var count=0;
-  impStudentData.forEach(function(item){
-    if(item.status==='skip')return;
-    if(!RD[item.class])RD[item.class]=item.nom;
-    else{var sts=RD[item.class].split('|').filter(Boolean);if(sts.indexOf(item.nom)===-1){sts.push(item.nom);RD[item.class]=sts.join('|')}}
-    count++;
+  impStudentData.forEach(function(r){
+    if(r.status!=='ok')return;
+    var fullName=r.nom+' '+r.prenom;
+    if(!RD[r.cls])RD[r.cls]='';
+    var students=getStudentsOfClass(r.cls);
+    if(students.indexOf(fullName)===-1){
+      students.push(fullName);
+      RD[r.cls]=students.join('|');
+      count++;
+    }
   });
-  saveData();renderStudents();closeModal('MIMP_S');
+  saveData(); // *** CORRECTION ***
+  closeModal('MIMP_S');
+  renderStudents();
   toast(count+' etudiant(s) importe(s)','success');
-  impStudentData=null;
 }
 
-/* ===== MODULES ===== */
-function renderModules(){
-  var opts=getAllOpts();var totalMod=0;
-  var html='';
-  opts.forEach(function(opt){
-    var classes=getClassesOfOpt(opt);if(!classes.length)return;
-    var optModCount=0;
-    classes.forEach(function(c){optModCount+=getModulesOfClass(c).length});
-    if(!optModCount)return;
-    totalMod+=optModCount;
-    html+='<div class="grp-section">';
-    html+='<div class="grp-hdr" onclick="this.classList.toggle(\'collapsed\')">';
-    html+='<div class="grp-hdr-icon" style="background:'+OPT_COLORS[opt]+'"><i class="fa-solid '+(OPT_ICONS[opt]||'fa-book')+'"></i></div>';
-    html+='<div class="grp-hdr-info"><div class="grp-hdr-name">'+esc(OPTIONS[opt]||opt)+'</div><div class="grp-hdr-sub">'+classes.length+' classe(s)</div></div>';
-    html+='<div class="grp-hdr-count">'+optModCount+' module(s)</div>';
-    html+='<div class="grp-hdr-arrow"><i class="fa-solid fa-chevron-down"></i></div></div>';
-    html+='<div class="grp-body">';
-    classes.forEach(function(cls){
-      var mods=getModulesOfClass(cls);
-      if(!mods.length)return;
-      html+='<div class="grp-lvl-hdr"><i class="fa-solid fa-book-open"></i> '+esc(cls)+' <span>'+mods.length+' module(s)</span></div>';
-      html+='<div class="grp-mod-grid">';
-      mods.forEach(function(mod){
-        var absCount=ABSENCES.filter(function(a){return a.moduleId===cls+'|'+mod}).length;
-        html+='<div class="mgc" onclick="openModDetail(\''+esc(cls).replace(/'/g,"\\'")+'\',\''+esc(mod).replace(/'/g,"\\'")+'\')">';
-        html+='<div class="mgg" style="background:'+OPT_COLORS[opt]+'"></div>';
-        html+='<button class="mod-card-del" onclick="event.stopPropagation();deleteMod(\''+esc(cls).replace(/'/g,"\\'")+'\',\''+esc(mod).replace(/'/g,"\\'")+'\')"><i class="fa-solid fa-xmark"></i></button>';
-        html+='<div class="mgnm">'+esc(mod)+'</div>';
-        html+='<div class="mgme"><div class="mgmi"><i class="fa-solid fa-users"></i> '+getStudentsOfClass(cls).length+' etudiants</div>';
-        html+='<div class="mgmi"><i class="fa-solid fa-calendar-xmark"></i> '+absCount+' absences</div></div>';
-        html+='</div>';
-      });
-      html+='</div>';
-    });
-    html+='</div></div>';
-  });
-  document.getElementById('MG').innerHTML=html||'<div class="empty-state"><i class="fa-solid fa-book-open"></i><p>Aucun module. Ajoutez ou importez des modules.</p></div>';
-  document.getElementById('MC2').textContent=totalMod;
-  document.getElementById('OMC2').textContent=opts.filter(function(o){var c=getClassesOfOpt(o);var n=0;c.forEach(function(cl){n+=getModulesOfClass(cl).length});return n>0}).length;
-}
-
-function deleteMod(cls,name){
-  deleteCallback=function(){
-    var mods=getModulesOfClass(cls).filter(function(m){return m!==name});
-    if(mods.length)MD[cls]=mods.join('|');else delete MD[cls];
-    /* Supprimer aussi les absences liees */
-    ABSENCES=ABSENCES.filter(function(a){return a.moduleId!==cls+'|'+name});
-    saveData();renderModules();toast('Module supprime','success');
-  };
-  document.getElementById('MCF_BODY').innerHTML='<i class="fa-solid fa-triangle-exclamation" style="font-size:36px;color:var(--wn);margin-bottom:12px;display:block;"></i><h3 style="margin-bottom:6px;">Supprimer ce module ?</h3><p style="color:var(--fm);font-size:13px;">'+esc(name)+' et ses absences associees seront supprimes.</p>';
-  openModal('MCF');
-}
-
-function doDeleteAllModules(){
-  deleteCallback=function(){MD={};saveData();renderModules();toast('Tous les modules supprimes','success')};
-  document.getElementById('MCF_BODY').innerHTML='<i class="fa-solid fa-triangle-exclamation" style="font-size:36px;color:var(--dn);margin-bottom:12px;display:block;"></i><h3 style="margin-bottom:6px;">Tout supprimer ?</h3><p style="color:var(--fm);font-size:13px;">Tous les modules et leurs absences seront supprimes.</p>';
-  openModal('MCF');
-}
-
-/* ===== DETAIL MODULE ===== */
-function openModDetail(cls,name){
-  var modId=cls+'|'+name;
-  var abs=ABSENCES.filter(function(a){return a.moduleId===modId});
-  var students=getStudentsOfClass(cls);
-  var col=OPT_COLORS[getOpt(cls)]||'#7c3aed';
-
-  var html='<button class="back-btn" onclick="go(\'modules\')"><i class="fa-solid fa-arrow-left"></i> Retour</button>';
-  html+='<div class="detail-hero"><div class="detail-hero-glow" style="background:'+col+'"></div>';
-  html+='<div style="display:flex;align-items:center;gap:18px;margin-bottom:16px;"><div style="width:56px;height:56px;border-radius:14px;background:'+col+';display:flex;align-items:center;justify-content:center;font-size:22px;color:#fff;"><i class="fa-solid fa-book-open"></i></div><div><h2 style="font-size:22px;font-weight:700;">'+esc(name)+'</h2><p style="color:var(--fm);font-size:13px;">'+esc(cls)+' &bull; '+esc(OPTIONS[getOpt(cls)]||getOpt(cls))+'</p></div></div></div>';
-
-  /* Stats par etudiant */
-  var stuAbsMap={};
-  abs.forEach(function(a){if(a.students)a.students.forEach(function(s){stuAbsMap[s]=(stuAbsMap[s]||0)+1})});
-
-  html+='<div class="detail-stats">';
-  html+='<div class="detail-stat"><div class="detail-stat-val" style="color:var(--dn)">'+abs.length+'</div><div class="detail-stat-label">Absences totales</div></div>';
-  html+='<div class="detail-stat"><div class="detail-stat-val" style="color:var(--wn)">'+Object.keys(stuAbsMap).filter(function(s){return stuAbsMap[s]>=warnThreshold}).length+'</div><div class="detail-stat-label">En alerte</div></div>';
-  html+='<div class="detail-stat"><div class="detail-stat-val" style="color:var(--ac)">'+(students.length-Object.keys(stuAbsMap).length)+'</div><div class="detail-stat-label">Sans absence</div></div>';
-  html+='</div>';
-
-  /* Liste des etudiants avec leur compteur */
-  html+='<div class="dtw"><div class="dth"><h3>Etudiants</h3></div><table><thead><tr><th>Etudiant</th><th>Absences</th><th>Statut</th></tr></thead><tbody>';
-  students.sort(function(a,b){return(stuAbsMap[b]||0)-(stuAbsMap[a]||0)});
-  students.forEach(function(s){
-    var c=stuAbsMap[s]||0;
-    var status=c>=exclThreshold?'<span class="excl-badge">EXCLUSION</span>':c>=warnThreshold?'<span class="warn-badge">ATTENTION</span>':'<span style="color:var(--ac);font-size:12px;font-weight:600;">OK</span>';
-    html+='<tr><td><div class="ec"><div class="ea" style="background:'+colorForName(s)+'">'+initials(s)+'</div><div><div class="en">'+esc(s)+'</div></div></div></td><td style="font-weight:700;font-family:Space Grotesk;">'+c+'</td><td>'+status+'</td></tr>';
-  });
-  html+='</tbody></table></div>';
-
-  var pg=document.getElementById('page-mod-detail');pg.innerHTML=html;pg.classList.add('active');
-  document.querySelectorAll('.ni').forEach(function(n){n.classList.remove('active')});
-}
-
-/* ===== MODALE MODULE ===== */
-function openMM(){
-  document.getElementById('MMT2').textContent='Nouveau module';
-  document.getElementById('MID').value='';document.getElementById('MNM').value='';
-  document.getElementById('MCO').value='#7c3aed';
-  var sel=document.getElementById('MCL');sel.innerHTML='';
-  getAllClasses().forEach(function(c){sel.innerHTML+='<option value="'+c+'">'+c+'</option>'});
-  updateModOptDisplay();openModal('MMO');
-}
-
-function updateModOptDisplay(){
-  var cls=document.getElementById('MCL').value;
-  document.getElementById('MOPT').value=OPTIONS[getOpt(cls)]||getOpt(cls)||'';
-}
-
-function saveM(){
-  var name=document.getElementById('MNM').value.trim();var cls=document.getElementById('MCL').value;
-  if(!name){toast('Entrez le nom du module','error');return}
-  if(!cls){toast('Selectionnez une classe','error');return}
-  var mods=getModulesOfClass(cls);
-  if(mods.indexOf(name)!==-1){toast('Ce module existe deja dans cette classe','error');return}
-  mods.push(name);MD[cls]=mods.join('|');
-  saveData();closeModal('MMO');toast('Module '+name+' ajoute','success');renderModules();
-}
-
-/* ===== IMPORT MODULES — CORRIGE ===== */
 function openModuleImport(){
   impModuleData=null;
   document.getElementById('IMP_M_FILE').value='';
@@ -1041,237 +1282,104 @@ function openModuleImport(){
   openModal('MIMP_M');
 }
 
-function handleModuleFile(event){
-  var file=event.target.files[0];
-  if(!file) return;
-
-  /* Afficher le nom du fichier */
+function handleModuleFile(e){
+  var file=e.target.files[0];
+  if(!file)return;
   document.getElementById('IMP_M_MOD_ROW').style.display='flex';
   document.getElementById('IMP_M_MOD_NAME').textContent=file.name;
-
   var reader=new FileReader();
-  reader.onload=function(e){
+  reader.onload=function(ev){
     try{
-      var data=new Uint8Array(e.target.result);
+      var data=new Uint8Array(ev.target.result);
       var wb=XLSX.read(data,{type:'array'});
       var ws=wb.Sheets[wb.SheetNames[0]];
-      var json=XLSX.utils.sheet_to_json(ws,{header:1});
-
+      var rows=XLSX.utils.sheet_to_json(ws,{header:1});
       impModuleData=[];
-      var ok=0, skip=0, err=0;
-      var tbody=document.getElementById('IMP_M_TB');
-      tbody.innerHTML='';
-
-      for(var i=0; i<json.length; i++){
-        var row=json[i];
-        if(!row || !row.length) continue;
-
-        /* Sauter la ligne d'en-tete */
-        var firstCell=String(row[0]||'').trim().toLowerCase();
-        if(i===0 && (firstCell==='module' || firstCell==='nom' || firstCell==='name')){
-          continue;
-        }
-
-        var modName=String(row[0]||'').trim();
-        var className=String(row[1]||'').trim();
-
-        /* Validation */
-        if(!modName){err++;continue}
-        if(!className){err++;continue}
-
-        /* Verifier si la classe existe dans les etudiants */
-        if(!RD[className]){
-          impModuleData.push({module:modName, class:className, status:'err'});
-          err++;
-          var trErr=document.createElement('tr');
-          trErr.className='imp-row-skip';
-          trErr.innerHTML='<td>'+esc(modName)+'</td><td>'+esc(className)+'</td><td><span style="color:var(--dn)"><i class="fa-solid fa-times-circle"></i> Classe inconnue</span></td>';
-          tbody.appendChild(trErr);
-          continue;
-        }
-
-        /* Verifier si le module existe deja */
-        var existingMods=getModulesOfClass(className);
-        var status='ok';
-        if(existingMods.indexOf(modName)!==-1){
-          status='skip';
-          skip++;
-        } else {
-          ok++;
-        }
-
-        impModuleData.push({module:modName, class:className, status:status});
-
-        var tr=document.createElement('tr');
-        if(status==='skip') tr.className='imp-row-skip';
-        tr.innerHTML='<td>'+esc(modName)+'</td><td>'+esc(className)+'</td><td>'+
-          (status==='ok'
-            ? '<span style="color:var(--ac)"><i class="fa-solid fa-check"></i> Nouveau</span>'
-            : '<span><i class="fa-solid fa-copy"></i> Existant</span>'
-          )+'</td>';
-        tbody.appendChild(tr);
-      }
-
-      /* Afficher le resume */
-      var summaryHtml='<div class="imp-summary-item ok"><i class="fa-solid fa-check-circle"></i> '+ok+' nouveau(x)</div>';
-      if(skip>0) summaryHtml+='<div class="imp-summary-item skip"><i class="fa-solid fa-copy"></i> '+skip+' existant(s)</div>';
-      if(err>0) summaryHtml+='<div class="imp-summary-item err"><i class="fa-solid fa-times-circle"></i> '+err+' erreur(s)</div>';
-      document.getElementById('IMP_M_SUMMARY').innerHTML=summaryHtml;
-
+      var ok=0,skip=0;
+      rows.forEach(function(r,i){
+        if(i===0)return;
+        var mod=String(r[0]||'').trim();
+        var cls=String(r[1]||'').trim();
+        if(!mod||!cls){skip++;impModuleData.push({mod:mod,cls:cls,status:'skip'});return}
+        // Verifier que la classe existe
+        if(!RD[cls]&&!RD_DEFAULT[cls]){skip++;impModuleData.push({mod:mod,cls:cls,status:'skip'});return}
+        ok++;
+        impModuleData.push({mod:mod,cls:cls,status:'ok'});
+      });
+      document.getElementById('IMP_M_SUMMARY').innerHTML='<div class="imp-summary-item ok"><i class="fa-solid fa-check-circle"></i> '+ok+' valide(s)</div>'+(skip?'<div class="imp-summary-item skip"><i class="fa-solid fa-exclamation-circle"></i> '+skip+' ignore(s)</div>':'');
+      var tbHtml='';
+      impModuleData.forEach(function(r){
+        if(r.status==='skip')tbHtml+='<tr class="imp-row-skip"><td>'+esc(r.mod)+'</td><td>'+esc(r.cls)+'</td><td>Classe inconnue</td></tr>';
+        else tbHtml+='<tr><td>'+esc(r.mod)+'</td><td>'+esc(r.cls)+'</td><td style="color:var(--ac);">OK</td></tr>';
+      });
+      document.getElementById('IMP_M_TB').innerHTML=tbHtml;
       document.getElementById('IMP_M_PREVIEW').style.display='block';
-      document.getElementById('IMP_M_BTN').style.display=ok>0?'inline-flex':'none';
-
-    } catch(ex){
-      console.error('Erreur import module:', ex);
-      toast('Erreur de lecture du fichier: '+ex.message, 'error');
-    }
+      if(ok)document.getElementById('IMP_M_BTN').style.display='inline-flex';
+    }catch(err){toast('Erreur de lecture du fichier','error');console.error(err)}
   };
   reader.readAsArrayBuffer(file);
 }
 
 function confirmModuleImport(){
-  if(!impModuleData || !impModuleData.length) return;
-
+  if(!impModuleData)return;
   var count=0;
-  for(var i=0; i<impModuleData.length; i++){
-    var item=impModuleData[i];
-    /* Ne traiter que les nouveaux (pas skip, pas err) */
-    if(item.status!=='ok') continue;
-
-    var existingMods=getModulesOfClass(item.class);
-    if(existingMods.indexOf(item.module)===-1){
-      existingMods.push(item.module);
-      MD[item.class]=existingMods.join('|');
+  impModuleData.forEach(function(r){
+    if(r.status!=='ok')return;
+    if(!MD[r.cls])MD[r.cls]='';
+    var mods=getModulesOfClass(r.cls);
+    if(mods.indexOf(r.mod)===-1){
+      mods.push(r.mod);
+      MD[r.cls]=mods.join('|');
       count++;
     }
-  }
-
-  /* Sauvegarder ET rafraichir */
-  saveData();
-  renderModules();
+  });
+  saveData(); // *** CORRECTION ***
   closeModal('MIMP_M');
-
-  if(count>0){
-    toast(count+' module(s) importe(s) avec succes','success');
-  } else {
-    toast('Aucun nouveau module a importer','info');
-  }
-
-  /* Reinitialiser l'etat de l'import */
-  impModuleData=null;
-  document.getElementById('IMP_M_FILE').value='';
-  document.getElementById('IMP_M_MOD_ROW').style.display='none';
-  document.getElementById('IMP_M_PREVIEW').style.display='none';
-  document.getElementById('IMP_M_BTN').style.display='none';
+  renderModules();
+  toast(count+' module(s) importe(s)','success');
 }
 
-/* ===== EXPORT MODULES ===== */
-function exportModules(){
-  var lines=['Module,Classe'];
-  for(var cls in MD){
-    var mods=MD[cls].split('|').filter(Boolean);
-    mods.forEach(function(m){lines.push('"'+m+'","'+cls+'"')});
-  }
-  if(lines.length<=1){toast('Aucun module a exporter','info');return}
-  dlTpl(lines.join('\n'),'modules_export_'+new Date().toISOString().slice(0,10)+'.csv');
-  toast('Modules exportes','success');
-}
-
-/* ===== TYPES ===== */
-function renderTypes(){
-  var html='';
-  TYPES.forEach(function(t){
-    var cnt=ABSENCES.filter(function(a){return a.typeId===t.id}).length;
-    html+='<tr><td><span class="badge" style="background:'+t.color+'15;color:'+t.color+'"><span class="abs-type-dot" style="background:'+t.color+'"></span>'+esc(t.name)+'</span></td><td><span class="mod-color-dot" style="background:'+t.color+'"></span> '+t.color+'</td><td style="font-weight:700;">'+cnt+'</td><td><button class="ab dg" onclick="deleteType('+t.id+')" title="Supprimer"><i class="fa-solid fa-trash-can"></i></button></td></tr>';
-  });
-  document.getElementById('TB').innerHTML=html||'<tr><td colspan="4" style="text-align:center;color:var(--fd);padding:30px;">Aucun type</td></tr>';
-}
-
-function openTM(){
-  document.getElementById('TYT2').textContent='Nouveau type';document.getElementById('TID').value='';
-  document.getElementById('TNM').value='';document.getElementById('TCO').value='#059669';openModal('MTY');
-}
-
-function saveT(){
-  var name=document.getElementById('TNM').value.trim();if(!name){toast('Entrez un nom','error');return}
-  var color=document.getElementById('TCO').value;
-  TYPES.push({id:nextId(TYPES),name:name,color:color});
-  saveData();closeModal('MTY');toast('Type ajoute','success');renderTypes();
-}
-
-function deleteType(id){
-  if(TYPES.length<=1){toast('Il faut au moins un type','error');return}
-  deleteCallback=function(){TYPES=TYPES.filter(function(t){return t.id!==id});saveData();renderTypes();toast('Type supprime','success')};
-  document.getElementById('MCF_BODY').innerHTML='<i class="fa-solid fa-triangle-exclamation" style="font-size:36px;color:var(--wn);margin-bottom:12px;display:block;"></i><h3 style="margin-bottom:6px;">Supprimer ce type ?</h3>';
-  openModal('MCF');
-}
-
-/* ===== PARAMETRES ===== */
+/* ===== SETTINGS ===== */
 function saveSettings(){
-  var w=parseInt(document.getElementById('SET_WARN').value)||3;
-  var e=parseInt(document.getElementById('SET_EXCL').value)||8;
-  if(e<=w){toast('Le seuil d\'exclusion doit etre superieur a l\'avertissement','error');return}
-  warnThreshold=w;exclThreshold=e;saveData();toast('Parametres enregistres','success');
+  var w=parseInt(document.getElementById('SET_WARN').value);
+  var e=parseInt(document.getElementById('SET_EXCL').value);
+  if(!w||w<1){toast('Seuil d\'avertissement invalide','error');return}
+  if(!e||e<1){toast('Seuil d\'exclusion invalide','error');return}
+  warnThreshold=w;
+  exclThreshold=e;
+  saveData(); // *** CORRECTION ***
+  toast('Parametres enregistres','success');
 }
 
-/* ===== EXPORTS ===== */
-function dlTpl(content,filename){
-  var blob=new Blob(['\ufeff'+content],{type:'text/csv;charset=utf-8;'});
-  var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=filename;a.click();
-}
-
-function exportCSV(){
-  if(!ABSENCES.length){toast('Aucune absence a exporter','info');return}
-  var lines=['Etudiant,Module,Classe,Type,Date Debut,Date Fin,Motif'];
-  ABSENCES.forEach(function(a){
-    var ty=getTypeById(a.typeId);
-    (a.students||[]).forEach(function(s){
-      lines.push('"'+s+'","'+(a.moduleName||'')+'","'+(a.moduleClass||'')+'","'+ty.name+'","'+(a.date||'')+'","'+(a.endTime||'')+'","'+(a.reason||'').replace(/"/g,'""')+'"');
-    });
-  });
-  dlTpl(lines.join('\n'),'absences_export_'+new Date().toISOString().slice(0,10)+'.csv');
-  toast('Absences exportees','success');
-}
-
-function exportStudents(){
-  var lines=['Nom,Prenom,Classe'];
-  for(var cls in RD){
-    RD[cls].split('|').filter(Boolean).forEach(function(s){
-      var p=s.split(' ');lines.push('"'+p[0]+'","'+(p.slice(1).join(' '))+'","'+cls+'"');
-    });
-  }
-  if(lines.length<=1){toast('Aucun etudiant','info');return}
-  dlTpl(lines.join('\n'),'etudiants_export_'+new Date().toISOString().slice(0,10)+'.csv');
-  toast('Etudiants exportes','success');
-}
-
-/* ===== RESET ===== */
 function doReset(){
-  deleteCallback=function(){ABSENCES=[];saveData();renderDashboard();toast('Absences reinitialisees','success')};
-  document.getElementById('MCF_BODY').innerHTML='<i class="fa-solid fa-triangle-exclamation" style="font-size:36px;color:var(--wn);margin-bottom:12px;display:block;"></i><h3 style="margin-bottom:6px;">Reinitialiser les absences ?</h3><p style="color:var(--fm);font-size:13px;">Toutes les absences seront supprimees. Etudiants et modules conserves.</p>';
-  openModal('MCF');
+  showConfirm('Reinitialiser toutes les absences ? Les etudiants et modules seront conserves.',function(){
+    ABSENCES=[];
+    saveData(); // *** CORRECTION ***
+    renderDashboard();
+    toast('Absences reinitialisees','success');
+  });
 }
 
 function doFullReset(){
-  deleteCallback=function(){
+  showConfirm('Reinitialiser TOUTES les donnees ? Cette action est irreversible.',function(){
     localStorage.removeItem(LS_KEY);
-    RD=JSON.parse(JSON.stringify(RD_DEFAULT));MD={};ABSENCES=[];
-    TYPES=[{id:1,name:'Absence non justifiee',color:'#dc2626'},{id:2,name:'Absence justifiee',color:'#059669'},{id:3,name:'Retard',color:'#d97706'}];
-    warnThreshold=3;exclThreshold=8;
-    saveData();go('dashboard');toast('Donnees reinitialisees','success');
-  };
-  document.getElementById('MCF_BODY').innerHTML='<i class="fa-solid fa-triangle-exclamation" style="font-size:36px;color:var(--dn);margin-bottom:12px;display:block;"></i><h3 style="margin-bottom:6px;color:var(--dn);">Reinitialisation complete ?</h3><p style="color:var(--fm);font-size:13px;">TOUTES les donnees seront perdues. Cette action est irreversible.</p>';
-  openModal('MCF');
+    loadData();
+    renderDashboard();
+    toast('Donnees reinitialisees','success');
+  });
 }
 
 /* ===== INITIALISATION ===== */
-loadData();
-renderDashboard();
+function init(){
+  loadData(); // Charger depuis localStorage
+  document.getElementById('SET_WARN').value=warnThreshold;
+  document.getElementById('SET_EXCL').value=exclThreshold;
+  renderDashboard();
+  updateDataBar();
+}
 
-/* Fermer modales en cliquant hors */
-document.querySelectorAll('.mo').forEach(function(m){
-  m.addEventListener('click',function(e){if(e.target===m)closeModal(m.id)});
-});
+// Lancer l'application
+init();
 </script>
 </body>
 </html>
